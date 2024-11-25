@@ -1,0 +1,29 @@
+﻿@page
+@model SuppliesManagement.Pages.DanhSachTaiKhoanModel
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Tài khoản</th>
+                <th>Mật khẩu</th>
+                <th>Quyền</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var taikhoan in Model.Accounts)
+            {
+                <tr>
+                    <td>@taikhoan.Username</td>
+                    <td>@taikhoan.Password</td>
+                    <td>@taikhoan.Role.Name</td>
+                    <td><button type="submit" class="btn btn-primary">Thay đổi quyền</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    let password = document.getElementById('password');
+    password.type = password.type == 'text' ? 'password' : 'text';
+</script>

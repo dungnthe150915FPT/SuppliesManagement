@@ -1,0 +1,81 @@
+﻿@page
+@model SuppliesManagement.Pages.DanhSachHangModel
+<h1>DANH SÁCH HÀNG TRONG KHO</h1>
+<form method="get">
+    <input type="text" name="hanghoa" value="@Request.Query["hanghoa"]"><input type="Submit" value="Search" />
+</form>
+<br />
+<a class="btn btn-dark" asp-page="./NhapMuaHangHoa">Nhập mua hàng hóa</a>
+<a class="btn btn-success" asp-page="./DanhSachHang" asp-route-exportExcelCCDC="true">Xuất Danh Sách Công cụ dụng cụ (CCDC)</a>
+<a class="btn btn-success" asp-page="./DanhSachHang" asp-route-exportExcelVatTu="true">Xuất Danh Sách Vật tư</a>
+<a class="btn btn-success" asp-page="./DanhSachHang" asp-route-exportExcelPTTT="true">Xuất Danh Sách Phụ Tùng Thay Thế (PTTT)</a>
+<a class="btn btn-success" asp-page="./DanhSachHang" asp-route-exportExcelTSCD="true">Xuất Danh Sách Tài sản cố định (TSCD)</a>
+<a class="btn btn-info" asp-page="./DanhSachHang">Tất cả hàng hóa</a>
+@{
+    @foreach (var tt in Model.NhomHangs)
+    {
+        <a class="btn btn-info" asp-page="./DanhSachHang" asp-route-NhomHangHoaId="@tt.ID">@tt.Name</a>
+    }
+}
+<div class="table-responsive" style="margin-top: 5%">
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Mặt hàng</th>
+                <th>Loại hàng</th>
+                <th>Đ.vị tính</th>
+                <th>
+                    <a asp-page="./DanhSachHang" asp-route-sortOrder="SoLuongAsc" asp-route-pageNumber="@Model.CurrentPage">S.lượng nhập ↑</a> |
+                    <a asp-page="./DanhSachHang" asp-route-sortOrder="SoLuongDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                </th>
+                <th>
+                    <a asp-page="./DanhSachHang" asp-route-sortOrder="DonGiaAsc" asp-route-pageNumber="@Model.CurrentPage">Đơn giá ↑</a> |
+                    <a asp-page="./DanhSachHang" asp-route-sortOrder="DonGiaDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                </th>
+                <th>
+                    <a asp-page="./DanhSachHang" asp-route-sortOrder="ThanhTienAsc" asp-route-pageNumber="@Model.CurrentPage">Thành tiền ↑</a> |
+                    <a asp-page="./DanhSachHang" asp-route-sortOrder="ThanhTienDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                </th>
+                <th>S.lượng đã xuất</th>
+                <th>S.lượng còn lại</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var hanghoa in Model.HangHoas)
+            {
+                <tr>
+                    <td>@hanghoa.TenHangHoa</td>
+                    <td>@hanghoa.NhomHang.Name</td>
+                    <td>@hanghoa.DonViTinh.Name</td>
+                    <td>@hanghoa.SoLuong</td>
+                    <td>@hanghoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</td>
+                    <td>@hanghoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</td>
+                    <td>@hanghoa.SoLuongDaXuat</td>
+                    <td>@hanghoa.SoLuongConLai</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<nav>
+    <ul class="pagination">
+        @if (Model.CurrentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)" asp-route-sortOrder="@Request.Query["sortOrder"]">Trước</a>
+            </li>
+        }
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                <a class="page-link" asp-route-pageNumber="@i" asp-route-sortOrder="@Request.Query["sortOrder"]">@i</a>
+            </li>
+        }
+        @if (Model.CurrentPage < Model.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)" asp-route-sortOrder="@Request.Query["sortOrder"]">Sau</a>
+            </li>
+        }
+    </ul>
+</nav>

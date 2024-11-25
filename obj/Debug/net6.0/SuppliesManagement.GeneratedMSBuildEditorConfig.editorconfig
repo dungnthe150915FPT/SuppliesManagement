@@ -1,0 +1,72 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = SuppliesManagement
+build_property.RootNamespace = SuppliesManagement
+build_property.ProjectDir = D:\SuppliesManagement\Project\SuppliesManagement\
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = true
+build_property.MSBuildProjectDirectory = D:\SuppliesManagement\Project\SuppliesManagement
+build_property._RazorSourceGeneratorDebug = 
+
+[D:/SuppliesManagement/Project/SuppliesManagement/Pages/ChiTietHoaDonNhap.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2hpVGlldEhvYURvbk5oYXAuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SuppliesManagement/Project/SuppliesManagement/Pages/DanhSachHang.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGFuaFNhY2hIYW5nLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SuppliesManagement/Project/SuppliesManagement/Pages/DanhSachHoaDonNhap.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGFuaFNhY2hIb2FEb25OaGFwLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SuppliesManagement/Project/SuppliesManagement/Pages/DanhSachTaiKhoan.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGFuaFNhY2hUYWlLaG9hbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SuppliesManagement/Project/SuppliesManagement/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SuppliesManagement/Project/SuppliesManagement/Pages/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SuppliesManagement/Project/SuppliesManagement/Pages/NhapKho.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTmhhcEtoby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SuppliesManagement/Project/SuppliesManagement/Pages/NhapMuaHangHoa.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTmhhcE11YUhhbmdIb2EuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SuppliesManagement/Project/SuppliesManagement/Pages/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SuppliesManagement/Project/SuppliesManagement/Pages/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SuppliesManagement/Project/SuppliesManagement/Pages/SignIn.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2lnbkluLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SuppliesManagement/Project/SuppliesManagement/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SuppliesManagement/Project/SuppliesManagement/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SuppliesManagement/Project/SuppliesManagement/Pages/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-27rva3h1gi
