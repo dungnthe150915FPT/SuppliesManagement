@@ -15,11 +15,16 @@ namespace SuppliesManagement.Pages
         {
             this.context = context;
         }
-        public List<HoaDonXuatViewModel> HoaDonXuats { get; set; }
 
-        public async Task OnGetAsync(DateTime? startDate, DateTime? endDate)
+        public List<HoaDonXuatViewModel> HoaDonXuats { get; set; }
+        public int CurrentPage { get; set; } = 1; 
+        public int TotalPages { get; set; } 
+        public const int PageSize = 10;
+
+        public async Task OnGetAsync(DateTime? startDate, DateTime? endDate, int pageNumber = 1)
         {
             var query = context.HoaDonXuats.Include(n => n.KhoHang).AsQueryable();
+
             if (startDate.HasValue)
             {
                 query = query.Where(h => h.NgayNhan >= startDate.Value);
@@ -29,7 +34,15 @@ namespace SuppliesManagement.Pages
                 query = query.Where(h => h.NgayNhan <= endDate.Value);
             }
 
+            // Tổng số hóa đơn để xác định số trang
+            int totalItems = await query.CountAsync();
+            TotalPages = (int)Math.Ceiling(totalItems / (double)PageSize);
+            CurrentPage = pageNumber;
+
+            // Lấy hóa đơn cho trang hiện tại
             HoaDonXuats = await query
+                .Skip((pageNumber - 1) * PageSize)
+                .Take(PageSize)
                 .Select(h => new HoaDonXuatViewModel
                 {
                     Id = h.Id,

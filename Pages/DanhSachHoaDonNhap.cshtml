@@ -56,6 +56,29 @@
     </tbody>
 </table>
 
+<nav>
+    <ul class="pagination">
+        @if (Model.CurrentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)" asp-route-sortOrder="@Request.Query["sortOrder"]">Trước</a>
+            </li>
+        }
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                <a class="page-link" asp-route-pageNumber="@i" asp-route-sortOrder="@Request.Query["sortOrder"]">@i</a>
+            </li>
+        }
+        @if (Model.CurrentPage < Model.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)" asp-route-sortOrder="@Request.Query["sortOrder"]">Sau</a>
+            </li>
+        }
+    </ul>
+</nav>
+
 @if (!string.IsNullOrWhiteSpace(ViewData["Success"]?.ToString()))
 {
     <div class="alert alert-success" role="alert">

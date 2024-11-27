@@ -2,6 +2,7 @@
 {
     public class HangHoaInputModel
     {
+        public Guid Id { get; set; }
         public string TenHangHoa { get; set; }
         public int NhomHangID { get; set; }
         public int SoLuong { get; set; }

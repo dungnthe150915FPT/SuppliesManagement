@@ -23,9 +23,9 @@ namespace SuppliesManagement.Pages
 
         public List<HangHoa> HangHoas { get; set; }
         public List<NhomHang> NhomHangs { get; set; }
-        public int CurrentPage { get; set; } // Trang hiện tại
-        public int TotalPages { get; set; }  // Tổng số trang
-        public const int PageSize = 10;      // Số hàng hóa trên mỗi trang
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        public const int PageSize = 10;
 
         public IActionResult OnGet(
     string hanghoa,
@@ -112,7 +112,7 @@ namespace SuppliesManagement.Pages
 
         private IActionResult ExportExcel(List<HangHoa> hangHoas)
         {
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial; 
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             using var package = new ExcelPackage();
 
