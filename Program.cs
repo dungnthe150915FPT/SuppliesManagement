@@ -1,15 +1,18 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using SuppliesManagement.DBContext;
+using Microsoft.Extensions.Configuration;
+using SuppliesManagement.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddDbContext<SuppliesManagementProjectContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("SuppliesManagement")));
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddDbContext<SuppliesManagementDBContext>(option =>
+/*builder.Services.AddDbContext<SuppliesManagementDBContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("SuppliesManagement"));
-});
+});*/
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -37,7 +40,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.MapGet("/", context =>
 {
-    context.Response.Redirect("/SignIn");
+    context.Response.Redirect("/DanhSachHang");
     return Task.CompletedTask;
 });
 app.UseRouting();

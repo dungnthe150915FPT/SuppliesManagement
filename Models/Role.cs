@@ -1,9 +1,18 @@
-﻿namespace SuppliesManagement.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace SuppliesManagement.Models
 {
-    public class Role
+    public partial class Role
     {
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public ICollection<Account> Accounts { get; set; }
+        public Role()
+        {
+            Accounts = new HashSet<Account>();
+        }
+
+        public int Id { get; set; }
+        public string Name { get; set; } = null!;
+
+        public virtual ICollection<Account> Accounts { get; set; }
     }
 }

@@ -1,11 +1,21 @@
-﻿namespace SuppliesManagement.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace SuppliesManagement.Models
 {
-    public class KhoHang
+    public partial class KhoHang
     {
-        public Guid ID { get; set; }
-        public string TenKho { get; set; }
-        public string DiaChi { get; set; }
-        public ICollection<HangHoa> HangHoas { get; set; }
-        public ICollection<HangHoaHoaDon> HangHoaHoaDons { get; set; }
+        public KhoHang()
+        {
+            HangHoas = new HashSet<HangHoa>();
+            HoaDonNhaps = new HashSet<HoaDonNhap>();
+        }
+
+        public Guid Id { get; set; }
+        public string Ten { get; set; } = null!;
+        public string DiaChi { get; set; } = null!;
+
+        public virtual ICollection<HangHoa> HangHoas { get; set; }
+        public virtual ICollection<HoaDonNhap> HoaDonNhaps { get; set; }
     }
 }

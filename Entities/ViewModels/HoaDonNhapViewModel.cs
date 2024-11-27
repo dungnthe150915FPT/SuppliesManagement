@@ -10,5 +10,6 @@
         public decimal ThanhTien { get; set; } 
         public string Serial { get; set; }
         public List<HangHoaViewModel> HangHoas { get; set; }
+        public KhoHang KhoHang { get; set; }
     }
 }

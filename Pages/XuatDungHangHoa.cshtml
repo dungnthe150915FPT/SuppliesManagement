@@ -1,25 +1,21 @@
 ﻿@page
-@model SuppliesManagement.Pages.NhapMuaHangHoaModel
+@model SuppliesManagement.Pages.XuatDungHangHoaModel
 @{
-    //ViewData["Title"] = "Nhập Mua Hàng Hóa";
-    //var success = ViewData["Success"]?.ToString();
 }
 
-<h2>Nhập Mua Hàng Hóa</h2>
-
-<a href="./ImportHoaDonNhap">Import hóa đơn nhập</a>
+<h2>Xuất Dùng Hàng Hóa</h2>
 
 <form method="post">
     <div class="form-group">
-        <label for="NhaCungCap">Nhà cung cấp:</label>
-        <input type="text" class="form-control" id="NhaCungCap" name="NhaCungCap" required>
+        <label for="KhoHang">Kho xuất:</label>
+        <input type="text" class="form-control" id="KhoHang" name="KhoHang" required>
     </div>
     <div class="form-group">
-        <label for="NgayNhap">Ngày nhập:</label>
-        <input type="date" class="form-control" id="NgayNhap" name="NgayNhap" required>
+        <label for="NgayNhan">Ngày xuất:</label>
+        <input type="date" class="form-control" id="NgayNhan" name="NgayNhan" required>
     </div>
     <div class="form-group">
-        <label for="KhoHangID">Nhập vào đơn vị:</label>
+        <label for="KhoHangID">Xuất từ đơn vị:</label>
         <select class="form-control" name="khoHangID" required>
             @if (Model.KhoHangs != null && Model.KhoHangs.Any())
             {
@@ -33,15 +29,30 @@
                 <option disabled>Không có dữ liệu kho hàng</option>
             }
         </select>
-
     </div>
     <div class="form-group">
-        <label for="SoSerial">Số Serial:</label>
-        <input type="text" class="form-control" id="SoSerial" name="SoSerial">
+        <label for="NguoiNhanId">Xuất cho:</label>
+        <select class="form-control" name="NguoiNhanId" required>
+            @if (Model.Accounts != null && Model.Accounts.Any())
+            {
+                foreach (var account in Model.Accounts)
+                {
+                    @if(account.RoleId == 2){
+                        <option value="@account.Id">@account.Username</option>
+                    }else{
+                        <option disabled>Không có dữ liệu tài khoản</option>
+                    }
+                }
+            }
+            else
+            {
+                <option disabled>Không có dữ liệu tài khoản</option>
+            }
+        </select>
     </div>
     <div class="form-group">
-        <label for="SoHoaDon">Số hóa đơn:</label>
-        <input type="text" class="form-control" id="SoHoaDon" name="SoHoaDon">
+        <label for="LyDoNhan">Lý do xuất:</label>
+        <input type="text" class="form-control" id="LyDoNhan" name="LyDoNhan">
     </div>
     <div class="form-group">
         <label for="ThanhTien">Tổng số tiền (Chưa tính VAT):</label>

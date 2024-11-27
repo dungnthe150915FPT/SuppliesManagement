@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using SuppliesManagement.DBContext;
 using SuppliesManagement.Models;
 using System.IO;
 
@@ -15,9 +14,9 @@ namespace SuppliesManagement.Pages
 {
     public class DanhSachHangModel : PageModel
     {
-        private readonly SuppliesManagementDBContext dBContext;
+        private readonly SuppliesManagementProjectContext dBContext;
 
-        public DanhSachHangModel(SuppliesManagementDBContext dBContext)
+        public DanhSachHangModel(SuppliesManagementProjectContext dBContext)
         {
             this.dBContext = dBContext;
         }
@@ -46,7 +45,7 @@ namespace SuppliesManagement.Pages
             // Lọc theo nhóm hàng
             if (NhomHangHoaId.HasValue)
             {
-                query = query.Where(t => t.NhomHangID == NhomHangHoaId.Value);
+                query = query.Where(t => t.NhomHangId == NhomHangHoaId.Value);
             }
 
             // Tìm kiếm theo tên hàng hóa
@@ -83,17 +82,17 @@ namespace SuppliesManagement.Pages
 
             if (exportExcelVatTu)
             {
-                var vatTu = query.Where(h => h.NhomHangID == 2).ToList();
+                var vatTu = query.Where(h => h.NhomHangId == 2).ToList();
                 return ExportExcel(vatTu, "VatTu");
             }
             if (exportExcelPTTT)
             {
-                var phuTung = query.Where(h => h.NhomHangID == 3).ToList();
+                var phuTung = query.Where(h => h.NhomHangId == 3).ToList();
                 return ExportExcel(phuTung, "PTTT");
             }
             if (exportExcelCCDC)
             {
-                var ccdc = query.Where(h => h.NhomHangID == 1).ToList();
+                var ccdc = query.Where(h => h.NhomHangId == 1).ToList();
                 return ExportExcel(ccdc, "CCDC");
             }
 

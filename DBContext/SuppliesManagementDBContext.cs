@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/*using Microsoft.EntityFrameworkCore;
 using SuppliesManagement.Models;
 
 namespace SuppliesManagement.DBContext
@@ -7,6 +7,8 @@ namespace SuppliesManagement.DBContext
     {
         public SuppliesManagementDBContext(DbContextOptions<SuppliesManagementDBContext> options) : base(options)
         { }
+
+
         public DbSet<HangHoa> HangHoas { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<HoaDonNhap> HoaDonNhaps { get; set; }
@@ -15,8 +17,9 @@ namespace SuppliesManagement.DBContext
         public DbSet<NhomHang> NhomHangs { get; set; }
         public DbSet<XuatKho> XuatKhos { get; set; }
         public DbSet<NhapKho> NhapKhos { get; set; }
-        public DbSet<Role> Roles { get; set; }
         public DbSet<DonViTinh> DonViTinhs { get; set; }
+        public DbSet<Role> Roles { get; set; }
         public DbSet<HangHoaHoaDon> HangHoaHoaDons { get; set; }
     }
 }
+*/

@@ -1,19 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using SuppliesManagement.DBContext;
 using SuppliesManagement.Models;
 using SuppliesManagement.Models.Request;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SuppliesManagement.Pages
 {
     public class NhapMuaHangHoaModel : PageModel
     {
-        private readonly SuppliesManagementDBContext dBContext;
+        private readonly SuppliesManagementProjectContext dBContext;
 
-        public NhapMuaHangHoaModel(SuppliesManagementDBContext dBContext)
+        public NhapMuaHangHoaModel(SuppliesManagementProjectContext dBContext)
         {
             this.dBContext = dBContext;
         }
@@ -36,8 +33,9 @@ namespace SuppliesManagement.Pages
             }
             var hoaDonNhap = new HoaDonNhap
             {
+                Id = Guid.NewGuid(),
                 NhaCungCap = NhaCungCap,
-                KhoHangID = khoHangID,
+                KhoHangId = khoHangID,
                 SoHoaDon = SoHoaDon,
                 NgayNhap = NgayNhap,
                 Serial = SoSerial,
@@ -49,31 +47,58 @@ namespace SuppliesManagement.Pages
 
             foreach (var item in hangHoaModels)
             {
-                //var hangHoaExisted = await dBContext.HangHoas.FirstOrDefaultAsync(h => h.TenHangHoa == item.TenHangHoa);
-                var hangHoaExisted = await dBContext.HangHoas
-        .FirstOrDefaultAsync(h => EF.Functions.Like(h.TenHangHoa, item.TenHangHoa.Trim()));
+                var hangHoaExisted = await dBContext.HangHoas.FirstOrDefaultAsync(h => h.TenHangHoa == item.TenHangHoa && 
+                h.NgayNhap == NgayNhap && h.DonViTinhId == item.DonViTinhID && h.DonGiaTruocThue == item.DonGiaTruocThue);
                 if (hangHoaExisted != null)
                 {
-                    var hangHoa = new HangHoa
+                    /*var hangHoa = new HangHoa
                     {
+                        Id = Guid.NewGuid(),
                         TenHangHoa = hangHoaExisted.TenHangHoa,
-                        NhomHangID = item.NhomHangID,
-                        DonViTinhID = item.DonViTinhID,
+                        NhomHangId = item.NhomHangID,
+                        DonViTinhId = item.DonViTinhID,
                         SoLuong = item.SoLuong + hangHoaExisted.SoLuong,
-                        VAT = item.VAT,
+                        Vat = item.VAT,
                         DonGiaTruocThue = item.DonGiaTruocThue,
                         DonGiaSauThue = item.DonGiaTruocThue * (1 + item.VAT / 100),
                         TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue + hangHoaExisted.TongGiaTruocThue,
                         TongGiaSauThue = item.SoLuong * (item.DonGiaTruocThue * (1 + item.VAT / 100)) + hangHoaExisted.TongGiaSauThue,
-                        KhoHangID = khoHangID,
+                        KhoHangId = khoHangID,
                         SoLuongConLai = hangHoaExisted.SoLuongConLai + item.SoLuong,
                         SoLuongDaXuat = hangHoaExisted.SoLuongDaXuat
                     };
-                    dBContext.HangHoas.Update(hangHoa);
+                    dBContext.HangHoas.Update(hangHoa);*/
+                    hangHoaExisted.NgayNhap = NgayNhap;
+                    hangHoaExisted.SoLuong += item.SoLuong;
+                    hangHoaExisted.DonGiaTruocThue = hangHoaExisted.DonGiaTruocThue;
+                    hangHoaExisted.Vat = hangHoaExisted.Vat;
+                    hangHoaExisted.DonGiaSauThue = hangHoaExisted.DonGiaTruocThue * (1 + hangHoaExisted.Vat / 100);
+                    hangHoaExisted.TongGiaTruocThue = hangHoaExisted.SoLuong * hangHoaExisted.DonGiaTruocThue;
+                    hangHoaExisted.TongGiaSauThue = hangHoaExisted.SoLuong * hangHoaExisted.DonGiaSauThue;
+                    hangHoaExisted.KhoHangId = khoHangID;
+                    hangHoaExisted.SoLuongConLai += item.SoLuong;
+                    dBContext.HangHoas.Update(hangHoaExisted);
+                    var hangHoaHoaDon = new HangHoaHoaDon
+                    {
+                        Id = Guid.NewGuid(),
+                        TenHangHoa = item.TenHangHoa,
+                        NhomHangId = item.NhomHangID,
+                        DonViTinhId = item.DonViTinhID,
+                        SoLuong = item.SoLuong,
+                        Vat = item.VAT,
+                        DonGiaTruocThue = item.DonGiaTruocThue,
+                        DonGiaSauThue = item.DonGiaTruocThue * (1 + item.VAT / 100),
+                        TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
+                        TongGiaSauThue = item.SoLuong * (item.DonGiaTruocThue * (1 + item.VAT / 100)),
+                        KhoHangId = khoHangID,
+                    };
+                    dBContext.HangHoaHoaDons.Add(hangHoaHoaDon);
+
                     var nhapKho = new NhapKho
                     {
-                        HoaDonNhapID = hoaDonNhap.ID,
-                        HangHoaID = hangHoa.Id,
+                        NhapKhoId = Guid.NewGuid(),
+                        HoaDonNhapId = hoaDonNhap.Id,
+                        HangHoaHoaDonId = hangHoaHoaDon.Id,
                     };
                     dBContext.NhapKhos.Add(nhapKho);
                 }
@@ -81,25 +106,42 @@ namespace SuppliesManagement.Pages
                 {
                     var hangHoa = new HangHoa
                     {
+                        Id = Guid.NewGuid(),
                         TenHangHoa = item.TenHangHoa,
-                        NhomHangID = item.NhomHangID,
-                        DonViTinhID = item.DonViTinhID,
+                        NhomHangId = item.NhomHangID,
+                        DonViTinhId = item.DonViTinhID,
                         SoLuong = item.SoLuong,
-                        VAT = item.VAT,
+                        Vat = item.VAT,
                         DonGiaTruocThue = item.DonGiaTruocThue,
                         DonGiaSauThue = item.DonGiaTruocThue * (1 + item.VAT / 100),
                         TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
                         TongGiaSauThue = item.SoLuong * (item.DonGiaTruocThue * (1 + item.VAT / 100)),
-                        KhoHangID = khoHangID,
+                        KhoHangId = khoHangID,
                         SoLuongDaXuat = 0,
-                        SoLuongConLai = item.SoLuong
+                        SoLuongConLai = item.SoLuong,
+                        NgayNhap = NgayNhap
                     };
                     dBContext.HangHoas.Add(hangHoa);
-
+                    var hangHoaHoaDon = new HangHoaHoaDon
+                    {
+                        Id = Guid.NewGuid(),
+                        TenHangHoa = item.TenHangHoa,
+                        NhomHangId = item.NhomHangID,
+                        DonViTinhId = item.DonViTinhID,
+                        SoLuong = item.SoLuong,
+                        Vat = item.VAT,
+                        DonGiaTruocThue = item.DonGiaTruocThue,
+                        DonGiaSauThue = item.DonGiaTruocThue * (1 + item.VAT / 100),
+                        TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
+                        TongGiaSauThue = item.SoLuong * (item.DonGiaTruocThue * (1 + item.VAT / 100)),
+                        KhoHangId = khoHangID,
+                    };
+                    dBContext.HangHoaHoaDons.Add(hangHoaHoaDon);
                     var nhapKho = new NhapKho
                     {
-                        HoaDonNhapID = hoaDonNhap.ID,
-                        HangHoaID = hangHoa.Id,
+                        NhapKhoId = Guid.NewGuid(),
+                        HoaDonNhapId = hoaDonNhap.Id,
+                        HangHoaHoaDonId = hangHoaHoaDon.Id,
                     };
                     dBContext.NhapKhos.Add(nhapKho);
                 }

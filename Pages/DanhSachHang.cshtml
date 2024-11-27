@@ -14,7 +14,7 @@
 @{
     @foreach (var tt in Model.NhomHangs)
     {
-        <a class="btn btn-info" asp-page="./DanhSachHang" asp-route-NhomHangHoaId="@tt.ID">@tt.Name</a>
+        <a class="btn btn-info" asp-page="./DanhSachHang" asp-route-NhomHangHoaId="@tt.Id">@tt.Name</a>
     }
 }
 <div class="table-responsive" style="margin-top: 5%">
@@ -24,6 +24,7 @@
                 <th>Mặt hàng</th>
                 <th>Loại hàng</th>
                 <th>Đ.vị tính</th>
+                <th>Ng.Nhập</th>
                 <th>
                     <a asp-page="./DanhSachHang" asp-route-sortOrder="SoLuongAsc" asp-route-pageNumber="@Model.CurrentPage">S.lượng nhập ↑</a> |
                     <a asp-page="./DanhSachHang" asp-route-sortOrder="SoLuongDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
@@ -47,6 +48,7 @@
                     <td>@hanghoa.TenHangHoa</td>
                     <td>@hanghoa.NhomHang.Name</td>
                     <td>@hanghoa.DonViTinh.Name</td>
+                    <td>@hanghoa.NgayNhap.ToString("dd/MM/yyyy")</td>
                     <td>@hanghoa.SoLuong</td>
                     <td>@hanghoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</td>
                     <td>@hanghoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</td>

@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using SuppliesManagement.DBContext;
+using SuppliesManagement.Models;
 
 namespace SuppliesManagement.Pages
 {
     public class SignInModel : PageModel
     {
-        private readonly SuppliesManagementDBContext context;
+        private readonly SuppliesManagementProjectContext context;
 
-        public SignInModel(SuppliesManagementDBContext context)
+        public SignInModel(SuppliesManagementProjectContext context)
         {
             this.context = context;
         }
@@ -25,12 +25,12 @@ namespace SuppliesManagement.Pages
         {
             var user = context.Accounts.FirstOrDefault(
                 u => u.Username == Username && u.Password == Password);
-            if (user != null && user.RoleID == 2)
+            if (user != null && user.RoleId == 2)
             {
                 HttpContext.Session.SetString("Username", user.Username);
                 return RedirectToPage("/DanhSachHang");
             }
-            else if (user != null && user.RoleID == 1)
+            else if (user != null && user.RoleId == 1)
             {
                 HttpContext.Session.SetString("Username", user.Username);
                 return RedirectToPage("/DanhSachTaiKhoan");

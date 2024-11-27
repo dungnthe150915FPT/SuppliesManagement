@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using SuppliesManagement.DBContext;
 using SuppliesManagement.Models;
 using SuppliesManagement.Models.ViewModels;
 using System.Collections.Generic;
@@ -11,9 +10,9 @@ namespace SuppliesManagement.Pages
 {
     public class DanhSachHoaDonNhapModel : PageModel
     {
-        private readonly SuppliesManagementDBContext _dbContext;
+        private readonly SuppliesManagementProjectContext _dbContext;
 
-        public DanhSachHoaDonNhapModel(SuppliesManagementDBContext dbContext)
+        public DanhSachHoaDonNhapModel(SuppliesManagementProjectContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -23,8 +22,6 @@ namespace SuppliesManagement.Pages
         public async Task OnGetAsync(DateTime? startDate, DateTime? endDate)
         {
             var query = _dbContext.HoaDonNhaps.Include(n => n.KhoHang).AsQueryable();
-
-            // Lọc theo khoảng ngày nếu có
             if (startDate.HasValue)
             {
                 query = query.Where(h => h.NgayNhap >= startDate.Value);
@@ -37,25 +34,25 @@ namespace SuppliesManagement.Pages
             HoaDonNhaps = await query
                 .Select(h => new HoaDonNhapViewModel
                 {
-                    ID = h.ID,
+                    ID = h.Id,
                     NhaCungCap = h.NhaCungCap,
                     NgayNhap = h.NgayNhap,
                     SoHoaDon = h.SoHoaDon,
                     ThanhTien = h.ThanhTien,
                     Serial = h.Serial,
-                    KhoNhap = h.KhoHang.TenKho,
+                    KhoNhap = h.KhoHang.Ten,
                     HangHoas = _dbContext.NhapKhos
-                        .Where(n => n.HoaDonNhapID == h.ID)
-                        .Include(n => n.HangHoa)
+                        .Where(n => n.HoaDonNhapId == h.Id)
+                        .Include(n => n.HangHoaHoaDon)
                         .Select(n => new HangHoaViewModel
                         {
-                            TenKhoHang = n.HangHoa.KhoHang.TenKho,
-                            TenHangHoa = n.HangHoa.TenHangHoa,
-                            SoLuong = n.HangHoa.SoLuong,
-                            DonGiaTruocThue = n.HangHoa.DonGiaTruocThue,
-                            DonGiaSauThue = n.HangHoa.DonGiaSauThue,
-                            TongGiaTruocThue = n.HangHoa.TongGiaTruocThue,
-                            TongGiaSauThue = n.HangHoa.TongGiaSauThue
+                            TenKhoHang = n.HangHoaHoaDon.KhoHang.Ten,
+                            TenHangHoa = n.HangHoaHoaDon.TenHangHoa,
+                            SoLuong = n.HangHoaHoaDon.SoLuong,
+                            DonGiaTruocThue = n.HangHoaHoaDon.DonGiaTruocThue,
+                            DonGiaSauThue = n.HangHoaHoaDon.DonGiaSauThue,
+                            TongGiaTruocThue = n.HangHoaHoaDon.TongGiaTruocThue,
+                            TongGiaSauThue = n.HangHoaHoaDon.TongGiaSauThue
                         })
                         .ToList()
                 })
