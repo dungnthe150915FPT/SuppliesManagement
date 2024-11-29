@@ -20,52 +20,15 @@ namespace SuppliesManagement.Pages
         public List<HoaDonNhapViewModel> HoaDonNhaps { get; set; }
         public int CurrentPage { get; set; } = 1;
         public int TotalPages { get; set; }
-        public const int ItemsPerPage = 10;
+        public const int PageSize = 10;
 
-        /*public async Task OnGetAsync(DateTime? startDate, DateTime? endDate)
+        public async Task OnGetAsync(
+            DateTime? startDate,
+            string hoadon,
+            DateTime? endDate,
+            int pageNumber = 1
+        )
         {
-            var query = _dbContext.HoaDonNhaps.Include(n => n.KhoHang).AsQueryable();
-            if (startDate.HasValue)
-            {
-                query = query.Where(h => h.NgayNhap >= startDate.Value);
-            }
-            if (endDate.HasValue)
-            {
-                query = query.Where(h => h.NgayNhap <= endDate.Value);
-            }
-
-            HoaDonNhaps = await query
-                .Select(h => new HoaDonNhapViewModel
-                {
-                    ID = h.Id,
-                    NhaCungCap = h.NhaCungCap,
-                    NgayNhap = h.NgayNhap,
-                    SoHoaDon = h.SoHoaDon,
-                    ThanhTien = h.ThanhTien,
-                    Serial = h.Serial,
-                    KhoNhap = h.KhoHang.Ten,
-                    HangHoas = _dbContext.NhapKhos
-                        .Where(n => n.HoaDonNhapId == h.Id)
-                        .Include(n => n.HangHoaHoaDon)
-                        .Select(n => new HangHoaViewModel
-                        {
-                            TenKhoHang = n.HangHoaHoaDon.KhoHang.Ten,
-                            TenHangHoa = n.HangHoaHoaDon.TenHangHoa,
-                            SoLuong = n.HangHoaHoaDon.SoLuong,
-                            DonGiaTruocThue = n.HangHoaHoaDon.DonGiaTruocThue,
-                            DonGiaSauThue = n.HangHoaHoaDon.DonGiaSauThue,
-                            TongGiaTruocThue = n.HangHoaHoaDon.TongGiaTruocThue,
-                            TongGiaSauThue = n.HangHoaHoaDon.TongGiaSauThue
-                        })
-                        .ToList()
-                })
-                .ToListAsync();
-        }*/
-
-        public async Task OnGetAsync(DateTime? startDate, DateTime? endDate, int page = 1)
-        {
-            CurrentPage = page;
-
             var query = _dbContext.HoaDonNhaps.Include(n => n.KhoHang).AsQueryable();
 
             if (startDate.HasValue)
@@ -76,26 +39,32 @@ namespace SuppliesManagement.Pages
             {
                 query = query.Where(h => h.NgayNhap <= endDate.Value);
             }
-
+            if (!string.IsNullOrEmpty(hoadon))
+            {
+                query = query.Where(h => h.NhaCungCap.Contains(hoadon) || h.SoHoaDon.Contains(hoadon));
+            }
             // Tính tổng số hóa đơn và tổng số trang
-            var totalItems = await query.CountAsync();
-            TotalPages = (int)Math.Ceiling(totalItems / (double)ItemsPerPage);
-
+            int totalItems = await query.CountAsync();
+            TotalPages = (int)Math.Ceiling(totalItems / (double)PageSize);
+            CurrentPage = pageNumber;
             // Lấy hóa đơn cho trang hiện tại
             HoaDonNhaps = await query
                 .OrderByDescending(h => h.NgayNhap)
-                .Skip((CurrentPage - 1) * ItemsPerPage)
-                .Take(ItemsPerPage)
-                .Select(h => new HoaDonNhapViewModel
-                {
-                    ID = h.Id,
-                    NhaCungCap = h.NhaCungCap,
-                    NgayNhap = h.NgayNhap,
-                    SoHoaDon = h.SoHoaDon,
-                    ThanhTien = h.ThanhTien,
-                    Serial = h.Serial,
-                    KhoNhap = h.KhoHang.Ten,
-                })
+                .Skip((CurrentPage - 1) * PageSize)
+                .Take(PageSize)
+                .Select(
+                    h =>
+                        new HoaDonNhapViewModel
+                        {
+                            ID = h.Id,
+                            NhaCungCap = h.NhaCungCap,
+                            NgayNhap = h.NgayNhap,
+                            SoHoaDon = h.SoHoaDon,
+                            ThanhTien = h.ThanhTien,
+                            Serial = h.Serial,
+                            KhoNhap = h.KhoHang.Ten,
+                        }
+                )
                 .ToListAsync();
         }
     }

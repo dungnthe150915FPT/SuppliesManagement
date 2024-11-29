@@ -4,9 +4,23 @@
 }
 <h2>Danh Sách Hóa Đơn Nhập</h2>
 
-<div class="form-group">
+@* <div class="form-group">
     <label for="searchInput">Tìm kiếm:</label>
-    <input type="text" class="form-control" id="searchInput" placeholder="Nhập tên nhà cung cấp hoặc số hóa đơn...">
+    <input type="text" class="form-control"
+     id="searchInput" 
+     name="hoadon" placeholder="Nhập tên nhà cung cấp hoặc số hóa đơn...">
+    <input type="Submit" value="Search" />
+</div> *@
+
+<div class="form-group">
+    @* <form method="get"> *@
+        <label for="searchInput">Tìm kiếm:</label>
+        <input type="text" class="form-control"   
+         id="searchInput" 
+   name="hoadon"
+            placeholder="Nhập tên nhà cung cấp hoặc số hóa đơn...">
+        @* <input class="btn btn-primary" type="Submit" value="Search" /> *@
+    @* </form> *@
 </div>
 
 <div class="form-group">
@@ -22,7 +36,6 @@
 <table class="table table-striped table-bordered">
     <thead class="thead-dark">
         <tr>
-            <th>STT</th>
             <th>Số Hóa Đơn</th>
             <th>Nhà Cung Cấp</th>
             <th>Nhập vào kho</th>
@@ -43,7 +56,6 @@
             for (int i = 0; i < Model.HoaDonNhaps.Count; i++)
             {
                 <tr>
-                    <td>@(i + 1)</td>
                     <td><a asp-page="/ChiTietHoaDonNhap" asp-route-id="@Model.HoaDonNhaps[i].ID">@Model.HoaDonNhaps[i].SoHoaDon</a></td>
                     <td>@Model.HoaDonNhaps[i].NhaCungCap</td>
                     <td>@Model.HoaDonNhaps[i].KhoNhap</td>
@@ -61,19 +73,21 @@
         @if (Model.CurrentPage > 1)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)" asp-route-sortOrder="@Request.Query["sortOrder"]">Trước</a>
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)" asp-route-hanghoa="@Request.Query["hanghoa"]">Trước</a>
             </li>
         }
+
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
             <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
-                <a class="page-link" asp-route-pageNumber="@i" asp-route-sortOrder="@Request.Query["sortOrder"]">@i</a>
+                <a class="page-link" asp-route-pageNumber="@i" asp-route-hanghoa="@Request.Query["hanghoa"]">@i</a>
             </li>
         }
+
         @if (Model.CurrentPage < Model.TotalPages)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)" asp-route-sortOrder="@Request.Query["sortOrder"]">Sau</a>
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)" asp-route-hanghoa="@Request.Query["hanghoa"]">Sau</a>
             </li>
         }
     </ul>

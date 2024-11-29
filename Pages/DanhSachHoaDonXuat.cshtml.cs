@@ -17,8 +17,8 @@ namespace SuppliesManagement.Pages
         }
 
         public List<HoaDonXuatViewModel> HoaDonXuats { get; set; }
-        public int CurrentPage { get; set; } = 1; 
-        public int TotalPages { get; set; } 
+        public int CurrentPage { get; set; } = 1;
+        public int TotalPages { get; set; }
         public const int PageSize = 10;
 
         public async Task OnGetAsync(DateTime? startDate, DateTime? endDate, int pageNumber = 1)
@@ -43,28 +43,35 @@ namespace SuppliesManagement.Pages
             HoaDonXuats = await query
                 .Skip((pageNumber - 1) * PageSize)
                 .Take(PageSize)
-                .Select(h => new HoaDonXuatViewModel
-                {
-                    Id = h.Id,
-                    LyDoNhan = h.LyDoNhan,
-                    ThanhTien = h.ThanhTien,
-                    NgayNhan = h.NgayNhan,
-                    NguoiNhanUsername = h.NguoiNhan.Username,
-                    KhoHang = h.KhoHang.Ten,
-                    HangHoas = context.XuatKhos
-                        .Where(n => n.HoaDonXuatId == h.Id)
-                        .Include(n => n.HangHoaHoaDon).ThenInclude(n => n.KhoHang)
-                        .Select(n => new HangHoaViewModel
+                .Select(
+                    h =>
+                        new HoaDonXuatViewModel
                         {
-                            TenHangHoa = n.HangHoaHoaDon.TenHangHoa,
-                            SoLuong = n.HangHoaHoaDon.SoLuong,
-                            DonGiaTruocThue = n.HangHoaHoaDon.DonGiaTruocThue,
-                            DonGiaSauThue = n.HangHoaHoaDon.DonGiaSauThue,
-                            TongGiaTruocThue = n.HangHoaHoaDon.TongGiaTruocThue,
-                            TongGiaSauThue = n.HangHoaHoaDon.TongGiaSauThue
-                        })
-                        .ToList()
-                })
+                            Id = h.Id,
+                            LyDoNhan = h.LyDoNhan,
+                            ThanhTien = h.ThanhTien,
+                            NgayNhan = h.NgayNhan,
+                            NguoiNhanUsername = h.NguoiNhan.Username,
+                            KhoHang = h.KhoHang.Ten,
+                            HangHoas = context.XuatKhos
+                                .Where(n => n.HoaDonXuatId == h.Id)
+                                .Include(n => n.HangHoaHoaDon)
+                                .ThenInclude(n => n.KhoHang)
+                                .Select(
+                                    n =>
+                                        new HangHoaViewModel
+                                        {
+                                            TenHangHoa = n.HangHoaHoaDon.TenHangHoa,
+                                            SoLuong = n.HangHoaHoaDon.SoLuong,
+                                            DonGiaTruocThue = n.HangHoaHoaDon.DonGiaTruocThue,
+                                            DonGiaSauThue = n.HangHoaHoaDon.DonGiaSauThue,
+                                            TongGiaTruocThue = n.HangHoaHoaDon.TongGiaTruocThue,
+                                            TongGiaSauThue = n.HangHoaHoaDon.TongGiaSauThue
+                                        }
+                                )
+                                .ToList()
+                        }
+                )
                 .ToListAsync();
         }
     }

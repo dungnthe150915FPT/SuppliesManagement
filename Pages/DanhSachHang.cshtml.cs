@@ -51,7 +51,10 @@ namespace SuppliesManagement.Pages
             // Tìm kiếm theo tên hàng hóa
             if (!string.IsNullOrEmpty(hanghoa))
             {
-                query = query.Where(t => t.TenHangHoa.Contains(hanghoa));
+                query = query.Include(t => t.NhomHang)
+                .Include(t => t.DonViTinh)
+                .Where(t => t.TenHangHoa.Contains(hanghoa)
+                || t.NhomHang.Name.Contains(hanghoa) || t.DonViTinh.Name.Contains(hanghoa));
             }
 
             // Sắp xếp theo tiêu chí

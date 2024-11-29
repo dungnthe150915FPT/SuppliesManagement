@@ -9,5 +9,7 @@
         public decimal DonGiaTruocThue { get; set; }
         public int DonViTinhID { get; set; }
         public int VAT { get; set; }
+/*        public string TenNhomHang { get; set; }
+        public string TenDonViTinh { get; set; }*/
     }
 }
