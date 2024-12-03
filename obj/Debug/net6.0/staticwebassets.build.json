@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "djeUX5zjVB1Li6XaFyIv+eeZ989wXVAen//y5jfd3Sc=",
+  "Hash": "B9qJeRtE++s8SrkGA5Oj0+9s9//QXzP6bJU/GIEJWj0=",
   "Source": "SuppliesManagement",
   "BasePath": "_content/SuppliesManagement",
   "Mode": "Default",
@@ -100,6 +100,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "D:\\SuppliesManagement\\Project\\SuppliesManagement\\wwwroot\\js\\SignIn.js",
+      "SourceId": "SuppliesManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\SuppliesManagement\\Project\\SuppliesManagement\\wwwroot\\",
+      "BasePath": "_content/SuppliesManagement",
+      "RelativePath": "js/SignIn.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\SignIn.js"
     },
     {
       "Identity": "D:\\SuppliesManagement\\Project\\SuppliesManagement\\wwwroot\\js\\site.js",
