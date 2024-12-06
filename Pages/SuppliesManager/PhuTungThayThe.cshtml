@@ -6,9 +6,16 @@
 <form method="get" class="form-group">
     <label for="NgayNhap">Tên hàng hóa:</label>
     <input class="form-control mb-3" type="text" name="hanghoa" value="@Request.Query["hanghoa"]" placeholder="Tên hàng hóa cần tìm kiếm" />
-    <label for="NgayNhap">Năm nhập:</label>
+    <label for="NgayNhap">Năm:</label>
     <input class="form-control mb-3" type="number" name="year" value="@Request.Query["year"]" placeholder="Năm cần tìm kiếm" />
     <input type="submit" value="Search" class="btn btn-success mb-3" />
+</form>
+<form method="post" class="form-group">
+    <input type="hidden" name="year" value="@Request.Query["year"]" />
+    @if (!string.IsNullOrEmpty(Request.Query["year"]))
+    {
+        <input type="submit" asp-page-handler="Export" value="Xuất sổ PTTT năm @Request.Query["year"]" class="btn btn-primary" />
+    } 
 </form>
 <div class="table-responsive" style="margin-top: 5%">
     <table class="table table-striped table-bordered">
@@ -18,16 +25,16 @@
                 <th>Đ.vị tính</th>
                 <th>Ng.Nhập</th>
                 <th>
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="SoLuongAsc" asp-route-pageNumber="@Model.CurrentPage">S.lượng nhập ↑</a> |
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="SoLuongDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="SoLuongAsc" asp-route-pageNumber="@Model.CurrentPage">S.lượng nhập ↑</a> |
+                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="SoLuongDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
                 </th>
                 <th>
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="DonGiaAsc" asp-route-pageNumber="@Model.CurrentPage">Đơn giá ↑</a> |
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="DonGiaDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="DonGiaAsc" asp-route-pageNumber="@Model.CurrentPage">Đơn giá ↑</a> |
+                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="DonGiaDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
                 </th>
                 <th>
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="ThanhTienAsc" asp-route-pageNumber="@Model.CurrentPage">Thành tiền ↑</a> |
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="ThanhTienDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="ThanhTienAsc" asp-route-pageNumber="@Model.CurrentPage">Thành tiền ↑</a> |
+                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="ThanhTienDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
                 </th>
                 <th>S.lượng đã xuất</th>
                 <th>S.lượng còn lại</th>

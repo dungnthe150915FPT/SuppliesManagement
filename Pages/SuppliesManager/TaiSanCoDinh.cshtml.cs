@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using SuppliesManagement.Models;
 
 namespace SuppliesManagement.Pages.SuppliesManager
@@ -11,6 +13,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
         {
             this.dBContext = dBContext;
         }
+
         public List<HangHoa> HangHoas { get; set; }
         public List<NhomHang> NhomHangs { get; set; }
         public int CurrentPage { get; set; }
@@ -19,16 +22,18 @@ namespace SuppliesManagement.Pages.SuppliesManager
         private readonly SuppliesManagementProjectContext dBContext;
 
         public IActionResult OnGet(
-    string hanghoa,
-    string sortOrder,
-        int pageNumber = 1,
-    int? year = null)
+            string hanghoa,
+            string sortOrder,
+            int pageNumber = 1,
+            int? year = null
+        )
         {
             NhomHangs = dBContext.NhomHangs.ToList();
 
             IQueryable<HangHoa> query = dBContext.HangHoas
                 .Include(h => h.NhomHang)
-                .Include(h => h.DonViTinh).Where(h => h.NhomHangId == 4);
+                .Include(h => h.DonViTinh)
+                .Where(h => h.NhomHangId == 4);
 
             // Lọc theo năm nhập
             if (year.HasValue)
@@ -39,9 +44,12 @@ namespace SuppliesManagement.Pages.SuppliesManager
             // Tìm kiếm theo tên hàng hóa
             if (!string.IsNullOrEmpty(hanghoa))
             {
-                query = query.Where(t => t.TenHangHoa.Contains(hanghoa) ||
-                                         t.NhomHang.Name.Contains(hanghoa) ||
-                                         t.DonViTinh.Name.Contains(hanghoa));
+                query = query.Where(
+                    t =>
+                        t.TenHangHoa.Contains(hanghoa)
+                        || t.NhomHang.Name.Contains(hanghoa)
+                        || t.DonViTinh.Name.Contains(hanghoa)
+                );
             }
 
             // Sắp xếp theo tiêu chí
@@ -75,10 +83,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
             TotalPages = (int)Math.Ceiling(totalItems / (double)PageSize);
             CurrentPage = pageNumber;
 
-            HangHoas = query
-                .Skip((pageNumber - 1) * PageSize)
-                .Take(PageSize)
-                .ToList();
+            HangHoas = query.Skip((pageNumber - 1) * PageSize).Take(PageSize).ToList();
 
             var role = HttpContext.Session.GetInt32("RoleId");
             if (role != 2 && role != 1)
@@ -87,6 +92,156 @@ namespace SuppliesManagement.Pages.SuppliesManager
             }
 
             return Page();
+        }
+
+        public IActionResult OnPostExport(int year)
+        {
+            var currentDate = DateTime.Now;
+            var khoHang = dBContext.KhoHangs.FirstOrDefault(); // Assuming single record
+            var hangHoas = dBContext.HangHoas
+                .Include(h => h.DonViTinh)
+                .Where(h => h.NgayNhap.Year == year && h.NhomHangId == 4)
+                .ToList();
+
+            using var package = new ExcelPackage();
+            var worksheet = package.Workbook.Worksheets.Add("Tài Sản Cố Định");
+
+            // Setting default font
+            worksheet.Cells.Style.Font.Name = "Times New Roman";
+            worksheet.Cells.Style.Font.Size = 12;
+
+            // Header Information
+            worksheet.Cells["A1"].Value = $"Đơn vị: {khoHang?.Ten}";
+            worksheet.Cells["A2"].Value = $"Địa chỉ: {khoHang?.DiaChi}";
+            worksheet.Cells["A3"].Value = $"SỔ THEO DÕI TÀI SẢN CỐ ĐỊNH";
+            worksheet.Cells["A3"].Style.Font.Size = 14;
+            worksheet.Cells["A3"].Style.Font.Bold = true;
+
+            worksheet.Cells["A4"].Value = $"Năm: {year}";
+            worksheet.Cells["A1:A4"].Style.Font.Bold = true;
+
+            // Merge header cells
+            worksheet.Cells["A1:L1"].Merge = true;
+            worksheet.Cells["A2:L2"].Merge = true;
+            worksheet.Cells["A3:L3"].Merge = true;
+            worksheet.Cells["A4:L4"].Merge = true;
+
+            worksheet.Cells["A1:A4"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+            // Table Headers
+            string[] headers =
+            {
+                "STT",
+                "Tên TSCĐ",
+                "Mã TSCĐ",
+                "Đặc điểm/TSKT",
+                "ĐVT",
+                "QĐ tăng (Số Hiệu)",
+                "Nguyên Giá",
+                "Ngày Tháng",
+                "QĐ giảm (Số Hiệu)",
+                "Ngày Tháng",
+                "Lý do giảm",
+                "Ghi chú"
+            };
+            for (int i = 0; i < headers.Length; i++)
+            {
+                worksheet.Cells[5, i + 1].Value = headers[i];
+            }
+
+            worksheet.Cells["A5:L5"].Style.Font.Bold = true;
+            worksheet.Cells["A5:L5"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["A5:L5"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            // Adjust column widths
+            worksheet.Column(1).Width = 5; // STT
+            worksheet.Column(2).Width = 30; // Tên TSCD
+            worksheet.Column(3).Width = 20; // Mã TSCD
+            worksheet.Column(4).Width = 15; // Đặc điểm
+            worksheet.Column(5).Width = 10; // ĐVT
+            worksheet.Column(6).Width = 10; // Nguyên giá
+            worksheet.Column(7).Width = 15; // Quyết định ghi tăng số hiệu
+            worksheet.Column(8).Width = 15; // Ngày tháng tăng
+            worksheet.Column(9).Width = 15; // Quyết định ghi giảm số hiệu
+            worksheet.Column(10).Width = 15; // Ngày tháng giảm
+            worksheet.Column(11).Width = 15; // Lý do giảm
+            worksheet.Column(12).Width = 15; // Ghi chú
+
+            // Add border around the table header
+            worksheet.Cells["A5:L5"]
+                .Style
+                .Border
+                .Top
+                .Style = ExcelBorderStyle.Thin;
+            worksheet.Cells["A5:L5"].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            worksheet.Cells["A5:L5"].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+            worksheet.Cells["A5:L5"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+            // Data Rows
+            int rowIndex = 6;
+            int stt = 1;
+            foreach (var hangHoa in hangHoas)
+            {
+                worksheet.Cells[rowIndex, 1].Value = stt++; // STT
+                worksheet.Cells[rowIndex, 2].Value = hangHoa.TenHangHoa; // Tên TSCD
+                worksheet.Cells[rowIndex, 3].Value = hangHoa.Id.ToString(); // Mã TSCD (GUID)
+                worksheet.Cells[rowIndex, 4].Value = ""; // Đặc điểm
+                worksheet.Cells[rowIndex, 5].Value = hangHoa.DonViTinh?.Name; // ĐVT
+                worksheet.Cells[rowIndex, 6].Value = ""; // Quyết định ghi tăng số hiệu
+                worksheet.Cells[rowIndex, 7].Value = String.Format(
+                    "{0:0,0}",
+                    hangHoa.TongGiaTruocThue
+                ); //Nguyên giá
+                worksheet.Cells[rowIndex, 8].Value = hangHoa.NgayNhap.ToString("dd/MM/yyyy"); // Ngày tháng tăng
+                worksheet.Cells[rowIndex, 9].Value = ""; // Quyết định ghi giảm
+                worksheet.Cells[rowIndex, 10].Value = ""; // Ngày tháng giảm
+                worksheet.Cells[rowIndex, 11].Value = ""; // Lý do giảm
+                worksheet.Cells[rowIndex, 12].Value = ""; // Ghi chú
+
+                // Add border for each data row
+                worksheet.Cells[$"A{rowIndex}:L{rowIndex}"]
+                    .Style
+                    .Border
+                    .Top
+                    .Style = ExcelBorderStyle.Thin;
+                worksheet.Cells[$"A{rowIndex}:L{rowIndex}"].Style.Border.Bottom.Style =
+                    ExcelBorderStyle.Thin;
+                worksheet.Cells[$"A{rowIndex}:L{rowIndex}"].Style.Border.Left.Style =
+                    ExcelBorderStyle.Thin;
+                worksheet.Cells[$"A{rowIndex}:L{rowIndex}"].Style.Border.Right.Style =
+                    ExcelBorderStyle.Thin;
+
+                rowIndex++;
+            }
+
+            // Footer
+            worksheet.Cells[rowIndex + 2, 1].Value =
+                $"Ngày {currentDate.Day} tháng {currentDate.Month} năm {currentDate.Year}";
+            worksheet.Cells[rowIndex + 2, 1].Style.HorizontalAlignment =
+                ExcelHorizontalAlignment.Center;
+            worksheet.Cells[rowIndex + 2, 1, rowIndex + 2, 11].Merge = true;
+
+            worksheet.Cells[rowIndex + 4, 1].Value = "Người ghi sổ";
+            worksheet.Cells[rowIndex + 4, 5].Value = "Phụ trách kế toán";
+            worksheet.Cells[rowIndex + 4, 10].Value = "Giám đốc";
+
+            worksheet.Cells[rowIndex + 5, 1].Value = "(Ký, họ tên)";
+            worksheet.Cells[rowIndex + 5, 5].Value = "(Ký, họ tên)";
+            worksheet.Cells[rowIndex + 5, 10].Value = "(Ký, họ tên)";
+
+            worksheet.Cells[rowIndex + 8, 1].Value = "Dương Mạnh Tuấn";
+            worksheet.Cells[rowIndex + 8, 5].Value = "Nguyễn Thị Hảo";
+            worksheet.Cells[rowIndex + 8, 10].Value = "Đỗ Công Biên";
+
+            // Save and return file
+            var stream = new MemoryStream();
+            package.SaveAs(stream);
+            stream.Position = 0;
+            return File(
+                stream,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                $"Sổ_TSCĐ_{year}.xlsx"
+            );
         }
     }
 }

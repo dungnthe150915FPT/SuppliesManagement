@@ -4,11 +4,17 @@
 }
 <h1>DANH SÁCH VẬT TƯ</h1>
 <form method="get" class="form-group">
-    <label for="NgayNhap">Tên hàng hóa:</label>
-    <input class="form-control mb-3" type="text" name="hanghoa" value="@Request.Query["hanghoa"]" placeholder="Tên hàng hóa cần tìm kiếm" />
-    <label for="NgayNhap">Năm nhập:</label>
-    <input class="form-control mb-3" type="number" name="year" value="@Request.Query["year"]" placeholder="Năm cần tìm kiếm" />
-    <input type="submit" value="Search" class="btn btn-success mb-3" />
+    <div class="mb-3">
+        <label for="NgayNhap">Tên hàng hóa:</label>
+        <input class="form-control" type="text" name="hanghoa" value="@Request.Query["hanghoa"]" placeholder="Tên hàng hóa cần tìm kiếm" />
+    </div>
+    <div class="mb-3">
+        <label for="NgayNhap">Năm:</label>
+        <input class="form-control" type="number" name="year" value="@Request.Query["year"]" placeholder="Năm cần tìm kiếm" />
+    </div>
+    <div class="mb-3">
+        <input type="submit" value="Search" class="btn btn-success" />
+    </div>
 </form>
 <div class="table-responsive" style="margin-top: 5%">
     <table class="table table-striped table-bordered">
