@@ -1,0 +1,88 @@
+﻿@page
+@using DNTCaptcha.Core
+@model SuppliesManagement.Pages.SignInModel
+@{
+    ViewData["Title"] = "Sign In";
+    Layout = null;
+    var error = ViewData["Error"]?.ToString();
+}
+<title>Sign In</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+
+<div class="container col-md-6">
+    <div class="card bg-light mt-5">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-7 mx-auto">
+                    <h2 class="text-center">Phần mềm Quản Lý Kho</h2>
+                    <form method="post" class="mt-4">
+                        @{
+                            if (!string.IsNullOrWhiteSpace(error))
+                            {
+                                <div class="alert alert-danger" role="alert">
+                                    @error
+                                </div>
+                            }
+                        }
+                        <div class="form-group">
+                            <label for="username">Tài khoản:</label>
+                            <input type="text" class="form-control" id="username" name="Username"
+                                placeholder="Tên đăng nhập" required>
+                        </div>
+                        <div class="form-group position-relative">
+                            <label for="password">Mật khẩu:</label>
+                            <input type="password" class="form-control" id="password" name="Password"
+                                placeholder="Mật khẩu" required>
+                            <span class="show-btn position-absolute" style="right: 10px; top: 60%;" role="button">
+                                <i class="fas fa-eye" id="togglePassword" style="cursor: pointer;"></i>
+                            </span>
+                        </div>
+                         @if ((HttpContext.Session.GetInt32("FailedAttempts") ?? 0) >= 3)
+                        {
+                            <div>
+                                <label>Captcha: @Model.CaptchaGenerated</label>
+                                <input asp-for="CaptchaInput" class="form-control" />
+                            </div>
+                        } 
+
+                        @* @if ((HttpContext.Session.GetInt32("FailedAttempts") ?? 0) >= 3)
+                        {
+                            <div class="form-group">
+                                <label for="captcha">Captcha:</label>
+                                @Html.DNTCaptcha("CaptchaInput", "Nhập mã captcha", new { @class = "form-control" })
+                                <p class="captcha-hint">Vui lòng nhập mã captcha để tiếp tục.</p>
+                            </div>
+                        } *@
+
+                        @*<div class="input-group mb-3">
+                            <dnt-captcha asp-captcha-generator-max="999999" asp-captcha-generator-min="111111"
+                                asp-captcha-generator-language="English" asp-captcha-generator-display-mode="ShowDigits"
+                                asp-use-relative-urls="true" asp-placeholder="Enter Captcha" asp-font-name="Tahoma"
+                                asp-font-size="20" asp-fore-color="#333333" asp-back-color="#ccc"
+                                asp-text-box-class="text-box form-control"
+                                asp-text-box-template="<span class='input-group-prepend'><span class='form-group-text'></span></span>{0}" 
+                                asp-validation-message-class="text-danger"
+                                asp-validation-error-message="Please enter the security code"
+                                asp-refresh-button-class="fas fa-redo btn-sm" asp-use-noise="false"
+                                />
+                        </div>*@
+                        <br>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary w-100">Sign In</button>
+                        </div>
+                    </form>
+                    @*                        <p><a href="/ForgotPassword">Quên mật khẩu ?</a></p>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/SignIn.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/js/site.js"></script>
+<script src="~/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>

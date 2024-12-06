@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "B9qJeRtE++s8SrkGA5Oj0+9s9//QXzP6bJU/GIEJWj0=",
+  "Hash": "T1qi1ZEsdgT/Cdzcu0+0II6PkN5zpC/vvL/lHdfwqqM=",
   "Source": "SuppliesManagement",
   "BasePath": "_content/SuppliesManagement",
   "Mode": "Default",
@@ -49,6 +49,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "D:\\SuppliesManagement\\Project\\SuppliesManagement\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\SuppliesManagement.bundle.scp.css"
+    },
+    {
+      "Identity": "D:\\SuppliesManagement\\Project\\SuppliesManagement\\wwwroot\\css\\Error.css",
+      "SourceId": "SuppliesManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\SuppliesManagement\\Project\\SuppliesManagement\\wwwroot\\",
+      "BasePath": "_content/SuppliesManagement",
+      "RelativePath": "css/Error.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\Error.css"
     },
     {
       "Identity": "D:\\SuppliesManagement\\Project\\SuppliesManagement\\wwwroot\\css\\SignIn.css",
@@ -100,6 +117,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "D:\\SuppliesManagement\\Project\\SuppliesManagement\\wwwroot\\jquery-ajax-unobtrusive\\jquery.unobtrusive-ajax.min.js",
+      "SourceId": "SuppliesManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\SuppliesManagement\\Project\\SuppliesManagement\\wwwroot\\",
+      "BasePath": "_content/SuppliesManagement",
+      "RelativePath": "jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\jquery-ajax-unobtrusive\\jquery.unobtrusive-ajax.min.js"
     },
     {
       "Identity": "D:\\SuppliesManagement\\Project\\SuppliesManagement\\wwwroot\\js\\SignIn.js",

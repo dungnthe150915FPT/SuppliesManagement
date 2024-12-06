@@ -27,6 +27,11 @@ namespace SuppliesManagement.Pages
         public List<DonViTinh> DonViTinhs { get; set; }
         public async Task OnGet()
         {
+            var role = HttpContext.Session.GetInt32("RoleId");
+            if (role != 2 && role != 1)
+            {
+                RedirectToPage("/AccessDenied");
+            }
             NhomHangs = await dBContext.NhomHangs.ToListAsync();
             KhoHangs = await dBContext.KhoHangs.ToListAsync();
             DonViTinhs = await dBContext.DonViTinhs.ToListAsync();
@@ -38,7 +43,7 @@ namespace SuppliesManagement.Pages
         public DateTime NgayNhap { get; set; } = DateTime.Now;
         public List<HangHoaInputModel> HangHoaModels { get; set; } = new List<HangHoaInputModel>();
 
-        public async Task<IActionResult> OnPostImportPdfAsync(IFormFile pdfFile)
+        public IActionResult OnPostImportPdfAsync(IFormFile pdfFile)
         {
             if (!ModelState.IsValid)
             {
@@ -167,7 +172,7 @@ namespace SuppliesManagement.Pages
                 await dBContext.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return RedirectToPage("./NhapMuaHangHoa");
+                return Page();
             }
             catch (Exception ex)
             {

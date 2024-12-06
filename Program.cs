@@ -1,56 +1,76 @@
+using DNTCaptcha.Core;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SuppliesManagement.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddDbContext<SuppliesManagementProjectContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("SuppliesManagement")));
-// Add services to the container.
-builder.Services.AddRazorPages();
-/*builder.Services.AddDbContext<SuppliesManagementDBContext>(option =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SuppliesManagement"))
+);
+
+/*builder.Services.AddDNTCaptcha(options =>
 {
-    option.UseSqlServer(builder.Configuration.GetConnectionString("SuppliesManagement"));
+    options.UseCookieStorageProvider() // Lưu trạng thái CAPTCHA bằng cookies
+           .ShowThousandsSeparators(false); 
+        //    .WithEncryptionKey("YourSecureKey123"); 
 });*/
+
+
+
+builder.Services.AddRazorPages();
+builder.Services.AddHttpContextAccessor();
+
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.Cookie.Name = "dungnt";
-    options.IdleTimeout = TimeSpan.FromMinutes(15);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    options.Cookie.Name = ".CaptchaSession"; 
+    options.IdleTimeout = TimeSpan.FromMinutes(10); 
+    options.Cookie.HttpOnly = true; 
+    options.Cookie.IsEssential = true; 
 });
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddCookie(options =>
-        {
-            options.Cookie.Name = "dungnt";
-            options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-            options.SlidingExpiration = true;
-        });
+builder.Services.AddAuthentication("CookieAuth")
+    .AddCookie("CookieAuth", options =>
+    {
+        options.LoginPath = "/Common/SignIn";
+        options.AccessDeniedPath = "/Error/AccessDenied";
+    });
+builder.Services.AddAuthorization(
+/*    options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireRole("1"));
+    options.AddPolicy("SuppliesManager", policy => policy.RequireRole("2"));
+    options.AddPolicy("User", policy => policy.RequireRole("3"));
+}*/
+);
+
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
+    app.UseExceptionHandler("/Error/PageNotFound");
+    app.UseHsts(); 
 }
+app.UseStatusCodePagesWithReExecute("/Error/PageNotFound");
+app.UseHttpsRedirection(); 
+app.UseStaticFiles(); 
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.MapGet("/", context =>
-{
-    context.Response.Redirect("/DanhSachHang");
-    return Task.CompletedTask;
-});
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseStaticFiles();
 app.UseSession();
+
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/Common/SignIn");
+    return Task.CompletedTask;
+});
 
 app.MapRazorPages();
 
-app.Run();
+app.Run(); 

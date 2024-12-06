@@ -1,0 +1,124 @@
+﻿@page
+@model SuppliesManagement.Pages.SuppliesManager.DanhSachHoaDonXuatModel
+<h2>Danh Sách Hóa Đơn Nhập</h2>
+
+<div class="form-group">
+    <label for="searchInput">Tìm kiếm:</label>
+    <input type="text" class="form-control" id="searchInput" placeholder="Nhập tên nhà cung cấp hoặc số hóa đơn...">
+</div>
+
+<div class="form-group">
+    <label for="startDate">Từ ngày:</label>
+    <input type="date" class="form-control" id="startDate" />
+</div>
+<div class="form-group">
+    <label for="endDate">Đến ngày:</label>
+    <input type="date" class="form-control" id="endDate" />
+</div>
+<button type="button" class="btn btn-primary" id="filterDateBtn">Lọc</button>
+
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>Mã Hóa Đơn</th>
+            <th>Người nhận</th>
+            <th>Ngày nhận</th>
+            <th>Kho xuất</th>
+            <th>Tổng Tiền</th>
+            <th>Lý do xuất</th>
+        </tr>
+    </thead>
+    <tbody id="invoiceTableBody">
+        @if (Model.HoaDonXuats.Count == 0)
+        {
+            <tr>
+                <td colspan="7" class="text-center">Không có hóa đơn nào.</td>
+            </tr>
+        }
+        else
+        {
+            for (int i = 0; i < Model.HoaDonXuats.Count; i++)
+            {
+                <tr>
+                    <td><a asp-page="/ChiTietHoaDonXuat" asp-route-id="@Model.HoaDonXuats[i].Id">@Model.HoaDonXuats[i].Id</a></td>
+                    <td>@Model.HoaDonXuats[i].NguoiNhanUsername</td>
+                    <td>@Model.HoaDonXuats[i].NgayNhan.ToString("dd/MM/yyyy")</td>
+                    <td>@Model.HoaDonXuats[i].KhoHang</td>
+                    <td>@Model.HoaDonXuats[i].ThanhTien.ToString("#,##0").Replace(',', '.') VNĐ</td>
+                    <td>@Model.HoaDonXuats[i].LyDoNhan</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<nav>
+    <ul class="pagination">
+        @if (Model.CurrentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)" asp-route-hanghoa="@Request.Query["hanghoa"]">Trước</a>
+            </li>
+        }
+
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                <a class="page-link" asp-route-pageNumber="@i" asp-route-hanghoa="@Request.Query["hanghoa"]">@i</a>
+            </li>
+        }
+
+        @if (Model.CurrentPage < Model.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)" asp-route-hanghoa="@Request.Query["hanghoa"]">Sau</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+
+
+@if (!string.IsNullOrWhiteSpace(ViewData["Success"]?.ToString()))
+{
+    <div class="alert alert-success" role="alert">
+        @ViewData["Success"]
+    </div>
+}
+
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function () {
+        var searchTerm = this.value.toLowerCase();
+        filterTable(searchTerm);
+    });
+
+    document.getElementById('filterDateBtn').addEventListener('click', function () {
+        var startDate = document.getElementById('startDate').value;
+        var endDate = document.getElementById('endDate').value;
+
+        fetch(`?startDate=${startDate}&endDate=${endDate}`)
+            .then(response => response.text())
+            .then(html => {
+                var tableBody = document.getElementById('invoiceTableBody');
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(html, 'text/html');
+                var newRows = doc.getElementById('invoiceTableBody').innerHTML;
+                tableBody.innerHTML = newRows;
+            });
+    });
+
+    function filterTable(searchTerm) {
+        var rows = document.querySelectorAll('tbody tr');
+        rows.forEach(function (row) {
+            var cells = row.getElementsByTagName('td');
+            var found = false;
+            for (var i = 0; i < cells.length; i++) {
+                if (cells[i].textContent.toLowerCase().indexOf(searchTerm) > -1) {
+                    found = true;
+                    break;
+                }
+            }
+            row.style.display = found ? '' : 'none';
+        });
+    }
+</script>
