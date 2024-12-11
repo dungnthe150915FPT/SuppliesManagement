@@ -6,6 +6,10 @@
 
 <h2>Chi Tiết Hóa Đơn Xuất</h2>
 
+<form method="post" asp-page-handler="Export" asp-route-id="@Model.HoaDonXuat.ID">
+    <button type="submit" class="btn btn-primary">Xuất Excel</button>
+</form>
+
 <div>
     <h4>Thông Tin Hóa Đơn</h4>
     <dl class="row">

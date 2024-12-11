@@ -184,7 +184,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 worksheet.Column(10).Width = 15; // Ghi chú
 
                 // Tổng tiền
-                worksheet.Cells[startRow + hangHoas.Count + 2, 8].Value = "Cộng:";
+                worksheet.Cells[startRow + hangHoas.Count + 2, 8].Value = "Tổng tiền (Chưa có VAT):";
                 worksheet.Cells[startRow + hangHoas.Count + 2, 9].Value = hoaDon.ThanhTien;
                 worksheet.Cells[startRow + hangHoas.Count + 2, 9].Style.Font.Bold = true;
 

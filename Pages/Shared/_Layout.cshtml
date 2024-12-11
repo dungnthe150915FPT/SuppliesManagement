@@ -41,9 +41,9 @@
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
+@*                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                            </li>
+                            </li>*@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Danh Sách Hàng Hóa
@@ -61,6 +61,12 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/SuppliesManager/DanhSachHoaDonXuat">Danh Sách Hóa Đơn Xuất</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/SuppliesManager/NhapMuaHangHoa">Nhập Mua Hàng Hóa</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/SuppliesManager/XuatDungHangHoa">Xuất Dùng Hàng Hóa</a>
                             </li>
                             @if (HttpContextAccessor.HttpContext.Session.GetInt32("RoleId") == 1)
                             {

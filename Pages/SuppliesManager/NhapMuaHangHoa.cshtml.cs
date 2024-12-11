@@ -159,6 +159,7 @@ namespace SuppliesManagement.Pages
             }
             dBContext.SaveChanges();
             /*ViewData["Success"] = "Thêm hóa đơn và hàng hóa thành công";*/
+            TempData["SuccessMessage"] = "Nhập mới hóa đơn hàng hóa có số hóa đơn: " + SoHoaDon + " thành công!";
             return RedirectToPage("./NhapMuaHangHoa");
         }
 

@@ -9,7 +9,7 @@
         ? System.Text.Json.JsonSerializer.Deserialize<List<HangHoaInputModel>>(hangHoaListJson)
         : new List<HangHoaInputModel>();
 }
-
+<link href="~/css/nhapmuahanghoa.css" rel="stylesheet" />
 <h2>Nhập Mua Hàng Hóa</h2>
 
 @*<a href="./ImportHoaDonNhap">Import hóa đơn nhập</a>*@
@@ -150,6 +150,18 @@
 
 
 </form>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successAlert" class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div id="errorAlert" class="alert alert-error" role="alert">
+        @TempData["Error"]
+    </div>
+}
 <script>
     let hangHoaCount = 1; // Start with one row
     document.getElementById('addRow').addEventListener('click', function () {
@@ -241,4 +253,21 @@
         });
         document.getElementById('TongTien').value = totalAmount.toFixed(0);
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const successAlert = document.getElementById("successAlert");
+        if (successAlert) {
+            setTimeout(() => {
+                successAlert.style.display = "none";
+            }, 10000); 
+        }
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        const errorAlert = document.getElementById("successAlert");
+        if (successAlert) {
+            setTimeout(() => {
+                successAlert.style.display = "none";
+            }, 10000);
+        }
+    });
 </script>
