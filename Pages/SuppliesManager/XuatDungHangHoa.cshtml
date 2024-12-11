@@ -1,234 +1,179 @@
 ﻿@page
-@model SuppliesManagement.Pages.XuatDungHangHoaModel
+@model SuppliesManagement.Pages.SuppliesManager.XuatDungHangHoaModel
 @{
 }
-
 <h2>Xuất Dùng Hàng Hóa</h2>
 
 <form method="post">
     <div class="form-group">
         <label for="KhoHang">Kho xuất:</label>
-        <select class="form-control" name="khoHangID" required>
+        <select class="form-control" name="KhoHangId" required>
             @if (Model.KhoHangs != null && Model.KhoHangs.Any())
             {
-                foreach (var kho in Model.KhoHangs)
+                @foreach (var kho in Model.KhoHangs)
                 {
                     <option value="@kho.Id">@kho.Ten - @kho.DiaChi</option>
                 }
             }
             else
             {
-                <option disabled>Không có dữ liệu kho hàng</option>
+                <option disabled>Không có kho hàng</option>
             }
         </select>
     </div>
     <div class="form-group">
         <label for="NgayNhan">Ngày xuất:</label>
-        <input type="date" class="form-control" id="NgayNhan" name="NgayNhan" required>
+        <input type="date" class="form-control" name="NgayNhan" required>
     </div>
     <div class="form-group">
-        <label for="NguoiNhanId">Xuất cho:</label>
+        <label for="NguoiNhanId">Người nhận:</label>
         <select class="form-control" name="NguoiNhanId" required>
             @if (Model.Accounts != null && Model.Accounts.Any())
-            {
-                foreach (var account in Model.Accounts)
+            { 
+                @foreach (var account in Model.Accounts)
                 {
-                    @if (account.RoleId == 3)
-                    {
-                        <option value="@account.Id">@account.Username</option>
-                    }
+                    <option value="@account.Id">@account.Username</option>
                 }
             }
             else
             {
-                <option disabled>Không có dữ liệu tài khoản</option>
+                <option disabled>Không có người nhận</option>
             }
         </select>
     </div>
     <div class="form-group">
         <label for="LyDoNhan">Lý do xuất:</label>
-        <input type="text" class="form-control" id="LyDoNhan" name="LyDoNhan">
+        <input type="text" class="form-control" name="LyDoNhan" required>
     </div>
     <div class="form-group">
-        <label for="ThanhTien">Tổng số tiền (Chưa tính VAT):</label>
-        <input type="text" class="form-control" id="ThanhTien" name="ThanhTien" readonly>
+        <label for="ThanhTien">Thành Tiền (Chưa tính thuế VAT):</label>
+        <input id="ThanhTien" type="text" class="form-control" name="ThanhTien" readonly>
     </div>
-    <br>
-
+        <div class="form-group">
+        <label for="TongTien">Tổng Tiền (Đã tính thuế VAT):</label>
+        <input id="TongTien" type="text" class="form-control" name="TongTien" readonly>
+    </div>
     <div class="table-responsive">
-        <table class="table custom-table">
-            <thead class="thead-dark">
+        <table class="table">
+            <thead>
                 <tr>
-                    <th>STT</th>
                     <th>Hàng hóa</th>
                     <th>Nhóm hàng</th>
                     <th>Số lượng</th>
-                    <th>Đơn vị tính</th>
-                    <th>Giá tr.thuế</th>
+                    <th>Đ.vị tính</th>
+                    <th>Đ.giá trước thuế</th>
                     <th>VAT%</th>
-                    <th>Giá s.thuế</th>
+                    <th>Đ.giá sau thuế</th>
                     <th>Tiền hàng</th>
                     <th>Tổng tiền</th>
                 </tr>
             </thead>
             <tbody id="hangHoaTableBody">
-                @for (int i = 0; i < 1; i++)
-                {
-                    <tr>
-                        <th>@(i + 1)</th>
-                        <td>
-                            <select class="form-control" name="hangHoaModels[@i].HangHoas" required onchange="updateHangHoaDetails(this)">
-                                @if (Model.HangHoas != null && Model.HangHoas.Any())
-                                {
-                                    @foreach (var hangHoa in Model.HangHoas)
-                                    {
-                                        <option value="@hangHoa.Id"
-                                    data-nhom="@hangHoa.NhomHang.Name"
-                                    data-dvt="@hangHoa.DonViTinh.Name"
-                                    data-dg="@hangHoa.DonGiaTruocThue"
-                                    data-vat="@hangHoa.Vat">
-                                            @hangHoa.TenHangHoa - Ngày nhập: @hangHoa.NgayNhap.ToString("dd/MM/yyyy")
-                                        </option>
-                                    }
-                                }
-                                else
-                                {
-                                    <option disabled>Không có dữ liệu hàng hóa</option>
-                                }
-                            </select>
-                        </td>
-                        <td>
-                            <span class="group-name">@Model.HangHoas[i].NhomHang.Name"</span>
-                        </td>
-                        <td><input type="number" class="form-control" name="hangHoaModels[@i].SoLuong" min="1" required oninput="calculateTotals(this.closest('tr'))"></td>
-                        <td><span class="unit-name">@Model.HangHoas[i].DonViTinh.Name</span></td>
-                        <td><input type="text" class="form-control" name="hangHoaModels[@i].DonGiaTruocThue" min="0" required readonly oninput="calculateTotals(this.closest('tr'))"></td>
-                        @*<td><input type="number" class="form-control" name="hangHoaModels[@i].VAT" min="0" max="10" required oninput="calculateTotals(this.closest('tr'))"></td>*@
-
-                        <td>
-                            <input type="number" class="form-control" name="hangHoaModels[@i].VAT"
-                               value="@Model.HangHoas[i].Vat" min="0" max="100" readonly
-                               oninput="calculateTotals(this.closest('tr'))">
-                        </td>
-                        <td><input type="text" class="form-control" name="hangHoaModels[@i].DonGiaSauThue" readonly></td>
-                        <td><input type="text" class="form-control" name="hangHoaModels[@i].TongGiaTruocThue" readonly></td>
-                        <td><input type="text" class="form-control" name="hangHoaModels[@i].TongGiaSauThue" readonly></td>
-                    </tr>
-                }
+                <!-- JavaScript will dynamically add rows here -->
             </tbody>
         </table>
-        <button type="button" class="btn btn-secondary" id="addRow">Thêm hàng hóa xuất</button>
+        <button type="button" id="addRow" class="btn btn-secondary">Thêm hàng hóa</button>
         <button type="submit" class="btn btn-primary">Xuất hàng hóa</button>
     </div>
-    @*@if (!string.IsNullOrWhiteSpace(success))
-    {
-    <div class="alert alert-success" role="alert">
-    @success
-    </div>
-    }*@
 </form>
 
 <script>
-    let hangHoaCount = 1; // Track row count.
-
-    // Function to update row fields based on selected HangHoa.
-    function updateHangHoaDetails(selectElement) {
-        const selectedOption = selectElement.options[selectElement.selectedIndex];
-
-        const nhomHang = selectedOption.getAttribute('data-nhom');
-        const donViTinh = selectedOption.getAttribute('data-dvt');
-        const donGia = parseFloat(selectedOption.getAttribute('data-dg'));
-        const vat = parseFloat(selectedOption.getAttribute('data-vat'));
-
-        const row = selectElement.closest('tr');
-
-        // Update fields in the row.
-        row.querySelector('.group-name').textContent = nhomHang;
-        row.querySelector('.unit-name').textContent = donViTinh;
-        row.querySelector('input[name*="DonGiaTruocThue"]').value = donGia.toFixed(0);
-        row.querySelector('input[name*="VAT"]').value = vat.toFixed(0);
-
-        calculateTotals(row); // Recalculate totals for the row.
-    }
-
-    // Function to calculate totals for a row.
-    function calculateTotals(row) {
-        const qty = parseFloat(row.querySelector('input[name*="SoLuong"]').value) || 0;
-        const priceBeforeTax = parseFloat(row.querySelector('input[name*="DonGiaTruocThue"]').value) || 0;
-        const vat = parseFloat(row.querySelector('input[name*="VAT"]').value) || 0;
-
-        const priceAfterTax = priceBeforeTax * (1 + vat / 100);
-        row.querySelector('input[name*="DonGiaSauThue"]').value = priceAfterTax.toFixed(0);
-
-        const totalBeforeTax = qty * priceBeforeTax;
-        row.querySelector('input[name*="TongGiaTruocThue"]').value = totalBeforeTax.toFixed(0);
-
-        const totalAfterTax = qty * priceAfterTax;
-        row.querySelector('input[name*="TongGiaSauThue"]').value = totalAfterTax.toFixed(0);
-
-        updateTotalAmount(); // Update the overall total.
-    }
-
-    // Function to update the total amount field.
-    function updateTotalAmount() {
-        let totalAmount = 0;
-
-        const rows = document.querySelectorAll('.custom-table tbody tr');
-        rows.forEach(row => {
-            const totalRow = parseFloat(row.querySelector('input[name*="TongGiaTruocThue"]').value) || 0;
-            totalAmount += totalRow;
-        });
-
-        document.getElementById('ThanhTien').value = totalAmount.toFixed(0);
-    }
-
-    // Add a new row to the table.
-    document.getElementById('addRow').addEventListener('click', function () {
-        const tableBody = document.getElementById('hangHoaTableBody');
-        const newRow = document.createElement('tr');
+    document.getElementById("addRow").addEventListener("click", function () {
+        const tableBody = document.getElementById("hangHoaTableBody");
+        const newRow = document.createElement("tr");
 
         newRow.innerHTML = `
-                <th>${hangHoaCount + 1}</th>
                 <td>
-                    <select class="form-control" name="hangHoaModels[${hangHoaCount}].HangHoas" required>
-    @foreach (var hangHoa in Model.HangHoas)
+                    <select name="HangHoaIds[]" class="form-control" onchange="fillHangHoaDetails(this)" required>
+                        <option value="" disabled selected>Chọn hàng hóa</option>
+    @if (Model.HangHoas != null && Model.HangHoas.Any())
     {
-                                <option value="@hangHoa.Id"
-                                    data-nhom="@hangHoa.NhomHang.Name"
-                                    data-dvt="@hangHoa.DonViTinh.Name"
-                                    data-dg="@hangHoa.DonGiaTruocThue"
-                                    data-vat="@hangHoa.Vat">
-            @hangHoa.TenHangHoa - Ngày nhập: @hangHoa.NgayNhap.ToString("dd/MM/yyyy")
-                                </option>
+        @foreach (var hangHoa in Model.HangHoas)
+        {
+                                                <option value="@hangHoa.Id"
+                                        data-nhom-hang="@hangHoa.NhomHang.Name"
+                                        data-don-vi-tinh="@hangHoa.DonViTinh.Name"
+                                        data-gia-truoc-thue="@hangHoa.DonGiaTruocThue"
+                                        data-vat="@hangHoa.Vat">
+                @hangHoa.TenHangHoa
+                                                </option>
+        }
     }
+    else
+    {
+                <p>Không có hàng hóa trong kho</p>
+    }
+
                     </select>
                 </td>
-                <td><span class="group-name"></span></td>
-                <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].SoLuong" min="1" required></td>
-                <td><span class="unit-name"></span></td>
-                <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].DonGiaTruocThue" readonly></td>
-                <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].VAT" readonly></td>
-                <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].DonGiaSauThue" readonly></td>
-                <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TongGiaTruocThue" readonly></td>
-                <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TongGiaSauThue" readonly></td>
+                <td><input type="text" name="NhomHang[]" class="form-control" readonly></td>
+                <td><input type="number" name="SoLuong[]" class="form-control" min="1" required oninput="calculateRowTotals(this.closest('tr'))"></td>
+                <td><input type="text" name="DonViTinh[]" class="form-control" readonly></td>
+                <td><input type="text" name="GiaTriTruocThue[]" class="form-control" readonly></td>
+                <td><input type="text" name="VAT[]" class="form-control" readonly></td>
+                <td><input type="text" name="GiaTriSauThue[]" class="form-control" readonly></td>
+                <td><input type="text" name="TienHang[]" class="form-control" readonly></td>
+                <td><input type="text" name="TongTien[]" class="form-control" readonly></td>
             `;
 
         tableBody.appendChild(newRow);
-        hangHoaCount++;
-
-        setupRow(newRow); // Attach event listeners to the new row.
     });
 
-    // Setup event listeners for a row.
-    function setupRow(row) {
-        row.querySelector('select[name*="HangHoas"]').addEventListener('change', function () {
-            updateHangHoaDetails(this);
-        });
-        row.querySelector('input[name*="SoLuong"]').addEventListener('input', function () {
-            calculateTotals(row);
-        });
+    function fillHangHoaDetails(selectElement) {
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+
+        const nhomHang = selectedOption.getAttribute("data-nhom-hang");
+        const donViTinh = selectedOption.getAttribute("data-don-vi-tinh");
+        const giaTruocThue = parseFloat(selectedOption.getAttribute("data-gia-truoc-thue"));
+        const vat = parseFloat(selectedOption.getAttribute("data-vat"));
+
+        const row = selectElement.closest("tr");
+
+        row.querySelector('input[name="NhomHang[]"]').value = nhomHang || "";
+        row.querySelector('input[name="DonViTinh[]"]').value = donViTinh || "";
+        row.querySelector('input[name="GiaTriTruocThue[]"]').value = giaTruocThue.toFixed(0);
+        row.querySelector('input[name="VAT[]"]').value = vat.toFixed(0);
+
+        calculateRowTotals(row);
     }
 
-    // Initialize event listeners for existing rows.
-    document.querySelectorAll('.custom-table tbody tr').forEach(row => setupRow(row));
+    function calculateRowTotals(row) {
+        const soLuong = parseFloat(row.querySelector('input[name="SoLuong[]"]').value) || 0;
+        const giaTruocThue = parseFloat(row.querySelector('input[name="GiaTriTruocThue[]"]').value) || 0;
+        const vat = parseFloat(row.querySelector('input[name="VAT[]"]').value) || 0;
+
+        const giaSauThue = giaTruocThue * (1 + vat / 100);
+        const tienHang = soLuong * giaTruocThue;
+        const tongTien = soLuong * giaSauThue;
+
+        row.querySelector('input[name="GiaTriSauThue[]"]').value = giaSauThue.toFixed(0);
+        row.querySelector('input[name="TienHang[]"]').value = tienHang.toFixed(0);
+        row.querySelector('input[name="TongTien[]"]').value = tongTien.toFixed(0);
+
+        updateTotalThanhTien();
+        updateTotalTongTien();
+    }
+
+    function updateTotalThanhTien() {
+        const rows = document.querySelectorAll('#hangHoaTableBody tr');
+        let totalThanhTien = 0;
+
+        rows.forEach(row => {
+            const tienHang = parseFloat(row.querySelector('input[name="TienHang[]"]').value) || 0;
+            totalThanhTien += tienHang;
+        });
+
+        document.getElementById('ThanhTien').value = totalThanhTien.toFixed(0);
+    }
+function updateTotalTongTien() {
+        const rows = document.querySelectorAll('#hangHoaTableBody tr');
+        let totalTongTien = 0;
+
+        rows.forEach(row => {
+            const tienHang = parseFloat(row.querySelector('input[name="TongTien[]"]').value) || 0;
+            totalTongTien += tienHang;
+        });
+
+        document.getElementById('TongTien').value = totalTongTien.toFixed(0);
+    }
 </script>

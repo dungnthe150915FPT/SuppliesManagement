@@ -100,7 +100,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 .ToList();
 
             using var package = new ExcelPackage();
-            var worksheet = package.Workbook.Worksheets.Add("Tài Sản Cố Định");
+            var worksheet = package.Workbook.Worksheets.Add("Phụ Tùng Thay Thế năm " + year);
 
             // Setting default font
             worksheet.Cells.Style.Font.Name = "Times New Roman";
@@ -133,9 +133,9 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 "Đặc điểm/TSKT",
                 "ĐVT",
                 "QĐ tăng (Số Hiệu)",
-                "Ngày Tháng",
+                "Ngày Tháng Tăng",
                 "QĐ giảm (Số Hiệu)",
-                "Ngày Tháng",
+                "Ngày Tháng Giảm",
                 "Lý do giảm",
                 "Ghi chú"
             };
@@ -154,9 +154,9 @@ namespace SuppliesManagement.Pages.SuppliesManager
             worksheet.Column(3).Width = 20; // Mã TSCD
             worksheet.Column(4).Width = 15; // Đặc điểm
             worksheet.Column(5).Width = 10; // ĐVT
-            worksheet.Column(6).Width = 15; // Quyết định ghi tăng số hiệu
+            worksheet.Column(6).Width = 20; // Quyết định ghi tăng số hiệu
             worksheet.Column(7).Width = 15; // Ngày tháng tăng 
-            worksheet.Column(8).Width = 15; // Quyết định ghi giảm số hiệu
+            worksheet.Column(8).Width = 20; // Quyết định ghi giảm số hiệu
             worksheet.Column(9).Width = 15; // Ngày tháng giảm
             worksheet.Column(10).Width = 15; // Lý do giảm
             worksheet.Column(11).Width = 15; // Ghi chú

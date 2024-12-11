@@ -37,11 +37,12 @@
     <thead class="thead-dark">
         <tr>
             <th>Số Hóa Đơn</th>
+            <th>Serial</th>
             <th>Nhà Cung Cấp</th>
             <th>Nhập vào kho</th>
             <th>Ngày Nhập</th>
             <th>Tổng Tiền</th>
-            <th>Serial</th>
+            <th>Số Lượng Mặt hàng</th>
         </tr>
     </thead>
     <tbody id="invoiceTableBody">
@@ -56,12 +57,13 @@
             for (int i = 0; i < Model.HoaDonNhaps.Count; i++)
             {
                 <tr>
-                    <td><a asp-page="/ChiTietHoaDonNhap" asp-route-id="@Model.HoaDonNhaps[i].ID">@Model.HoaDonNhaps[i].SoHoaDon</a></td>
+                    <td><a asp-page="/SuppliesManager/ChiTietHoaDonNhap" asp-route-id="@Model.HoaDonNhaps[i].ID">@Model.HoaDonNhaps[i].SoHoaDon</a></td>
+                    <td>@Model.HoaDonNhaps[i].Serial</td>
                     <td>@Model.HoaDonNhaps[i].NhaCungCap</td>
                     <td>@Model.HoaDonNhaps[i].KhoNhap</td>
                     <td>@Model.HoaDonNhaps[i].NgayNhap.ToString("dd/MM/yyyy")</td>
                     <td>@Model.HoaDonNhaps[i].ThanhTien.ToString("#,##0").Replace(',', '.') VNĐ</td>
-                    <td>@Model.HoaDonNhaps[i].Serial</td>
+                    <td>@Model.HoaDonNhaps[i].SoLuongMatHang</td>
                 </tr>
             }
         }

@@ -16,8 +16,8 @@
         <dt class="col-sm-3">Nhà Cung Cấp:</dt>
         <dd class="col-sm-9">@Model.HoaDonNhap.NhaCungCap</dd>
 
-@*        <dt class="col-sm-3">Nhập vào kho:</dt>
-        <dd class="col-sm-9">@Model.HoaDonNhap.KhoHang</dd>*@
+        <dt class="col-sm-3">Nhập vào kho:</dt>
+        <dd class="col-sm-9">@Model.HoaDonNhap.KhoHang</dd>
 
         <dt class="col-sm-3">Ngày Nhập:</dt>
         <dd class="col-sm-9">@Model.HoaDonNhap.NgayNhap.ToString("dd/MM/yyyy")</dd>
@@ -38,6 +38,7 @@
     <thead>
         <tr>
             <th>Hàng Hóa</th>
+            <th>Nhóm hàng</th>
             <th>Đơn vị tính</th>
             <th>Số Lượng</th>
             <th>Giá Trước Thuế</th>
@@ -59,6 +60,7 @@
             {
                 <tr>
                     <td>@hangHoa.TenHangHoa</td>
+                    <td>@hangHoa.NhomHangName</td>
                     <td>@hangHoa.DonViTinh</td>
                     <td>@hangHoa.SoLuong</td>
                     <td>@hangHoa.DonGiaTruocThue.ToString("#,##0 VNĐ")</td>

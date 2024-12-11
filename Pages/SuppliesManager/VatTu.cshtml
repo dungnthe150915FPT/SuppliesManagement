@@ -6,15 +6,31 @@
 <form method="get" class="form-group">
     <div class="mb-3">
         <label for="NgayNhap">Tên hàng hóa:</label>
-        <input class="form-control" type="text" name="hanghoa" value="@Request.Query["hanghoa"]" placeholder="Tên hàng hóa cần tìm kiếm" />
+        <input class="form-control" type="text" name="hanghoa" value="@Request.Query["hanghoa"]"
+            placeholder="Tên hàng hóa cần tìm kiếm" />
+    </div>
+    <div class="mb-3">
+        <label for="month">Tháng:</label>
+        <input class="form-control" type="number" name="month" min="1" max="12" 
+        value="@Request.Query["month"]" placeholder="Tháng" />
     </div>
     <div class="mb-3">
         <label for="NgayNhap">Năm:</label>
-        <input class="form-control" type="number" name="year" value="@Request.Query["year"]" placeholder="Năm cần tìm kiếm" />
+        <input class="form-control" type="number" name="year" value="@Request.Query["year"]"
+            placeholder="Năm" />
     </div>
     <div class="mb-3">
         <input type="submit" value="Search" class="btn btn-success" />
     </div>
+</form>
+<form method="post" class="form-group">
+    <input type="hidden" name="year" value="@Request.Query["year"]" />
+    <input type="hidden" name="month" value="@Request.Query["month"]" />
+    @if (!string.IsNullOrEmpty(Request.Query["year"]) && !string.IsNullOrEmpty(Request.Query["month"]))
+    {
+        <input type="submit" asp-page-handler="Export"
+            value="Xuất sổ Vật tư tháng @Request.Query["month"] năm @Request.Query["year"]" class="btn btn-primary" />
+    }
 </form>
 <div class="table-responsive" style="margin-top: 5%">
     <table class="table table-striped table-bordered">
@@ -24,36 +40,51 @@
                 <th>Đ.vị tính</th>
                 <th>Ng.Nhập</th>
                 <th>
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="SoLuongAsc" asp-route-pageNumber="@Model.CurrentPage">S.lượng nhập ↑</a> |
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="SoLuongDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                    <a asp-page="./VatTu" asp-route-sortOrder="SoLuongAsc"
+                        asp-route-pageNumber="@Model.CurrentPage">S.lượng nhập ↑</a> |
+                    <a asp-page="./VatTu" asp-route-sortOrder="SoLuongDesc"
+                        asp-route-pageNumber="@Model.CurrentPage">↓</a>
                 </th>
                 <th>
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="DonGiaAsc" asp-route-pageNumber="@Model.CurrentPage">Đơn giá ↑</a> |
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="DonGiaDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                    <a asp-page="./VatTu" asp-route-sortOrder="DonGiaAsc" asp-route-pageNumber="@Model.CurrentPage">Đơn
+                        giá ↑</a> |
+                    <a asp-page="./VatTu" asp-route-sortOrder="DonGiaDesc"
+                        asp-route-pageNumber="@Model.CurrentPage">↓</a>
                 </th>
                 <th>
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="ThanhTienAsc" asp-route-pageNumber="@Model.CurrentPage">Thành tiền ↑</a> |
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="ThanhTienDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                    <a asp-page="./VatTu" asp-route-sortOrder="ThanhTienAsc"
+                        asp-route-pageNumber="@Model.CurrentPage">Thành tiền ↑</a> |
+                    <a asp-page="./VatTu" asp-route-sortOrder="ThanhTienDesc"
+                        asp-route-pageNumber="@Model.CurrentPage">↓</a>
                 </th>
                 <th>S.lượng đã xuất</th>
                 <th>S.lượng còn lại</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var hanghoa in Model.HangHoas)
-            {
-                <tr>
-                    <td>@hanghoa.TenHangHoa</td>
-                    <td>@hanghoa.DonViTinh.Name</td>
-                    <td>@hanghoa.NgayNhap.ToString("dd/MM/yyyy")</td>
-                    <td>@hanghoa.SoLuong</td>
-                    <td>@hanghoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</td>
-                    <td>@hanghoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</td>
-                    <td>@hanghoa.SoLuongDaXuat</td>
-                    <td>@hanghoa.SoLuongConLai</td>
-                </tr>
-            }
-        </tbody>
+
+        @if (Model.HangHoas != null && Model.HangHoas.Any())
+        {
+            <tbody>
+                @foreach (var hanghoa in Model.HangHoas)
+                {
+                    <tr>
+                        <td>@hanghoa.TenHangHoa</td>
+                        <td>@hanghoa.DonViTinh.Name</td>
+                        <td>@hanghoa.NgayNhap.ToString("dd/MM/yyyy")</td>
+                        <td>@hanghoa.SoLuong</td>
+                        <td>@hanghoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</td>
+                        <td>@hanghoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</td>
+                        <td>@hanghoa.SoLuongDaXuat</td>
+                        <td>@hanghoa.SoLuongConLai</td>
+                    </tr>
+                }
+            </tbody>
+
+        }
+        else
+        {
+            <p style="color:red">Không có vật tư được nhập trong tháng @Request.Query["month"] năm @Request.Query["year"] </p>
+        }
     </table>
 </div>
 <nav>
@@ -61,7 +92,8 @@
         @if (Model.CurrentPage > 1)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)" asp-route-sortOrder="@Request.Query["sortOrder"]">Trước</a>
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)"
+                    asp-route-sortOrder="@Request.Query["sortOrder"]">Trước</a>
             </li>
         }
         @for (int i = 1; i <= Model.TotalPages; i++)
@@ -73,7 +105,8 @@
         @if (Model.CurrentPage < Model.TotalPages)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)" asp-route-sortOrder="@Request.Query["sortOrder"]">Sau</a>
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)"
+                    asp-route-sortOrder="@Request.Query["sortOrder"]">Sau</a>
             </li>
         }
     </ul>

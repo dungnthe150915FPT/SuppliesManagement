@@ -10,6 +10,8 @@
         public decimal TongGiaTruocThue { get; set; }
         public decimal TongGiaSauThue { get; set; }
         public string TenKhoHang { get; set; }
+        public string NhomHangName { get; set; }
+        public NhomHang NhomHang { get; set; }
         public KhoHang KhoHang { get; set; }
     }
 }

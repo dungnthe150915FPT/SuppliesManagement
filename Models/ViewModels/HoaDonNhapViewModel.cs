@@ -9,7 +9,12 @@
         public string SoHoaDon { get; set; } 
         public decimal ThanhTien { get; set; } 
         public string Serial { get; set; }
-        public List<HangHoaViewModel> HangHoas { get; set; }
+        // public 
+        // List<HangHoaViewModel> 
+        // // HangHoaHoaDon
+        
+        // HangHoaHoaDons { get; set; }
         public KhoHang KhoHang { get; set; }
+        public int SoLuongMatHang { get; set; }
     }
 }

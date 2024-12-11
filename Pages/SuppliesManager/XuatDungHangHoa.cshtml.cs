@@ -2,101 +2,127 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SuppliesManagement.Models;
-using SuppliesManagement.Models.Request;
 
-namespace SuppliesManagement.Pages
+namespace SuppliesManagement.Pages.SuppliesManager
 {
     public class XuatDungHangHoaModel : PageModel
     {
-        private readonly SuppliesManagementProjectContext context;
+        private readonly SuppliesManagementProjectContext _dbContext;
 
-        public XuatDungHangHoaModel(SuppliesManagementProjectContext context)
+        public XuatDungHangHoaModel(SuppliesManagementProjectContext dbContext)
         {
-            this.context = context;
+            _dbContext = dbContext;
         }
-        public List<HangHoa> HangHoas { get; set; }
+
         public List<KhoHang> KhoHangs { get; set; }
         public List<Account> Accounts { get; set; }
+        public List<HangHoa> HangHoas { get; set; }
+
         public IActionResult OnGet()
         {
+            var role = HttpContext.Session.GetInt32("RoleId");
+            if (role != 2 && role != 1)
+            {
+                return RedirectToPage("/Error/AccessDenied");
+            }
 
-            HangHoas = context.HangHoas
-                .Include(h => h.NhomHang) 
-                .Include(h => h.DonViTinh) 
-                .Where(h => h.SoLuongConLai > 0) 
-                .ToList();
-            KhoHangs = context.KhoHangs.ToList();
-            Accounts = context.Accounts.Include(a => a.Role).ToList();
+            KhoHangs = _dbContext.KhoHangs?.ToList() ?? new List<KhoHang>();
+            Accounts =
+                _dbContext.Accounts?.Where(a => a.RoleId == 3).ToList() ?? new List<Account>();
+            HangHoas =
+                _dbContext.HangHoas
+                    ?.Include(h => h.NhomHang)
+                    .Include(h => h.DonViTinh)
+                    .OrderByDescending(h => h.TenHangHoa)
+                    .ToList() ?? new List<HangHoa>();
             return Page();
         }
 
-
-        public async Task<IActionResult> OnPostAsync(
-    Guid khoHangID,
-    Guid NguoiNhanId,
-    DateTime NgayNhan,
-    string LyDoNhan,
-    List<HangHoaInputModel> hangHoaModels)
+        public IActionResult OnPost(
+            Guid KhoHangId,
+            Guid NguoiNhanId,
+            DateTime NgayNhan,
+            string LyDoNhan,
+            List<Guid> HangHoaIds,
+            List<int> SoLuongs,
+            decimal ThanhTien
+        )
         {
             if (!ModelState.IsValid)
             {
+                ModelState.AddModelError(string.Empty, "Dữ liệu đầu vào không hợp lệ.");
                 return Page();
             }
 
+            // Thêm hóa đơn xuất
             var hoaDonXuat = new HoaDonXuat
             {
                 Id = Guid.NewGuid(),
-                KhoHangId = khoHangID,
+                KhoHangId = KhoHangId,
                 NguoiNhanId = NguoiNhanId,
                 NgayNhan = NgayNhan,
                 LyDoNhan = LyDoNhan,
-                ThanhTien = 0 // Sẽ được cập nhật sau
+                ThanhTien = ThanhTien
             };
 
-            // Lưu hóa đơn xuất
-            context.HoaDonXuats.Add(hoaDonXuat);
-            await context.SaveChangesAsync();
+            _dbContext.HoaDonXuats.Add(hoaDonXuat);
+            _dbContext.SaveChanges();
 
-            decimal totalAmount = 0; // Tổng tiền hoá đơn
-
-            foreach (var item in hangHoaModels)
+            for (int i = 0; i < HangHoaIds.Count; i++)
             {
-                var hangHoa = await context.HangHoas.FirstOrDefaultAsync(h => h.Id == item.Id);
-                if (hangHoa == null || hangHoa.SoLuongConLai < item.SoLuong)
+                var hangHoa = _dbContext.HangHoas.FirstOrDefault(h => h.Id == HangHoaIds[i]);
+
+                if (hangHoa == null)
                 {
-                    ModelState.AddModelError(string.Empty, $"Số lượng hàng hóa {item.TenHangHoa} không đủ.");
+                    ModelState.AddModelError(
+                        string.Empty,
+                        $"Hàng hóa với ID {HangHoaIds[i]} không tồn tại."
+                    );
                     return Page();
                 }
 
-                // Cập nhật số lượng hàng hóa
-                hangHoa.SoLuongConLai -= item.SoLuong;
-                context.HangHoas.Update(hangHoa);
+                /*if (hangHoa.SoLuongConLai < SoLuongs[i])
+                {
+                    ModelState.AddModelError(string.Empty, $"Số lượng tồn kho của hàng hóa '{hangHoa.TenHangHoa}' không đủ.");
+                    return Page();
+                }*/
+
+                // Cập nhật số lượng còn lại
+                hangHoa.SoLuongConLai -= SoLuongs[i];
+                _dbContext.HangHoas.Update(hangHoa);
+
+                // Tính toán chi tiết hóa đơn
+                var tongGiaTruocThue = SoLuongs[i] * hangHoa.DonGiaTruocThue;
+                var tongGiaSauThue = tongGiaTruocThue * (1 + hangHoa.Vat / 100);
 
                 var hangHoaHoaDon = new HangHoaHoaDon
                 {
                     Id = Guid.NewGuid(),
                     TenHangHoa = hangHoa.TenHangHoa,
                     DonViTinhId = hangHoa.DonViTinhId,
+                    SoLuong = SoLuongs[i],
                     DonGiaTruocThue = hangHoa.DonGiaTruocThue,
                     DonGiaSauThue = hangHoa.DonGiaTruocThue * (1 + hangHoa.Vat / 100),
                     Vat = hangHoa.Vat,
-                    TongGiaTruocThue = item.SoLuong * hangHoa.DonGiaTruocThue,
-                    TongGiaSauThue = item.SoLuong * (hangHoa.DonGiaTruocThue * (1 + hangHoa.Vat / 100)),
-                    SoLuong = item.SoLuong,
-                    KhoHangId = khoHangID,
+                    TongGiaTruocThue = tongGiaTruocThue,
+                    TongGiaSauThue = tongGiaSauThue,
+                    KhoHangId = KhoHangId,
                     NhomHangId = hangHoa.NhomHangId
                 };
 
-                context.HangHoaHoaDons.Add(hangHoaHoaDon);
+                _dbContext.HangHoaHoaDons.Add(hangHoaHoaDon);
 
-                totalAmount += hangHoaHoaDon.TongGiaTruocThue; // Cộng dồn tổng tiền
+                var xuatKho = new XuatKho
+                {
+                    XuatKhoId = Guid.NewGuid(),
+                    HoaDonXuatId = hoaDonXuat.Id,
+                    HangHoaHoaDonId = hangHoaHoaDon.Id
+                };
+                _dbContext.XuatKhos.Add(xuatKho);
             }
 
-            hoaDonXuat.ThanhTien = totalAmount; // Cập nhật tổng tiền sau khi tính toán
-            context.HoaDonXuats.Update(hoaDonXuat);
-            await context.SaveChangesAsync();
-
-            return RedirectToPage("./SuppliesManager/XuatDungHangHoa");
+            _dbContext.SaveChanges();
+            return RedirectToPage("./XuatDungHangHoa");
         }
     }
 }

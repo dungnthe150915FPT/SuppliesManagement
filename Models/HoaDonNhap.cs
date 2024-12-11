@@ -12,7 +12,6 @@ namespace SuppliesManagement.Models
         public string Serial { get; set; } = null!;
         public decimal ThanhTien { get; set; }
         public Guid KhoHangId { get; set; }
-
         public virtual KhoHang KhoHang { get; set; } = null!;
     }
 }

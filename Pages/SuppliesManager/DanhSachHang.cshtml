@@ -14,23 +14,9 @@
     </select>
     <input type="submit" value="Search" class="btn btn-success mb-3" />
 </form>
-@*<a class="btn btn-success" asp-page="./DanhSachHangExportExcel?hanghoa=@Request.Query["hanghoa"]&year=@Request.Query["year"]&NhomHangHoaId=@Request.Query["NhomHangHoaId"]">
-    <button class="form-control">Xuất Excel</button>
-</a>*@
 <br />
 <a class="btn btn-dark" asp-page="./NhapMuaHangHoa">Nhập mua hàng hóa</a>
 <a class="btn btn-dark" asp-page="./XuatDungHangHoa">Xuất dùng hàng hóa</a>
-@*<a class="btn btn-success" asp-page="./DanhSachHang" asp-route-exportExcelCCDC="true">Xuất Danh Sách Công cụ dụng cụ (CCDC)</a>
-<a class="btn btn-success" asp-page="./DanhSachHang" asp-route-exportExcelVatTu="true">Xuất Danh Sách Vật tư</a>
-<a class="btn btn-success" asp-page="./DanhSachHang" asp-route-exportExcelPTTT="true">Xuất Danh Sách Phụ Tùng Thay Thế (PTTT)</a>
-<a class="btn btn-success" asp-page="./DanhSachHang" asp-route-exportExcelTSCD="true">Xuất Danh Sách Tài sản cố định (TSCD)</a>
-<a class="btn btn-info" asp-page="./DanhSachHang">Tất cả hàng hóa</a>
-@{
-    @foreach (var tt in Model.NhomHangs)
-    {
-        <a class="btn btn-info" asp-page="./DanhSachHang" asp-route-NhomHangHoaId="@tt.Id">@tt.Name</a>
-    }
-}*@
 <div class="table-responsive" style="margin-top: 5%">
     <table class="table table-striped table-bordered">
         <thead class="thead-dark">

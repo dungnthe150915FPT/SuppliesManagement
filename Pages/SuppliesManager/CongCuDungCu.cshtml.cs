@@ -104,7 +104,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 .ToList();
 
             using var package = new ExcelPackage();
-            var worksheet = package.Workbook.Worksheets.Add("Công Cụ Dụng Cụ");
+            var worksheet = package.Workbook.Worksheets.Add("Công Cụ Dụng Cụ năm " +year);
 
             // Setting default font
             worksheet.Cells.Style.Font.Name = "Times New Roman";
@@ -136,10 +136,10 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 "Mã CCDC",
                 "Đặc điểm/TSKT",
                 "ĐVT",
-                "QĐ tăng (Số Hiệu)",
-                "Ngày Tháng",
-                "QĐ giảm (Số Hiệu)",
-                "Ngày Tháng",
+                "QĐ tăng",
+                "N.Tháng Tăng",
+                "QĐ giảm",
+                "N.Tháng Giảm",
                 "Lý do giảm",
                 "Ghi chú"
             };
