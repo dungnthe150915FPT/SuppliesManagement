@@ -1,0 +1,17 @@
+﻿@page
+@model SuppliesManagement.Pages.Common.ProfileModel
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+}
+
+<h2>Thông tin cá nhân</h2>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Xin chào, @Model.User.Username</h5>
+@*        <p class="card-text"><strong>Email:</strong> @Model.User.Email</p>
+        <p class="card-text"><strong>Họ tên:</strong> @Model.User.FullName</p>*@
+        <p class="card-text"><strong>Quyền của bạn: </strong> @Model.User.Role.Name</p>
+        <a class="btn btn-primary" asp-page="/User/EditProfile">Chỉnh sửa thông tin</a>
+    </div>
+</div>
