@@ -46,7 +46,7 @@
                             </li>*@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Danh Sách Hàng Hóa
+                                    DS Hàng Hóa
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" asp-area="" asp-page="/SuppliesManager/DanhSachHang">Tất Cả Hàng Hóa</a></li>
@@ -57,10 +57,10 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/SuppliesManager/DanhSachHoaDonNhap">Danh Sách Hóa Đơn Nhập</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/SuppliesManager/DanhSachHoaDonNhap">DS Hóa Đơn Nhập</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/SuppliesManager/DanhSachHoaDonXuat">Danh Sách Hóa Đơn Xuất</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/SuppliesManager/DanhSachHoaDonXuat">DS Hóa Đơn Xuất</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/SuppliesManager/NhapMuaHangHoa">Nhập Mua Hàng Hóa</a>
@@ -81,12 +81,13 @@
                                 @if (HttpContextAccessor.HttpContext.Session.GetString("Username") != null)
                                 {
                                     <a class="nav-link text-dark" asp-page="/Common/Profile">
-                                        Xin chào, @HttpContextAccessor.HttpContext.Session.GetString("Username")
+                                        Xin chào @HttpContextAccessor.HttpContext.Session.GetString("Username")  |
                                     </a>
                                 }
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/User/Logout">Đăng xuất</a>
+                                @*<a class="nav-link text-dark" asp-area="" asp-page="/Common/SignOut">Đăng xuất</a>*@
+                                <a href="javascript:void(0);" class="nav-link text-dark" onclick="confirmLogout()">Đăng xuất</a>
                             </li>
                         </ul>
                     </div>
@@ -114,3 +115,10 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<script>
+    function confirmLogout() {
+        if (confirm("Bạn có chắc chắn muốn đăng xuất không?")) {
+            window.location.href = '/Common/SignOut';
+        }
+    }
+</script>
