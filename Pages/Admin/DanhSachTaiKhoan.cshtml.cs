@@ -20,7 +20,7 @@ namespace SuppliesManagement.Pages
             var role = HttpContext.Session.GetInt32("RoleId"); 
             if (role != 1)
             {
-                return RedirectToPage("/AccessDenied"); 
+                return RedirectToPage("/Error/AccessDenied"); 
             }
             Accounts = context.Accounts.Include(a => a.Role).OrderBy(a => a.RoleId).ToList();
             return Page();

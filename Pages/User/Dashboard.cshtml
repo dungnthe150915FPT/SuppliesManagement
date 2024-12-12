@@ -1,0 +1,135 @@
+﻿@page
+@model SuppliesManagement.Pages.User.DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+@*<h2>Dashboard</h2>*@
+
+<div class="row">
+    <!-- Biểu đồ Tài khoản -->
+    <div class="col-md-6">
+        <h4>Phân bố Tài khoản</h4>
+        <canvas id="accountChart"></canvas>
+        <div class="mt-3">
+            <p><strong>Tổng số tài khoản:</strong> @Model.TotalAccounts</p>
+            <p>
+                <strong>Số tài khoản Admin:</strong>
+                @Model.AccountCounts["Admin"] tài khoản
+                (chiếm @Model.AccountDistribution["Admin"].ToString("F2")%)
+            </p>
+            <p>
+                <strong>Số tài khoản Thủ Kho:</strong>
+                @Model.AccountCounts["Supplies Manager"] tài khoản
+                (chiếm @Model.AccountDistribution["Supplies Manager"].ToString("F2")%)
+            </p>
+            <p>
+                <strong>Số tài khoản Người nhận:</strong>
+                @Model.AccountCounts["User"] tài khoản
+                (chiếm @Model.AccountDistribution["User"].ToString("F2")%)
+            </p>
+        </div>
+    </div>
+
+    <!-- Biểu đồ Hàng hóa -->
+    <div class="col-md-6">
+        <h4>Phân bố Hàng hóa</h4>
+        <canvas id="hangHoaChart"></canvas>
+        <div class="mt-3">
+            <p><strong>Tổng số hàng hóa:</strong> @Model.TotalHangHoas</p>
+            <p>
+                <strong>Số hàng hóa thuộc nhóm Công cụ dụng cụ:</strong>
+                @Model.HangHoaCounts["Công cụ dụng cụ"] hàng
+                (chiếm @Model.HangHoaDistribution["Công cụ dụng cụ"].ToString("F2")%)
+            </p>
+            <p>
+                <strong>Số hàng hóa thuộc nhóm Vật tư:</strong>
+                @Model.HangHoaCounts["Vật tư"] hàng
+                (chiếm @Model.HangHoaDistribution["Vật tư"].ToString("F2")%)
+            </p>
+            <p>
+                <strong>Số hàng hóa thuộc nhóm Phụ tùng thay thế:</strong>
+                @Model.HangHoaCounts["Phụ tùng thay thế"] hàng
+                (chiếm @Model.HangHoaDistribution["Phụ tùng thay thế"].ToString("F2")%)
+            </p>
+            <p>
+                <strong>Số hàng hóa thuộc nhóm Tài sản cố định:</strong>
+                @Model.HangHoaCounts["Tài sản cố định"] hàng
+                (chiếm @Model.HangHoaDistribution["Tài sản cố định"].ToString("F2")%)
+            </p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Dữ liệu cho biểu đồ tài khoản
+    const accountData = {
+        labels: ['Admin', 'Thủ Kho', 'Người Nhận'],
+        datasets: [{
+            data: [
+    @Model.AccountDistribution["Admin"].ToString("F2"),
+    @Model.AccountDistribution["Supplies Manager"].ToString("F2"),
+    @Model.AccountDistribution["User"].ToString("F2")
+                ],
+            backgroundColor: ['#dc3545', '#ffc107', '#17a2b8'],
+        }]
+    };
+
+    // Vẽ biểu đồ tài khoản
+    const accountCtx = document.getElementById('accountChart').getContext('2d');
+    new Chart(accountCtx, {
+        type: 'pie',
+        data: accountData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return `${context.label}: ${context.raw}%`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Dữ liệu cho biểu đồ hàng hóa
+    const hangHoaData = {
+        labels: ['Công cụ dụng cụ', 'Vật tư', 'Phụ tùng thay thế', 'Tài sản cố định'],
+        datasets: [{
+            data: [
+    @Model.HangHoaDistribution["Công cụ dụng cụ"].ToString("F2"),
+    @Model.HangHoaDistribution["Vật tư"].ToString("F2"),
+    @Model.HangHoaDistribution["Phụ tùng thay thế"].ToString("F2"),
+    @Model.HangHoaDistribution["Tài sản cố định"].ToString("F2")
+                ],
+            backgroundColor: ['#dc3545', '#ffc107', '#17a2b8', '#6f42c1'],
+        }]
+    };
+
+    // Vẽ biểu đồ hàng hóa
+    const hangHoaCtx = document.getElementById('hangHoaChart').getContext('2d');
+    new Chart(hangHoaCtx, {
+        type: 'pie',
+        data: hangHoaData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return `${context.label}: ${context.raw}%`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>

@@ -80,11 +80,11 @@ namespace SuppliesManagement.Pages
                 HttpContext.Session.Remove("CaptchaGenerated"); // Xóa captcha
                 if (user.RoleId == 2)
                 {
-                    return RedirectToPage("/SuppliesManager/DanhSachHang");
+                    return RedirectToPage("/User/Dashboard");
                 }
                 else if (user.RoleId == 1)
                 {
-                    return RedirectToPage("/Admin/DanhSachTaiKhoan");
+                    return RedirectToPage("/User/Dashboard");
                 }
                 else if (user.RoleId == 3)
                 {
