@@ -31,10 +31,14 @@ namespace SuppliesManagement.Pages
             }
             NhomHangs = dBContext.NhomHangs.ToList();
             KhoHangs = dBContext.KhoHangs.Include(k => k.HangHoas).ToList();
-            DonViTinhs = dBContext.DonViTinhs.Include(d => d.HangHoas).OrderBy(d => d.Name).ToList();
+            DonViTinhs = dBContext.DonViTinhs
+                .Include(d => d.HangHoas)
+                .OrderBy(d => d.Name)
+                .ToList();
             HangHoas = dBContext.HangHoas.Include(h => h.DonViTinh).ToList();
             return Page();
         }
+
         public IActionResult OnPost(
             Guid khoHangID,
             string NhaCungCap,
@@ -159,7 +163,8 @@ namespace SuppliesManagement.Pages
             }
             dBContext.SaveChanges();
             /*ViewData["Success"] = "Thêm hóa đơn và hàng hóa thành công";*/
-            TempData["SuccessMessage"] = "Nhập mới hóa đơn hàng hóa có số hóa đơn: " + SoHoaDon + " thành công!";
+            TempData["SuccessMessage"] =
+                "Nhập mới hóa đơn hàng hóa có số hóa đơn: " + SoHoaDon + " thành công!";
             return RedirectToPage("./NhapMuaHangHoa");
         }
 
@@ -200,157 +205,271 @@ namespace SuppliesManagement.Pages
                             var hangHoa = new HangHoaInputModel
                             {
                                 TenHangHoa = hangHoaNode.SelectSingleNode("THHDVu")?.InnerText,
-                                SoLuong = int.Parse(hangHoaNode.SelectSingleNode("SLuong")?.InnerText ?? "0"),
-                                DonGiaTruocThue = decimal.Parse(hangHoaNode.SelectSingleNode("DGia")?.InnerText ?? "0"),
+                                SoLuong = int.Parse(
+                                    hangHoaNode.SelectSingleNode("SLuong")?.InnerText ?? "0"
+                                ),
+                                DonGiaTruocThue = decimal.Parse(
+                                    hangHoaNode.SelectSingleNode("DGia")?.InnerText ?? "0"
+                                ),
                                 /*                                VAT = int.Parse(hangHoaNode.SelectSingleNode("TSuat")?.InnerText ?? "0"),*/
                             };
-                            if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "chiếc" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Chiếc")
+                            if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "chiếc"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Chiếc"
+                            )
                             {
                                 hangHoa.DonViTinhID = 1;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "cái" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Cái")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "cái"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Cái"
+                            )
                             {
                                 hangHoa.DonViTinhID = 2;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "cặp" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Cặp")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "cặp"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Cặp"
+                            )
                             {
                                 hangHoa.DonViTinhID = 3;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "bộ" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Bộ")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "bộ"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Bộ"
+                            )
                             {
                                 hangHoa.DonViTinhID = 4;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "hệ thống" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Hệ thống")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "hệ thống"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Hệ thống"
+                            )
                             {
                                 hangHoa.DonViTinhID = 5;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "ram" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Ram")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "ram"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Ram"
+                            )
                             {
                                 hangHoa.DonViTinhID = 6;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "hộp" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Hộp")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "hộp"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Hộp"
+                            )
                             {
                                 hangHoa.DonViTinhID = 7;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "tập" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Tập")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "tập"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Tập"
+                            )
                             {
                                 hangHoa.DonViTinhID = 8;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "chuyến" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Chuyến")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "chuyến"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Chuyến"
+                            )
                             {
                                 hangHoa.DonViTinhID = 9;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "kg" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Kg")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "kg"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Kg"
+                            )
                             {
                                 hangHoa.DonViTinhID = 10;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "chai" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Chai")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "chai"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Chai"
+                            )
                             {
                                 hangHoa.DonViTinhID = 11;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "EA" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "ea")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "EA"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "ea"
+                            )
                             {
                                 hangHoa.DonViTinhID = 12;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Phần" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "phần")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Phần"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "phần"
+                            )
                             {
                                 hangHoa.DonViTinhID = 13;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Đôi" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "đôi")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Đôi"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "đôi"
+                            )
                             {
                                 hangHoa.DonViTinhID = 14;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Nồi" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "nồi")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Nồi"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "nồi"
+                            )
                             {
                                 hangHoa.DonViTinhID = 15;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Cuộn" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "cuộn")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Cuộn"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "cuộn"
+                            )
                             {
                                 hangHoa.DonViTinhID = 15;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Nồi" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "nồi")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Nồi"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "nồi"
+                            )
                             {
                                 hangHoa.DonViTinhID = 16;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Túi" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "túi")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Túi"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "túi"
+                            )
                             {
                                 hangHoa.DonViTinhID = 17;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Suất" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "suất")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Suất"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "suất"
+                            )
                             {
                                 hangHoa.DonViTinhID = 18;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Người" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "người")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Người"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "người"
+                            )
                             {
                                 hangHoa.DonViTinhID = 19;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Chai" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "chai")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Chai"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "chai"
+                            )
                             {
                                 hangHoa.DonViTinhID = 20;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Lọ" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "lọ")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Lọ"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "lọ"
+                            )
                             {
                                 hangHoa.DonViTinhID = 21;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Cốc" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "cốc")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Cốc"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "cốc"
+                            )
                             {
                                 hangHoa.DonViTinhID = 22;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Bàn" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "bàn")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Bàn"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "bàn"
+                            )
                             {
                                 hangHoa.DonViTinhID = 23;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Lốc" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "lốc")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Lốc"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "lốc"
+                            )
                             {
                                 hangHoa.DonViTinhID = 24;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Can" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "can")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Can"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "can"
+                            )
                             {
                                 hangHoa.DonViTinhID = 25;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Dây" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "dây")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Dây"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "dây"
+                            )
                             {
                                 hangHoa.DonViTinhID = 26;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Quả" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "quả")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Quả"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "quả"
+                            )
                             {
                                 hangHoa.DonViTinhID = 27;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Bình" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "bình")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Bình"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "bình"
+                            )
                             {
                                 hangHoa.DonViTinhID = 28;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Gói" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "gói")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Gói"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "gói"
+                            )
                             {
                                 hangHoa.DonViTinhID = 29;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Hũ" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "hũ")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Hũ"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "hũ"
+                            )
                             {
                                 hangHoa.DonViTinhID = 30;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Đĩa" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "đĩa")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Đĩa"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "đĩa"
+                            )
                             {
                                 hangHoa.DonViTinhID = 31;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Bát" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "bát")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Bát"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "bát"
+                            )
                             {
                                 hangHoa.DonViTinhID = 32;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Lon" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "lon")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Lon"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "lon"
+                            )
                             {
                                 hangHoa.DonViTinhID = 33;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Cuốn" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "cuốn")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Cuốn"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "cuốn"
+                            )
                             {
                                 hangHoa.DonViTinhID = 34;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "kWh"
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "kWh"
                                 || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "KWh"
-                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "KWH")
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "KWH"
+                            )
                             {
                                 hangHoa.DonViTinhID = 35;
                             }
-                            else if (hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Vận đơn" || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "vận đơn")
+                            else if (
+                                hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "Vận đơn"
+                                || hangHoaNode.SelectSingleNode("DVTinh")?.InnerText == "vận đơn"
+                            )
                             {
                                 hangHoa.DonViTinhID = 36;
                             }
@@ -359,9 +478,11 @@ namespace SuppliesManagement.Pages
                                 hangHoa.DonViTinhID = 2;
                             }
 
-                            if (hangHoaNode.SelectSingleNode("TSuat")?.InnerText == "KCT" ||
-                                hangHoaNode.SelectSingleNode("TSuat")?.InnerText == "0%" ||
-                                hangHoaNode.SelectSingleNode("TSuat")?.InnerText == null)
+                            if (
+                                hangHoaNode.SelectSingleNode("TSuat")?.InnerText == "KCT"
+                                || hangHoaNode.SelectSingleNode("TSuat")?.InnerText == "0%"
+                                || hangHoaNode.SelectSingleNode("TSuat")?.InnerText == null
+                            )
                             {
                                 hangHoa.VAT = 0;
                             }
@@ -379,7 +500,9 @@ namespace SuppliesManagement.Pages
                             }
                             hangHoaList.Add(hangHoa);
                         }
-                        TempData["HangHoaList"] = System.Text.Json.JsonSerializer.Serialize(hangHoaList);
+                        TempData["HangHoaList"] = System.Text.Json.JsonSerializer.Serialize(
+                            hangHoaList
+                        );
                     }
                 }
                 catch (Exception ex)

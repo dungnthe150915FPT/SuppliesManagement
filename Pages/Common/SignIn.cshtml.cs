@@ -117,7 +117,7 @@ namespace SuppliesManagement.Pages
                 // Kiểm tra captcha
                 if (string.IsNullOrEmpty(CaptchaInput) || CaptchaInput != storedCaptcha)
                 {
-                    ViewData["Error"] = "Mã captcha không đúng, vui lòng thử lại.";
+                    TempData["ErrorMessage"] = "Mã captcha không đúng, vui lòng thử lại.";
                     CaptchaGenerated = storedCaptcha;
                     return Page();
                 }
@@ -161,7 +161,7 @@ namespace SuppliesManagement.Pages
                 HttpContext.Session.SetString("CaptchaGenerated", CaptchaGenerated);
             }
 
-            ViewData["Error"] = "Tên tài khoản hoặc mật khẩu không đúng!";
+            TempData["ErrorMessage"] = "Tên tài khoản hoặc mật khẩu không đúng!";
             return Page();
         }
 

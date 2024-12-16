@@ -21,18 +21,25 @@ namespace SuppliesManagement.Pages.Admin
 
         [BindProperty]
         public string Username { get; set; }
+
         [BindProperty]
         public string Fullname { get; set; }
+
         [BindProperty]
         public DateTime DateOfBirth { get; set; }
+
         [BindProperty]
         public bool Gender { get; set; }
+
         [BindProperty]
         public string Phone { get; set; }
+
         [BindProperty]
         public string Address { get; set; }
+
         [BindProperty]
         public string Email { get; set; }
+
         [BindProperty]
         public int Role { get; set; }
 
@@ -40,6 +47,11 @@ namespace SuppliesManagement.Pages.Admin
 
         public IActionResult OnGet()
         {
+            var role = HttpContext.Session.GetInt32("RoleId");
+            if (role != 1)
+            {
+                return RedirectToPage("/Error/AccessDenied");
+            }
             Roles = _context.Roles.Where(r => r.Id != 1).ToList();
             return Page();
         }
@@ -87,28 +99,33 @@ namespace SuppliesManagement.Pages.Admin
             var message = "";
             if (Role == 2)
             {
-                message = $"Xin chào {Username},\n\n" +
-                                          $"Tài khoản của bạn đã được tạo thành công với thông tin sau:\n" +
-                                          $"Tên đăng nhập: {Username}\n" +
-                                          $"Mật khẩu: {password}\n\n" +
-                                          $"Quyền: Thủ Kho\n\n" +
-                                          $"Vui lòng đổi mật khẩu sau khi đăng nhập.\n" +
-                                          $"Trân trọng,\nSupplies Management";
+                message =
+                    $"Xin chào {Username},\n\n"
+                    + $"Tài khoản của bạn đã được tạo thành công với thông tin sau:\n"
+                    + $"Tên đăng nhập: {Username}\n"
+                    + $"Mật khẩu: {password}\n\n"
+                    + $"Quyền: Thủ Kho\n\n"
+                    + $"Vui lòng đổi mật khẩu sau khi đăng nhập.\n"
+                    + $"Trân trọng,\nSupplies Management";
             }
             else
             {
-                message = $"Xin chào {Username},\n\n" +
-                                          $"Tài khoản của bạn đã được tạo thành công với thông tin sau:\n" +
-                                          $"Tên đăng nhập: {Username}\n" +
-                                          $"Mật khẩu: {password}\n\n" +
-                                          $"Quyền: Người Nhận Hàng\n\n" +
-                                          $"Vui lòng đổi mật khẩu sau khi đăng nhập.\n" +
-                                          $"Trân trọng,\nSupplies Management";
+                message =
+                    $"Xin chào {Username},\n\n"
+                    + $"Tài khoản của bạn đã được tạo thành công với thông tin sau:\n"
+                    + $"Tên đăng nhập: {Username}\n"
+                    + $"Mật khẩu: {password}\n\n"
+                    + $"Quyền: Người Nhận Hàng\n\n"
+                    + $"Vui lòng đổi mật khẩu sau khi đăng nhập.\n"
+                    + $"Trân trọng,\nSupplies Management";
             }
-            
+
             SendPasswordEmail(receiver, subject, message);
 
-            TempData["SuccessMessage"] = "Tài khoản đã được thêm mới. Mật khẩu đã gửi qua email. Kiểm tra gmail: " + newAccount.Email + " để lấy mật khẩu";
+            TempData["SuccessMessage"] =
+                "Tài khoản đã được thêm mới. Mật khẩu đã gửi qua email. Kiểm tra gmail: "
+                + newAccount.Email
+                + " để lấy mật khẩu";
             return Page();
         }
 
@@ -116,34 +133,10 @@ namespace SuppliesManagement.Pages.Admin
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             var random = new Random();
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
+            return new string(
+                Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray()
+            );
         }
-
-        /*private async Task SendPasswordEmail(string email, string message, string subject)
-        {
-            if (string.IsNullOrWhiteSpace(subject))
-                throw new ArgumentException("Subject cannot be null or empty", nameof(subject));
-            var mail = "dungdev224@gmail.com";
-            var pw = "tnjg rgrm svbv tvko";
-            var client = new SmtpClient("smtp.mail.com", 587)
-            {
-                EnableSsl = true,
-                Credentials = new NetworkCredential(mail, pw)
-            };
-
-            using var mailMessage = new MailMessage
-            {
-                From = new MailAddress(mail, "Supplies Management"),
-                Subject = subject.Trim(), // Xóa khoảng trắng dư thừa
-                Body = message,
-                IsBodyHtml = false // Đảm bảo không gửi HTML nếu không cần
-            };
-
-            mailMessage.To.Add(email);
-            await client.SendMailAsync(mailMessage);
-        }*/
-
 
         private async Task SendPasswordEmail(string email, string subject, string message)
         {
@@ -152,8 +145,8 @@ namespace SuppliesManagement.Pages.Admin
 
             try
             {
-                var mail = "dungdev224@gmail.com"; 
-                var appPassword = "tnjgrgrmsvbvtvko"; 
+                var mail = "dungdev224@gmail.com";
+                var appPassword = "tnjgrgrmsvbvtvko";
 
                 // Cấu hình SMTP
                 using var smtp = new SmtpClient("smtp.gmail.com", 587)
@@ -184,6 +177,5 @@ namespace SuppliesManagement.Pages.Admin
                 throw;
             }
         }
-
     }
 }

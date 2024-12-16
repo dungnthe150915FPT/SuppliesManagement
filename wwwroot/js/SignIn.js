@@ -7,3 +7,12 @@ showBtn.onclick = function () {
     this.classList.toggle("fa-eye");
     this.classList.toggle("fa-eye-slash");
 };
+
+document.addEventListener("DOMContentLoaded", function () {
+    const errorAlert = document.getElementById("errorAlert");
+    if (errorAlert) {
+        setTimeout(() => {
+            errorAlert.style.display = "none";
+        }, 5000);
+    }
+});
