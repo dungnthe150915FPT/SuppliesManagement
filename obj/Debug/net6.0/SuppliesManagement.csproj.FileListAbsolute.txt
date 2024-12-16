@@ -416,3 +416,6 @@ D:\SuppliesManagement\Project\SuppliesManagement\obj\Debug\net6.0\refint\Supplie
 D:\SuppliesManagement\Project\SuppliesManagement\obj\Debug\net6.0\SuppliesManagement.pdb
 D:\SuppliesManagement\Project\SuppliesManagement\obj\Debug\net6.0\SuppliesManagement.genruntimeconfig.cache
 D:\SuppliesManagement\Project\SuppliesManagement\obj\Debug\net6.0\ref\SuppliesManagement.dll
+D:\SuppliesManagement\Project\SuppliesManagement\bin\Debug\net6.0\BouncyCastle.Cryptography.dll
+D:\SuppliesManagement\Project\SuppliesManagement\bin\Debug\net6.0\MailKit.dll
+D:\SuppliesManagement\Project\SuppliesManagement\bin\Debug\net6.0\MimeKit.dll

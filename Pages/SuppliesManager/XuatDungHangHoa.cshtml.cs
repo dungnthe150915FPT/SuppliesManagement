@@ -56,14 +56,14 @@ namespace SuppliesManagement.Pages.SuppliesManager
             }
 
             // Kiểm tra danh sách dữ liệu từ form
-/*            if (HangHoaIds == null || SoLuongs == null || HangHoaIds.Count != SoLuongs.Count)
-            {
-                ModelState.AddModelError(
-                    string.Empty,
-                    "Danh sách hàng hóa hoặc số lượng không hợp lệ."
-                );
-                return Page();
-            }*/
+            // if (HangHoaIds == null || SoLuongs == null || HangHoaIds.Count != SoLuongs.Count)
+            // {
+            //     ModelState.AddModelError(
+            //         string.Empty,
+            //         "Danh sách hàng hóa hoặc số lượng không hợp lệ."
+            //     );
+            //     return Page();
+            // }
 
             if (HangHoaIds.Count == 0)
             {
@@ -106,7 +106,8 @@ namespace SuppliesManagement.Pages.SuppliesManager
                             string.Empty,
                             $"Số lượng tồn kho của hàng hóa '{hangHoa.TenHangHoa}' không đủ."
                         );
-                        TempData["Error"] = $"Số lượng tồn kho của hàng hóa '{hangHoa.TenHangHoa}' không đủ.";
+                        TempData["Error"] =
+                            $"Số lượng tồn kho của hàng hóa '{hangHoa.TenHangHoa}' không đủ.";
                         return Page();
                     }
                     else

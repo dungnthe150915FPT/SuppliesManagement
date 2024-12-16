@@ -1,0 +1,96 @@
+﻿@page "{id:guid}"
+@model SuppliesManagement.Pages.Admin.UserDetailModel
+@{
+}
+
+<h2>Thông tin User</h2>
+
+<form method="post">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="Username" class="form-label"><strong>Tài Khoản:</strong></label>
+                        <input type="text" id="Username" class="form-control" value="@Model.Account.Username" readonly>
+                    </div>
+                    @*                    <div class="mb-3">
+                    <label for="UserId" class="form-label"><strong>Mã Tài Khoản:</strong></label>
+                    <input type="text" id="UserId" class="form-control" value="@Model.User.Id" readonly>
+                    </div>*@
+                    <div class="mb-3">
+                        <label for="Fullname" class="form-label"><strong>Họ tên:</strong></label>
+                        <input type="text" id="Fullname" name="Fullname" class="form-control"
+                            value="@Model.Account.Fullname" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="DateOfBirth" class="form-label"><strong>Sinh nhật:</strong></label>
+                        <input type="date" id="DateOfBirth" name="DateOfBirth" class="form-control"
+                            value="@Model.Account.DateOfBirth?.ToString("yyyy-MM-dd")">
+                    </div>
+                    <div class="mb-3">
+                        <label><strong>Giới tính:</strong></label>
+                        <div>
+                            <input type="radio" id="GenderMale" name="Gender" value="true" @(Model.Account.Gender ==
+                                true ? "checked" : "")>
+                            <label for="GenderMale">Nam</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="GenderFemale" name="Gender" value="false" @(Model.Account.Gender ==
+                                false ? "checked" : "")>
+                            <label for="GenderFemale">Nữ</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                    <div class="mb-3">
+                        <label for="Phone" class="form-label"><strong>Số điện thoại:</strong></label>
+                        <input type="text" id="Phone" name="Phone" class="form-control" value="@Model.Account.Phone"
+                            required pattern="^(\+84|0)\d{9,10}$"
+                            title="Số điện thoại phải bắt đầu bằng +84 hoặc 0, và có từ 9-10 chữ số.">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Address" class="form-label"><strong>Địa chỉ:</strong></label>
+                        <input type="text" id="Address" name="Address" class="form-control"
+                            value="@Model.Account.Address">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Email" class="form-label"><strong>Email:</strong></label>
+                        <input type="email" id="Email" name="Email" class="form-control" value="@Model.Account.Email"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Role" class="form-label"><strong>Quyền của bạn:</strong></label>
+                        @* <select id="Role" class="form-control" name="Role">
+                            @foreach (var role in Model.Roles)
+                            {
+                                var isSelected = Request.Query["RoleId"] == role.Id.ToString() ? "selected" : null;
+                                <option value="@role.Id" selected="@isSelected">@role.Name</option>
+                                <option value="@role.Id">@role.Name</option>
+                            }
+                        </select> *@
+                        @if(Model.Account.RoleId == 2){
+                            <input type="text" id="Role" class="form-control" value="Thủ kho" readonly>
+                        }else{
+                            <input type="text" id="Role" class="form-control" value="Người nhận hàng" readonly>
+                        }
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Lưu thông tin thay đổi</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successAlert" class="alert alert-success mt-3" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+<script src="~/js/Profile.js"></script>
+<link href="~/css/profile.css" rel="stylesheet" />

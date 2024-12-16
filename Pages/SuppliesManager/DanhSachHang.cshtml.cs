@@ -27,16 +27,18 @@ namespace SuppliesManagement.Pages
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
         public const int PageSize = 10;
+
         public IActionResult OnGet(
-    string hanghoa,
-    int? NhomHangHoaId,
-    string sortOrder,
-    int pageNumber = 1,
-    bool exportExcelVatTu = false,
-    bool exportExcelPTTT = false,
-    bool exportExcelCCDC = false,
-    bool exportExcelTSCD = false,
-    int? year = null)
+            string hanghoa,
+            int? NhomHangHoaId,
+            string sortOrder,
+            int pageNumber = 1,
+            bool exportExcelVatTu = false,
+            bool exportExcelPTTT = false,
+            bool exportExcelCCDC = false,
+            bool exportExcelTSCD = false,
+            int? year = null
+        )
         {
             NhomHangs = dBContext.NhomHangs.ToList();
 
@@ -59,9 +61,12 @@ namespace SuppliesManagement.Pages
             // Tìm kiếm theo tên hàng hóa
             if (!string.IsNullOrEmpty(hanghoa))
             {
-                query = query.Where(t => t.TenHangHoa.Contains(hanghoa) ||
-                                         t.NhomHang.Name.Contains(hanghoa) ||
-                                         t.DonViTinh.Name.Contains(hanghoa));
+                query = query.Where(
+                    t =>
+                        t.TenHangHoa.Contains(hanghoa)
+                        || t.NhomHang.Name.Contains(hanghoa)
+                        || t.DonViTinh.Name.Contains(hanghoa)
+                );
             }
 
             // Sắp xếp theo tiêu chí
@@ -117,10 +122,7 @@ namespace SuppliesManagement.Pages
             TotalPages = (int)Math.Ceiling(totalItems / (double)PageSize);
             CurrentPage = pageNumber;
 
-            HangHoas = query
-                .Skip((pageNumber - 1) * PageSize)
-                .Take(PageSize)
-                .ToList();
+            HangHoas = query.Skip((pageNumber - 1) * PageSize).Take(PageSize).ToList();
 
             var role = HttpContext.Session.GetInt32("RoleId");
             if (role != 2 && role != 1)
@@ -150,7 +152,7 @@ namespace SuppliesManagement.Pages
                 query = query.Where(h => h.NhomHangId == NhomHangHoaId.Value);
             }
 
-            var hangHoaList = query.ToList();  // Lấy danh sách sau khi lọc
+            var hangHoaList = query.ToList(); // Lấy danh sách sau khi lọc
 
             // Tạo Excel với EPPlus
             using (var package = new ExcelPackage())
@@ -167,18 +169,19 @@ namespace SuppliesManagement.Pages
                 {
                     worksheet.Cells[row, 1].Value = hangHoa.Id;
                     worksheet.Cells[row, 2].Value = hangHoa.TenHangHoa;
-                    worksheet.Cells[row, 3].Value = hangHoa.NhomHang.Name;  // Lấy tên nhóm hàng
+                    worksheet.Cells[row, 3].Value = hangHoa.NhomHang.Name; // Lấy tên nhóm hàng
                     worksheet.Cells[row, 4].Value = hangHoa.NgayNhap.Year;
                     row++;
                 }
 
                 // Trả về file Excel
                 var fileBytes = package.GetAsByteArray();
-                return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachHangHoa.xlsx");
+                return File(
+                    fileBytes,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "DanhSachHangHoa.xlsx"
+                );
             }
         }
-
-
-
     }
 }

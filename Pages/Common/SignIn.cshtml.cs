@@ -13,9 +13,7 @@ namespace SuppliesManagement.Pages
     {
         private readonly SuppliesManagementProjectContext context;
 
-        public SignInModel(
-            SuppliesManagementProjectContext context
-        )
+        public SignInModel(SuppliesManagementProjectContext context)
         {
             this.context = context;
         }
@@ -31,13 +29,73 @@ namespace SuppliesManagement.Pages
 
         public string CaptchaGenerated { get; private set; } // Captcha được sinh ra
 
-        private char[] chars = {
-            '1', 'A', 'a', 'B', 'b', 'C', 'c', '2', 'D', 'd', 'E', 'e', 'F', 'f', '3',
-            'G', 'g', 'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', '4', 'M', 'm',
-            'N', 'n', 'O', 'o', '5', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't',
-            '6', '7', 'U', 'u', 'V', 'v', 'U', 'u', 'W', 'w', '8', 'X', 'x', 'Y', 'y',
-            'Z', 'z', '9'
+        private char[] chars =
+        {
+            '1',
+            'A',
+            'a',
+            'B',
+            'b',
+            'C',
+            'c',
+            '2',
+            'D',
+            'd',
+            'E',
+            'e',
+            'F',
+            'f',
+            '3',
+            'G',
+            'g',
+            'H',
+            'h',
+            'I',
+            'i',
+            'J',
+            'j',
+            'K',
+            'k',
+            'L',
+            'l',
+            '4',
+            'M',
+            'm',
+            'N',
+            'n',
+            'O',
+            'o',
+            '5',
+            'P',
+            'p',
+            'Q',
+            'q',
+            'R',
+            'r',
+            'S',
+            's',
+            'T',
+            't',
+            '6',
+            '7',
+            'U',
+            'u',
+            'V',
+            'v',
+            'U',
+            'u',
+            'W',
+            'w',
+            '8',
+            'X',
+            'x',
+            'Y',
+            'y',
+            'Z',
+            'z',
+            '9'
         };
+
         public void OnGet()
         {
             var roleId = HttpContext.Session.GetInt32("RoleId");
@@ -67,7 +125,8 @@ namespace SuppliesManagement.Pages
 
             // check acc
             var user = context.Accounts.FirstOrDefault(
-                u => u.Username == Username && u.Password == Password);
+                u => u.Username == Username && u.Password == Password
+            );
 
             if (user != null)
             {
@@ -80,11 +139,11 @@ namespace SuppliesManagement.Pages
                 HttpContext.Session.Remove("CaptchaGenerated"); // Xóa captcha
                 if (user.RoleId == 2)
                 {
-                    return RedirectToPage("/User/Dashboard");
+                    return RedirectToPage("/SuppliesManager/SuppliesDashboard");
                 }
                 else if (user.RoleId == 1)
                 {
-                    return RedirectToPage("/User/Dashboard");
+                    return RedirectToPage("/Admin/AdminDashboard");
                 }
                 else if (user.RoleId == 3)
                 {
@@ -106,13 +165,12 @@ namespace SuppliesManagement.Pages
             return Page();
         }
 
-
         private string GenerateCaptcha()
         {
             var random = new Random();
-            return new string(Enumerable.Repeat(chars, 6)
-                                        .Select(s => s[random.Next(s.Length)])
-                                        .ToArray());
+            return new string(
+                Enumerable.Repeat(chars, 6).Select(s => s[random.Next(s.Length)]).ToArray()
+            );
         }
     }
 }

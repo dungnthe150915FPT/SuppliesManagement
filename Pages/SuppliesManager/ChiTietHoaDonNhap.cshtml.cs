@@ -32,7 +32,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
             }
 
             var hoaDon = await dBContext.HoaDonNhaps
-                .Include(h => h.KhoHang) // Include để lấy thông tin kho hàng
+                .Include(h => h.KhoHang) 
                 .FirstOrDefaultAsync(h => h.Id == id);
 
             if (hoaDon == null)

@@ -71,19 +71,19 @@ namespace SuppliesManagement.Pages.SuppliesManager
             return Page();
         }
 
-
         public async Task<IActionResult> OnPostExportAsync(Guid id)
         {
             var hoaDon = await dBContext.HoaDonXuats
                 .Include(h => h.NguoiNhan) // Bao gồm thông tin người nhận
-    .Include(h => h.KhoHang) // Bao gồm thông tin kho hàng
-    .FirstOrDefaultAsync(h => h.Id == id);
+                .Include(h => h.KhoHang) // Bao gồm thông tin kho hàng
+                .FirstOrDefaultAsync(h => h.Id == id);
             if (hoaDon == null)
                 return NotFound();
 
             var hangHoas = await dBContext.XuatKhos
                 .Where(n => n.HoaDonXuatId == hoaDon.Id)
                 .Include(n => n.HangHoaHoaDon)
+                .ThenInclude(n => n.DonViTinh)
                 .ToListAsync();
 
             using (var package = new ExcelPackage())
@@ -159,7 +159,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                     var item = hangHoas[i];
                     worksheet.Cells[startRow + i, 2].Value = i + 1; // Stt
                     worksheet.Cells[startRow + i, 3].Value = item.HangHoaHoaDon.TenHangHoa;
-                    worksheet.Cells[startRow + i, 5].Value = item.HangHoaHoaDon.DonViTinhId;
+                    worksheet.Cells[startRow + i, 5].Value = item.HangHoaHoaDon.DonViTinh.Name;
                     worksheet.Cells[startRow + i, 6].Value = item.HangHoaHoaDon.SoLuong;
                     worksheet.Cells[startRow + i, 7].Value = item.HangHoaHoaDon.SoLuong;
                     worksheet.Cells[startRow + i, 8].Value = item.HangHoaHoaDon.DonGiaTruocThue;
@@ -183,7 +183,8 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 worksheet.Column(10).Width = 15; // Ghi chú
 
                 // Tổng tiền
-                worksheet.Cells[startRow + hangHoas.Count + 2, 8].Value = "Tổng tiền (Chưa có VAT):";
+                worksheet.Cells[startRow + hangHoas.Count + 2, 8].Value =
+                    "Tổng tiền (Chưa có VAT):";
                 worksheet.Cells[startRow + hangHoas.Count + 2, 9].Value = hoaDon.ThanhTien;
                 worksheet.Cells[startRow + hangHoas.Count + 2, 9].Style.Font.Bold = true;
 
