@@ -104,7 +104,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 .ToList();
 
             using var package = new ExcelPackage();
-            var worksheet = package.Workbook.Worksheets.Add("Tài Sản Cố Định năm "+year);
+            var worksheet = package.Workbook.Worksheets.Add("Tài Sản Cố Định năm " + year);
 
             // Setting default font
             worksheet.Cells.Style.Font.Name = "Times New Roman";

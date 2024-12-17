@@ -57,7 +57,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Hàng hóa</th>
+                    <th>Hàng hóa - Ngày nhập</th>
                     <th>Nhóm hàng</th>
                     <th>Số lượng</th>
                     <th>Đ.vị tính</th>
@@ -69,7 +69,6 @@
                 </tr>
             </thead>
             <tbody id="hangHoaTableBody">
-                <!-- JavaScript will dynamically add rows here -->
             </tbody>
         </table>
         <button type="button" id="addRow" class="btn btn-secondary">Thêm hàng hóa</button>
@@ -106,7 +105,7 @@
                                         data-don-vi-tinh="@hangHoa.DonViTinh.Name"
                                         data-gia-truoc-thue="@hangHoa.DonGiaTruocThue"
                                         data-vat="@hangHoa.Vat">
-                @hangHoa.TenHangHoa
+                @hangHoa.TenHangHoa - @hangHoa.NgayNhap.ToString("dd/MM/yyyy")
                                                 </option>
         }
     }

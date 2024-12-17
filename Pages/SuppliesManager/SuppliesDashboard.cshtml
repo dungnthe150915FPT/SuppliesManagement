@@ -7,8 +7,8 @@
 
 <div class="row">
     <!-- Biểu đồ Hàng hóa -->
-    <div class="col-md-6">
-        <h4>Phân bố Hàng hóa</h4>
+    <div class="col-md-4">
+        <h4>Thống kê số lượng Hàng hóa</h4>
         <canvas id="hangHoaChart"></canvas>
         <div class="mt-3">
             <p><strong>Tổng số hàng hóa:</strong> @Model.TotalHangHoas</p>
@@ -34,11 +34,48 @@
             </p>
         </div>
     </div>
+
+    <!-- Biểu đồ Hóa đơn -->
+    <div class="col-md-4">
+        <h4>Thống kê số lượng nhóm hóa đơn</h4>
+        <canvas id="hoaDonChart"></canvas>
+        <div class="mt-3">
+            <p><strong>Tổng số hóa đơn:</strong> @(Model.TotalHoaDon)</p>
+            <p>
+                <strong>Số hóa đơn nhập:</strong> @Model.HoaDonCounts["Hóa đơn nhập"]
+                (chiếm @Model.HoaDonDistribution["Hóa đơn nhập"].ToString("F2")%)
+            </p>
+            <p>
+                <strong>Số hóa đơn xuất:</strong> @Model.HoaDonCounts["Hóa đơn xuất"]
+                (chiếm @Model.HoaDonDistribution["Hóa đơn xuất"].ToString("F2")%)
+            </p>
+        </div>
+    </div>
+
+    <!-- Biểu đồ Số lượng Hàng hóa -->
+    <div class="col-md-4">
+        <h4>Thống kê số lượng hàng hóa</h4>
+        <canvas id="soLuongChart"></canvas>
+        <div class="mt-3">
+            <p><strong>Tổng số lượng hàng hóa:</strong> @(Model.TotalSoLuongDaXuat + Model.TotalSoLuongConLai)</p>
+            <p>
+                <strong>Số lượng đã xuất:</strong> @Model.TotalSoLuongDaXuat
+                (chiếm @string.Format("{0:F2}", (Model.TotalSoLuongDaXuat * 100.0 / (Model.TotalSoLuongDaXuat +
+                Model.TotalSoLuongConLai)))%)
+            </p>
+            <p>
+                <strong>Số lượng còn lại:</strong> @Model.TotalSoLuongConLai
+                (chiếm @string.Format("{0:F2}", (Model.TotalSoLuongConLai * 100.0 / (Model.TotalSoLuongDaXuat +
+                Model.TotalSoLuongConLai)))%)
+            </p>
+        </div>
+    </div>
+
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-
     // Dữ liệu cho biểu đồ hàng hóa
     const hangHoaData = {
         labels: ['Công cụ dụng cụ', 'Vật tư', 'Phụ tùng thay thế', 'Tài sản cố định'],
@@ -48,7 +85,7 @@
     @Model.HangHoaDistribution["Vật tư"].ToString("F2"),
     @Model.HangHoaDistribution["Phụ tùng thay thế"].ToString("F2"),
     @Model.HangHoaDistribution["Tài sản cố định"].ToString("F2")
-                ],
+            ],
             backgroundColor: ['#dc3545', '#ffc107', '#17a2b8', '#6f42c1'],
         }]
     };
@@ -61,15 +98,60 @@
         options: {
             responsive: true,
             plugins: {
-                legend: {
-                    position: 'top',
-                },
+                legend: { position: 'top' },
                 tooltip: {
-                    callbacks: {
-                        label: function (context) {
-                            return `${context.label}: ${context.raw}%`;
-                        }
-                    }
+                    callbacks: { label: (context) => `${context.label}: ${context.raw}%` }
+                }
+            }
+        }
+    });
+
+    // Dữ liệu cho biểu đồ hóa đơn
+    const hoaDonData = {
+        labels: ['Hóa đơn nhập', 'Hóa đơn xuất'],
+        datasets: [{
+            data: [@Model.HoaDonDistribution["Hóa đơn nhập"].ToString("F2"),
+    @Model.HoaDonDistribution["Hóa đơn xuất"].ToString("F2")],
+            backgroundColor: ['#007bff', '#28a745'],
+        }]
+    };
+
+    // Vẽ biểu đồ hóa đơn
+    const hoaDonCtx = document.getElementById('hoaDonChart').getContext('2d');
+    new Chart(hoaDonCtx, {
+        type: 'pie',
+        data: hoaDonData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: {
+                    callbacks: { label: (context) => `${context.label}: ${context.raw}%` }
+                }
+            }
+        }
+    });
+
+    // Dữ liệu cho biểu đồ số lượng hàng hóa
+    const soLuongData = {
+        labels: ['Đã xuất', 'Còn lại'],
+        datasets: [{
+            data: [@Model.SoLuongDaXuatPercentage, @Model.SoLuongConLaiPercentage],
+            backgroundColor: ['#ffc107', '#17a2b8'],
+        }]
+    };
+
+    // Vẽ biểu đồ số lượng hàng hóa
+    const soLuongCtx = document.getElementById('soLuongChart').getContext('2d');
+    new Chart(soLuongCtx, {
+        type: 'pie',
+        data: soLuongData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: {
+                    callbacks: { label: (context) => `${context.label}: ${context.raw}%` }
                 }
             }
         }

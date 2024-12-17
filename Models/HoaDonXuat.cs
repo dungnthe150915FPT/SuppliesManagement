@@ -11,6 +11,8 @@ namespace SuppliesManagement.Models
         public decimal ThanhTien { get; set; }
         public Guid KhoHangId { get; set; }
         public Guid? NguoiNhanId { get; set; }
+
+        // public Guid? NguoiNhapId { get; set; }
         public Account? NguoiNhan { get; set; }
         public KhoHang KhoHang { get; set; } = null!;
     }

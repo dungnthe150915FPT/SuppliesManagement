@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
@@ -112,7 +113,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 worksheet.Cells["B5"].Value = "- Họ và tên người nhận hàng:";
                 worksheet.Cells["B5:C5"].Merge = true;
                 worksheet.Cells["D5:H5"].Merge = true;
-                worksheet.Cells["D5"].Value = hoaDon.NguoiNhan.Username;
+                worksheet.Cells["D5"].Value = hoaDon.NguoiNhan.Fullname;
 
                 worksheet.Cells["B6"].Value = "- Lý do nhận: ";
                 worksheet.Cells["D6:H6"].Merge = true;
@@ -162,13 +163,42 @@ namespace SuppliesManagement.Pages.SuppliesManager
                     worksheet.Cells[startRow + i, 5].Value = item.HangHoaHoaDon.DonViTinh.Name;
                     worksheet.Cells[startRow + i, 6].Value = item.HangHoaHoaDon.SoLuong;
                     worksheet.Cells[startRow + i, 7].Value = item.HangHoaHoaDon.SoLuong;
-                    worksheet.Cells[startRow + i, 8].Value = item.HangHoaHoaDon.DonGiaTruocThue;
-                    worksheet.Cells[startRow + i, 9].Value = item.HangHoaHoaDon.TongGiaTruocThue;
+                    worksheet.Cells[startRow + i, 8].Value =
+                        item.HangHoaHoaDon.DonGiaTruocThue.ToString("N0", new CultureInfo("vi-VN"));
+                    ;
+                    worksheet.Cells[startRow + i, 9].Value =
+                        item.HangHoaHoaDon.TongGiaTruocThue.ToString(
+                            "N0",
+                            new CultureInfo("vi-VN")
+                        );
+                    ;
 
                     // Định dạng border cho mỗi ô
                     worksheet.Cells[startRow + i, 2, startRow + i, 10].Style.Border.BorderAround(
                         ExcelBorderStyle.Thin
                     );
+
+                    // Thêm đường kẻ mỏng giữa các cột
+                    for (int col = 2; col <= 10; col++)
+                    {
+                        worksheet.Cells[startRow + i, col].Style.Border.Right.Style =
+                            ExcelBorderStyle.Thin;
+                    }
+
+                    // Căn giữa số trong các ô
+                    worksheet.Cells[startRow + i, 2]
+                        .Style
+                        .HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[startRow + i, 5].Style.HorizontalAlignment =
+                        ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[startRow + i, 6].Style.HorizontalAlignment =
+                        ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[startRow + i, 7].Style.HorizontalAlignment =
+                        ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[startRow + i, 8].Style.HorizontalAlignment =
+                        ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[startRow + i, 9].Style.HorizontalAlignment =
+                        ExcelHorizontalAlignment.Center;
                 }
 
                 // Định dạng cột rộng
@@ -185,17 +215,62 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 // Tổng tiền
                 worksheet.Cells[startRow + hangHoas.Count + 2, 8].Value =
                     "Tổng tiền (Chưa có VAT):";
-                worksheet.Cells[startRow + hangHoas.Count + 2, 9].Value = hoaDon.ThanhTien;
+                worksheet.Cells[startRow + hangHoas.Count + 2, 9].Value = hoaDon.ThanhTien.ToString(
+                    "N0",
+                    new CultureInfo("vi-VN")
+                );
+                ;
                 worksheet.Cells[startRow + hangHoas.Count + 2, 9].Style.Font.Bold = true;
 
                 worksheet.Cells[startRow + hangHoas.Count + 3, 2].Value =
                     $"- Tổng số tiền (viết bằng chữ): {NumberToWords((long)hoaDon.ThanhTien)} đồng.";
 
+                int footerStartRow = startRow + hangHoas.Count + 6;
+
+                // Add Current Date (Ngày tháng năm) - Trên chữ ký Giám đốc, 2 ô ngoài cùng bên phải
+                worksheet.Cells[footerStartRow - 2, 10, footerStartRow - 2, 11].Merge = true;
+                worksheet.Cells[footerStartRow - 2, 10].Value =
+                    $"Ngày {DateTime.Now.Day} tháng {DateTime.Now.Month} năm {DateTime.Now.Year}";
+                worksheet.Cells[footerStartRow - 2, 10].Style.HorizontalAlignment =
+                    ExcelHorizontalAlignment.Center;
+
+                // Header Row for Footer
+                worksheet.Cells[$"B{footerStartRow}:C{footerStartRow}"].Merge = true;
+                worksheet.Cells[$"D{footerStartRow}:E{footerStartRow}"].Merge = true;
+                worksheet.Cells[$"F{footerStartRow}:G{footerStartRow}"].Merge = true;
+                worksheet.Cells[$"H{footerStartRow}:I{footerStartRow}"].Merge = true;
+                worksheet.Cells[$"J{footerStartRow}:K{footerStartRow}"].Merge = true;
+
+                worksheet.Cells[$"B{footerStartRow}"].Value = "Người lập phiếu";
+                worksheet.Cells[$"D{footerStartRow}"].Value = "Người nhận hàng";
+                worksheet.Cells[$"F{footerStartRow}"].Value = "Thủ kho";
+                worksheet.Cells[$"H{footerStartRow}"].Value = "Kế toán";
+                worksheet.Cells[$"J{footerStartRow}"].Value = "Giám đốc";
+
+                worksheet.Row(footerStartRow).Style.Font.Bold = true;
+                worksheet.Row(footerStartRow).Style.HorizontalAlignment =
+                    ExcelHorizontalAlignment.Center;
+
+                // Names Row for Footer
+                worksheet.Cells[$"B{footerStartRow + 3}:C{footerStartRow + 3}"].Merge = true;
+                worksheet.Cells[$"D{footerStartRow + 3}:E{footerStartRow + 3}"].Merge = true;
+                worksheet.Cells[$"F{footerStartRow + 3}:G{footerStartRow + 3}"].Merge = true;
+                worksheet.Cells[$"H{footerStartRow + 3}:I{footerStartRow + 3}"].Merge = true;
+                worksheet.Cells[$"J{footerStartRow + 3}:K{footerStartRow + 3}"].Merge = true;
+
+                worksheet.Cells[$"B{footerStartRow + 3}"].Value = "Dương Mạnh Tuấn"; // Người lập phiếu
+                worksheet.Cells[$"D{footerStartRow + 3}"].Value = hoaDon.NguoiNhan.Fullname; // Người nhận hàng
+                worksheet.Cells[$"F{footerStartRow + 3}"].Value = "Dương Mạnh Tuấn"; // Thủ kho
+                worksheet.Cells[$"H{footerStartRow + 3}"].Value = "Nguyễn Thị Hảo"; // Kế toán
+                worksheet.Cells[$"J{footerStartRow + 3}"].Value = "Đỗ Công Biên"; // Giám đốc
+
+                worksheet.Row(footerStartRow + 3).Style.HorizontalAlignment =
+                    ExcelHorizontalAlignment.Center;
                 // Xuất file
                 var stream = new MemoryStream();
                 package.SaveAs(stream);
                 stream.Position = 0;
-                string excelName = $"Xuất kho_{hoaDon.NgayNhan}.xlsx";
+                string excelName = $"Xuất kho_{hoaDon.NgayNhan.ToString("dd/MM/yyyy")}.xlsx";
                 return File(
                     stream,
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

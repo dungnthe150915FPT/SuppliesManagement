@@ -31,6 +31,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 _dbContext.Accounts?.Where(a => a.RoleId == 3).ToList() ?? new List<Account>();
             HangHoas =
                 _dbContext.HangHoas
+                    .Where(h => h.SoLuongConLai > 0)
                     ?.Include(h => h.NhomHang)
                     .Include(h => h.DonViTinh)
                     .OrderByDescending(h => h.TenHangHoa)

@@ -158,7 +158,7 @@
 }
 @if (TempData["Error"] != null)
 {
-    <div id="errorAlert" class="alert alert-error" role="alert">
+    <div id="errorAlert" class="alert alert-danger" role="alert">
         @TempData["Error"]
     </div>
 }
@@ -263,10 +263,10 @@
         }
     });
     document.addEventListener("DOMContentLoaded", function () {
-        const errorAlert = document.getElementById("successAlert");
-        if (successAlert) {
+        const errorAlert = document.getElementById("errorAlert");
+        if (errorAlert) {
             setTimeout(() => {
-                successAlert.style.display = "none";
+                errorAlert.style.display = "none";
             }, 10000);
         }
     });
