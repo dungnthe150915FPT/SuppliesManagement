@@ -13,6 +13,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
         {
             this.dBContext = dBContext;
         }
+
         public List<HangHoa> HangHoas { get; set; }
         public List<NhomHang> NhomHangs { get; set; }
         public int CurrentPage { get; set; }
@@ -21,16 +22,18 @@ namespace SuppliesManagement.Pages.SuppliesManager
         private readonly SuppliesManagementProjectContext dBContext;
 
         public IActionResult OnGet(
-    string hanghoa,
-    string sortOrder,
-        int pageNumber = 1,
-    int? year = null)
+            string hanghoa,
+            string sortOrder,
+            int pageNumber = 1,
+            int? year = null
+        )
         {
             NhomHangs = dBContext.NhomHangs.ToList();
 
             IQueryable<HangHoa> query = dBContext.HangHoas
                 .Include(h => h.NhomHang)
-                .Include(h => h.DonViTinh).Where(h => h.NhomHangId == 3);
+                .Include(h => h.DonViTinh)
+                .Where(h => h.NhomHangId == 3);
 
             // Lọc theo năm nhập
             if (year.HasValue)
@@ -41,9 +44,12 @@ namespace SuppliesManagement.Pages.SuppliesManager
             // Tìm kiếm theo tên hàng hóa
             if (!string.IsNullOrEmpty(hanghoa))
             {
-                query = query.Where(t => t.TenHangHoa.Contains(hanghoa) ||
-                                         t.NhomHang.Name.Contains(hanghoa) ||
-                                         t.DonViTinh.Name.Contains(hanghoa));
+                query = query.Where(
+                    t =>
+                        t.TenHangHoa.Contains(hanghoa)
+                        || t.NhomHang.Name.Contains(hanghoa)
+                        || t.DonViTinh.Name.Contains(hanghoa)
+                );
             }
 
             // Sắp xếp theo tiêu chí
@@ -77,10 +83,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
             TotalPages = (int)Math.Ceiling(totalItems / (double)PageSize);
             CurrentPage = pageNumber;
 
-            HangHoas = query
-                .Skip((pageNumber - 1) * PageSize)
-                .Take(PageSize)
-                .ToList();
+            HangHoas = query.Skip((pageNumber - 1) * PageSize).Take(PageSize).ToList();
 
             var role = HttpContext.Session.GetInt32("RoleId");
             if (role != 2 && role != 1)
@@ -90,6 +93,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
 
             return Page();
         }
+
         public IActionResult OnPostExport(int year)
         {
             var currentDate = DateTime.Now;
@@ -155,7 +159,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
             worksheet.Column(4).Width = 15; // Đặc điểm
             worksheet.Column(5).Width = 10; // ĐVT
             worksheet.Column(6).Width = 20; // Quyết định ghi tăng số hiệu
-            worksheet.Column(7).Width = 15; // Ngày tháng tăng 
+            worksheet.Column(7).Width = 15; // Ngày tháng tăng
             worksheet.Column(8).Width = 20; // Quyết định ghi giảm số hiệu
             worksheet.Column(9).Width = 15; // Ngày tháng giảm
             worksheet.Column(10).Width = 15; // Lý do giảm
