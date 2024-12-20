@@ -79,6 +79,7 @@ namespace SuppliesManagement.Pages
                             && h.NgayNhap == NgayNhap
                             && h.DonViTinhId == item.DonViTinhID
                             && h.DonGiaTruocThue == item.DonGiaTruocThue
+                            && h.Image == item.Image
                     );
                     if (hangHoaExisted != null)
                     {
@@ -94,6 +95,7 @@ namespace SuppliesManagement.Pages
                             hangHoaExisted.SoLuong * hangHoaExisted.DonGiaSauThue;
                         hangHoaExisted.KhoHangId = khoHangID;
                         hangHoaExisted.SoLuongConLai += item.SoLuong;
+                        hangHoaExisted.Image = item?.Image; // Update image if needed
                         dBContext.HangHoas.Update(hangHoaExisted);
                         var hangHoaHoaDon = new HangHoaHoaDon
                         {
@@ -109,6 +111,7 @@ namespace SuppliesManagement.Pages
                             TongGiaSauThue =
                                 item.SoLuong * (item.DonGiaTruocThue * (1 + item.VAT / 100)),
                             KhoHangId = khoHangID,
+                            Image = item?.Image // Add image to HangHoaHoaDon
                         };
                         dBContext.HangHoaHoaDons.Add(hangHoaHoaDon);
 
@@ -138,7 +141,8 @@ namespace SuppliesManagement.Pages
                             KhoHangId = khoHangID,
                             SoLuongDaXuat = 0,
                             SoLuongConLai = item.SoLuong,
-                            NgayNhap = NgayNhap
+                            NgayNhap = NgayNhap,
+                            Image = item?.Image // Add image to new HangHoa
                         };
                         dBContext.HangHoas.Add(hangHoa);
                         var hangHoaHoaDon = new HangHoaHoaDon
@@ -155,6 +159,7 @@ namespace SuppliesManagement.Pages
                             TongGiaSauThue =
                                 item.SoLuong * (item.DonGiaTruocThue * (1 + item.VAT / 100)),
                             KhoHangId = khoHangID,
+                            Image = item?.Image // Add image to new HangHoaHoaDon
                         };
                         dBContext.HangHoaHoaDons.Add(hangHoaHoaDon);
                         var nhapKho = new NhapKho
@@ -183,7 +188,7 @@ namespace SuppliesManagement.Pages
                     + " và số Serial: "
                     + SoSerial
                     + " đã tồn tại";
-                return Page();
+                return RedirectToPage("./NhapMuaHangHoa");
             }
         }
 

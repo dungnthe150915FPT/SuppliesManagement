@@ -19,6 +19,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
         }
 
         public HoaDonXuatDetailViewModel HoaDonXuat { get; set; }
+        public string ExcelFilePath { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
@@ -108,17 +109,27 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 worksheet.Cells["A2:B3"].Value =
                     $"Đơn vị: {hoaDon.KhoHang.Ten}{Environment.NewLine}Bộ phận: ..........";
                 worksheet.Cells["A2:B3"].Style.WrapText = true;
+                worksheet.Cells["A2:B3"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
                 // Ô tiêu đề "PHIẾU XUẤT KHO"
                 worksheet.Cells["C2:D3"].Merge = true;
-                worksheet.Cells["C2:D3"].Value =
-                    "PHIẾU XUẤT KHO"
-                    + Environment.NewLine
-                    + $"Ngày {hoaDon.NgayNhan.Day} tháng {hoaDon.NgayNhan.Month} năm {hoaDon.NgayNhan.Year}";
+                worksheet.Cells["C2:D3"].Style.WrapText = true;
+                worksheet.Cells["C2:D3"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells["C2:D3"].Style.HorizontalAlignment =
                     ExcelHorizontalAlignment.Center;
-                worksheet.Cells["C2:D3"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                worksheet.Cells["C2:D3"].Style.WrapText = true;
+                worksheet.Cells["C2:D3"].Style.Font.Bold = true;
+
+                var richText = worksheet.Cells["C2"].RichText;
+
+                var titleText = richText.Add("PHIẾU XUẤT KHO");
+                titleText.Size = 16;
+
+                richText.Add("\n");
+                var dateText = richText.Add(
+                    $"Ngày {hoaDon.NgayNhan.Day} tháng {hoaDon.NgayNhan.Month} năm {hoaDon.NgayNhan.Year}"
+                );
+                dateText.Size = 13;
+                dateText.Bold = false;
 
                 worksheet.Cells["E2:H3"].Style.Font.Size = 13;
                 worksheet.Cells["E2:H3"].Merge = true;
@@ -134,13 +145,13 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 // Information section
                 worksheet.Cells["B5"].Value =
                     "- Họ và tên người nhận hàng: " + hoaDon.NguoiNhan.Fullname;
-                worksheet.Cells["B5:C5"].Merge = true;
+                worksheet.Cells["B5:D5"].Merge = true;
                 worksheet.Cells["B6"].Value = "- Lý do xuất kho: " + hoaDon.LyDoNhan;
-                worksheet.Cells["B6:C6"].Merge = true;
+                worksheet.Cells["B6:D6"].Merge = true;
                 worksheet.Cells["B7"].Value = "- Xuất tại kho (ngăn lô): " + hoaDon.KhoHang.Ten;
-                worksheet.Cells["B7:C7"].Merge = true;
-                worksheet.Cells["D5"].Value = "- Địa chỉ bộ phận: " + hoaDon.KhoHang.DiaChi;
-                worksheet.Cells["D5:H5"].Merge = true;
+                worksheet.Cells["B7:D7"].Merge = true;
+                worksheet.Cells["E5"].Value = "- Địa chỉ bộ phận: " + hoaDon.KhoHang.DiaChi;
+                worksheet.Cells["E5:H5"].Merge = true;
                 worksheet.Cells["B5:F7"].Style.Font.Name = "Times New Roman";
                 worksheet.Cells["B5:F7"].Style.Font.Size = 12;
 
@@ -200,13 +211,13 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 var columnWidths = new Dictionary<int, double>
                 {
                     { 1, 5 },
-                    { 2, 40 },
-                    { 3, 15 },
-                    { 4, 15 },
+                    { 2, 35 },
+                    { 3, 25 },
+                    { 4, 20 },
                     { 5, 12 },
                     { 6, 12 },
-                    { 7, 30 },
-                    { 8, 30 }
+                    { 7, 12 },
+                    { 8, 12 }
                 };
                 foreach (var (col, width) in columnWidths)
                 {
@@ -245,15 +256,19 @@ namespace SuppliesManagement.Pages.SuppliesManager
                             ExcelBorderStyle.Thin;
                     }
                     // Căn giữa các cột Số lượng, Đơn giá, Tổng giá
-                    worksheet.Cells[startRow + i, 5]
+                    worksheet.Cells[startRow + i, 1]
                         .Style
                         .HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[startRow + i, 4].Style.HorizontalAlignment =
+                        ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[startRow + i, 5].Style.HorizontalAlignment =
+                        ExcelHorizontalAlignment.Center;
                     worksheet.Cells[startRow + i, 6].Style.HorizontalAlignment =
                         ExcelHorizontalAlignment.Center;
                     worksheet.Cells[startRow + i, 7].Style.HorizontalAlignment =
                         ExcelHorizontalAlignment.Center;
                     worksheet.Cells[startRow + i, 8].Style.HorizontalAlignment =
-                        ExcelHorizontalAlignment.Center;
+                        ExcelHorizontalAlignment.Right;
                 }
                 // Add thicker border for the outer edge of the data
                 worksheet.Cells[
@@ -267,11 +282,13 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 int totalRow = startRow + hangHoas.Count + 1;
                 worksheet.Cells[totalRow - 1, 2].Value = "Tổng tiền (Chưa có VAT):";
                 worksheet.Cells[totalRow - 1, 2].Style.Font.Bold = true;
-                worksheet.Cells[totalRow - 1, 8].Value = hoaDon.ThanhTien;
+                worksheet.Cells[totalRow - 1, 8].Value = hoaDon.ThanhTien.ToString(
+                    "N0",
+                    new CultureInfo("vi-VN")
+                );
                 worksheet.Cells[totalRow - 1, 8].Style.Font.Bold = true;
-                worksheet.Cells[totalRow - 1, 8].Style.Numberformat.Format = "#,##0";
                 worksheet.Cells[totalRow - 1, 8].Style.HorizontalAlignment =
-                    ExcelHorizontalAlignment.Center;
+                    ExcelHorizontalAlignment.Right;
                 for (int i = 1; i <= 8; i++)
                 {
                     worksheet.Cells[totalRow - 1, i].Style.Border.Top.Style = ExcelBorderStyle.Thin;
@@ -284,20 +301,20 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 }
 
                 // Tổng số tiền bằng chữ
-                worksheet.Cells[totalRow + 1, 2, totalRow + 1, 8].Merge = true;
-                worksheet.Cells[totalRow + 1, 2].Value =
+                worksheet.Cells[totalRow, 2, totalRow, 8].Merge = true;
+                worksheet.Cells[totalRow, 2].Value =
                     $"- Tổng số tiền (viết bằng chữ): {CapitalizeFirstLetter(NumberToWords((long)hoaDon.ThanhTien))} đồng.";
+                worksheet.Cells[totalRow, 2].Style.WrapText = true;
+
+                worksheet.Cells[totalRow + 1, 2, totalRow + 1, 8].Merge = true;
+                worksheet.Cells[totalRow + 1, 2].Value = "- Số chứng từ gốc kèm theo:......";
                 worksheet.Cells[totalRow + 1, 2].Style.WrapText = true;
 
-                worksheet.Cells[totalRow + 2, 2, totalRow + 2, 8].Merge = true;
-                worksheet.Cells[totalRow + 2, 2].Value = "- Số chứng từ gốc kèm theo:......";
-                worksheet.Cells[totalRow + 2, 2].Style.WrapText = true;
-
                 // Ngày tháng năm
-                worksheet.Cells[totalRow + 4, 8, totalRow + 4, 8].Merge = true;
-                worksheet.Cells[totalRow + 4, 8].Value =
+                worksheet.Cells[totalRow + 3, 5, totalRow + 3, 8].Merge = true;
+                worksheet.Cells[totalRow + 3, 5, totalRow + 3, 8].Value =
                     $"Ngày {DateTime.Now.Day} tháng {DateTime.Now.Month} năm {DateTime.Now.Year}";
-                worksheet.Cells[totalRow + 4, 8].Style.HorizontalAlignment =
+                worksheet.Cells[totalRow + 3, 5, totalRow + 3, 8].Style.HorizontalAlignment =
                     ExcelHorizontalAlignment.Center;
 
                 // Footer
@@ -306,7 +323,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                     "Người lập phiếu",
                     "Người nhận hàng",
                     "Thủ kho",
-                    "Kế toán trưởng",
+                    "Kế toán",
                     "Giám đốc"
                 };
 
@@ -326,7 +343,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 for (int i = 0; i < footerTitles.Length; i++)
                 {
                     int columnSpan =
-                        (footerTitles[i] == "Kế toán trưởng" || footerTitles[i] == "Giám đốc")
+                        (footerTitles[i] == "Người nhận hàng" || footerTitles[i] == "Thủ kho")
                             ? 1
                             : 2;
 
@@ -429,7 +446,20 @@ namespace SuppliesManagement.Pages.SuppliesManager
 
             if ((number / 1_000) > 0)
             {
-                words += NumberToWords(number / 1_000) + " nghìn ";
+                long remainder = number % 1_000;
+                if (remainder == 0)
+                {
+                    words += NumberToWords(number / 1_000) + " nghìn ";
+                }
+                else
+                {
+                    long lastDigit = remainder % 10;
+                    words += NumberToWords(number / 1_000) + " nghìn ";
+                    if (lastDigit == 1 && remainder / 10 % 10 != 1)
+                    {
+                        words += "mốt "; // Sử dụng "mốt" thay vì "một" trong trường hợp đặc biệt
+                    }
+                }
                 number %= 1_000;
             }
 
@@ -442,7 +472,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
             if (number > 0)
             {
                 if (words != "")
-                    words += "và ";
+                    words += "";
 
                 if (number < 10)
                     words += unitsMap[number];
@@ -452,7 +482,12 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 {
                     words += tensMap[number / 10];
                     if ((number % 10) > 0)
-                        words += " " + unitsMap[number % 10];
+                    {
+                        if (number % 10 == 1)
+                            words += " mốt"; // Xử lý trường hợp đặc biệt khi số cuối là "mốt"
+                        else
+                            words += " " + unitsMap[number % 10];
+                    }
                 }
             }
 

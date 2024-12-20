@@ -1,6 +1,6 @@
 ﻿@page
 @model SuppliesManagement.Pages.SuppliesManager.DanhSachHoaDonXuatModel
-<h2>Danh Sách Hóa Đơn Nhập</h2>
+<h2>Danh Sách Hóa Đơn Xuất</h2>
 
 <div class="form-group">
     <label for="searchInput">Tìm kiếm:</label>
@@ -40,7 +40,8 @@
             for (int i = 0; i < Model.HoaDonXuats.Count; i++)
             {
                 <tr>
-                    <td><a asp-page="/SuppliesManager/ChiTietHoaDonXuat" asp-route-id="@Model.HoaDonXuats[i].Id">@Model.HoaDonXuats[i].Id</a></td>
+                    <td><a asp-page="/SuppliesManager/ChiTietHoaDonXuat"
+                            asp-route-id="@Model.HoaDonXuats[i].Id">@Model.HoaDonXuats[i].Id</a></td>
                     <td>@Model.HoaDonXuats[i].NguoiNhanUsername</td>
                     <td>@Model.HoaDonXuats[i].NgayNhan.ToString("dd/MM/yyyy")</td>
                     <td>@Model.HoaDonXuats[i].KhoHang</td>
@@ -57,7 +58,8 @@
         @if (Model.CurrentPage > 1)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)" asp-route-hanghoa="@Request.Query["hanghoa"]">Trước</a>
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)"
+                    asp-route-hanghoa="@Request.Query["hanghoa"]">Trước</a>
             </li>
         }
 
@@ -71,7 +73,8 @@
         @if (Model.CurrentPage < Model.TotalPages)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)" asp-route-hanghoa="@Request.Query["hanghoa"]">Sau</a>
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)"
+                    asp-route-hanghoa="@Request.Query["hanghoa"]">Sau</a>
             </li>
         }
     </ul>

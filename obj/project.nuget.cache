@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QHQwND6dDzk2SCJ1Y2lYkDgRWGfVrIAA3Eb09DpMVAeBH3BnaIZ2ewmAf5Bt96uhgJflz7o/ovNyWdUufIkM8w==",
+  "dgSpecHash": "DwdCQWXW8Sn+913jOLlfNY6bn7hm1g428tOOMR9kx3SYN3w8k48zcd1Q7VzQeutdo6Qq05IPv/htXcKp5L2sDw==",
   "success": true,
-  "projectFilePath": "D:\\SuppliesManagement\\Project\\SuppliesManagement\\SuppliesManagement.csproj",
+  "projectFilePath": "D:\\SM\\SuppliesManagement\\SuppliesManagement.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\bouncycastle.cryptography\\2.5.0\\bouncycastle.cryptography.2.5.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\dntcaptcha.core\\5.2.8\\dntcaptcha.core.5.2.8.nupkg.sha512",
