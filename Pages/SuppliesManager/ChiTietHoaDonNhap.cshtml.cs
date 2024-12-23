@@ -57,7 +57,8 @@ namespace SuppliesManagement.Pages.SuppliesManager
                             DonGiaSauThue = n.HangHoaHoaDon.DonGiaSauThue,
                             TongGiaTruocThue = n.HangHoaHoaDon.TongGiaTruocThue,
                             TongGiaSauThue = n.HangHoaHoaDon.TongGiaSauThue,
-                            NhomHangName = n.HangHoaHoaDon.NhomHang.Name
+                            NhomHangName = n.HangHoaHoaDon.NhomHang.Name,
+                            Image = n.HangHoaHoaDon.Image
                         }
                 )
                 .ToListAsync();
@@ -149,7 +150,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 // Information section
                 worksheet.Cells["B5"].Value = "- Họ và tên người giao hàng: Dương Mạnh Tuấn";
                 worksheet.Cells["B5:D5"].Merge = true;
-                worksheet.Cells["B6"].Value = "- Theo  hóa đơn số: " + hoaDon.SoHoaDon;
+                worksheet.Cells["B6"].Value = "- Theo hóa đơn số: " + hoaDon.SoHoaDon;
                 worksheet.Cells["B6:D6"].Merge = true;
                 worksheet.Cells["B7"].Value = "- Nhập tại kho (ngăn lô): " + hoaDon.KhoHang.Ten;
                 worksheet.Cells["B7:D7"].Merge = true;
@@ -219,8 +220,8 @@ namespace SuppliesManagement.Pages.SuppliesManager
                     { 4, 20 },
                     { 5, 12 },
                     { 6, 12 },
-                    { 7, 12 },
-                    { 8, 12 }
+                    { 7, 20 },
+                    { 8, 20 }
                 };
                 foreach (var (col, width) in columnWidths)
                 {
@@ -291,7 +292,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 );
                 worksheet.Cells[totalRow - 1, 8].Style.Font.Bold = true;
                 worksheet.Cells[totalRow - 1, 8].Style.HorizontalAlignment =
-                    ExcelHorizontalAlignment.Center;
+                    ExcelHorizontalAlignment.Right;
                 for (int i = 1; i <= 8; i++)
                 {
                     worksheet.Cells[totalRow - 1, i].Style.Border.Top.Style = ExcelBorderStyle.Thin;

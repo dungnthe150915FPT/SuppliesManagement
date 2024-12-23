@@ -26,13 +26,13 @@
     <div class="form-group">
         <label for="NhaCungCap">Nhà cung cấp:</label>
         <input type="text" class="form-control" id="NhaCungCap" name="NhaCungCap" value="@TempData["NhaCungCap"]"
-               required>
+            required>
     </div>
     <div class="form-group">
         <label for="NgayNhap">Ngày nhập:</label>
         <input type="date" class="form-control" id="NgayNhap" name="NgayNhap"
-               value="@(TempData["NgayNhap"] != null ? DateTime.Parse(TempData["NgayNhap"].ToString()).ToString("yyyy-MM-dd") : "")"
-               required>
+            value="@(TempData["NgayNhap"] != null ? DateTime.Parse(TempData["NgayNhap"].ToString()).ToString("yyyy-MM-dd") : "")"
+            required>
     </div>
     <div class="form-group">
         <label for="KhoHangID">Nhập vào đơn vị:</label>
@@ -92,7 +92,7 @@
                     <tr>
                         <td>
                             <input type="text" class="form-control" name="hangHoaModels[@i].TenHangHoa"
-                               value="@hangHoa.TenHangHoa" required>
+                                value="@hangHoa.TenHangHoa" required>
                         </td>
                         <td>
                             <select class="form-control" name="hangHoaModels[@i].NhomHangID" required>
@@ -111,7 +111,7 @@
                         </td>
                         <td>
                             <input type="number" class="form-control" name="hangHoaModels[@i].SoLuong" min="1"
-                               value="@hangHoa.SoLuong" required oninput="calculateTotals(this.closest('tr'))">
+                                value="@hangHoa.SoLuong" required oninput="calculateTotals(this.closest('tr'))">
                         </td>
                         <td>
                             <select class="form-control" name="hangHoaModels[@i].DonViTinhID" required>
@@ -141,31 +141,31 @@
                         </td>
                         <td>
                             <input type="file" class="form-control" name="hangHoaModels[@i].ImageFile" accept="image/*"
-                               onchange="previewImage(this, @i)">
+                                onchange="previewImage(this, @i)">
                             <img id="imagePreview_@i" src="#" alt="Preview"
-                             style="max-width: 100px; max-height: 100px; display: none;" />
+                                style="max-width: 100px; max-height: 100px; display: none;" />
                             @if (hangHoa.Image != null)
                             {
                                 <img src="data:image/jpeg;base64,@Convert.ToBase64String(hangHoa.Image)" alt="Existing Image"
-                             style="max-width: 100px; max-height: 100px;" />
+                                    style="max-width: 100px; max-height: 100px;" />
                             }
                         </td>
                         <td>
                             <input type="text" class="form-control" name="hangHoaModels[@i].DonGiaTruocThue"
-                               value="@hangHoa.DonGiaTruocThue" min="0" required
-                               oninput="calculateTotals(this.closest('tr'))">
+                                value="@hangHoa.DonGiaTruocThue" min="0" required
+                                oninput="calculateTotals(this.closest('tr'))">
                         </td>
                         <td>
                             <input type="number" class="form-control" name="hangHoaModels[@i].VAT" min="0" max="10"
-                               value="@hangHoa.VAT" required oninput="calculateTotals(this.closest('tr'))">
+                                value="@hangHoa.VAT" required oninput="calculateTotals(this.closest('tr'))">
                         </td>
                         <td>
                             <input type="text" class="form-control" name="hangHoaModels[@i].DonGiaSauThue"
-                               value="@(hangHoa.DonGiaTruocThue + (hangHoa.DonGiaTruocThue * hangHoa.VAT / 100))" readonly>
+                                value="@(hangHoa.DonGiaTruocThue + (hangHoa.DonGiaTruocThue * hangHoa.VAT / 100))" readonly>
                         </td>
                         <td>
                             <input type="text" class="form-control" name="hangHoaModels[@i].TongGiaTruocThue"
-                               value="@(hangHoa.DonGiaTruocThue * hangHoa.SoLuong)" readonly>
+                                value="@(hangHoa.DonGiaTruocThue * hangHoa.SoLuong)" readonly>
                         </td>
                         <td>
                             <input type="text" class="form-control" name="hangHoaModels[@i].TongGiaSauThue" value="@((hangHoa.DonGiaTruocThue * hangHoa.SoLuong)
@@ -200,126 +200,100 @@
     </div>
 }
 <script>
-    let hangHoaCount = 0; // Start with one row
+    // Initialize row counter based on existing rows
+    let hangHoaCount = document.querySelectorAll('#hangHoaTableBody tr').length;
+
     document.getElementById('addRow').addEventListener('click', function () {
         const tableBody = document.getElementById('hangHoaTableBody');
-        // Create a new row
         const newRow = document.createElement('tr');
+
+        // Dynamically add new row content
         newRow.innerHTML = `
-                                                    <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TenHangHoa" required></td>
-                                                    <td>
-                                                        <select class="form-control" name="hangHoaModels[${hangHoaCount}].NhomHangID" required>
-    @if (Model.NhomHangs != null && Model.NhomHangs.Any())
+            <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TenHangHoa" required></td>
+            <td>
+                <select class="form-control" name="hangHoaModels[${hangHoaCount}].NhomHangID" required>
+    @foreach (var nhomHang in Model.NhomHangs)
     {
-        @foreach (var nhomHang in Model.NhomHangs)
-        {
-                                                                                                                                                                                                                        <option value="@nhomHang.Id">@nhomHang.Name</option>
-        }
+                            <option value="@nhomHang.Id">@nhomHang.Name</option>
     }
-    else
+                </select>
+            </td>
+            <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].SoLuong" min="1" required oninput="calculateTotals(this.closest('tr'))"></td>
+            <td>
+                <select class="form-control" name="hangHoaModels[${hangHoaCount}].DonViTinhID" required>
+    @foreach (var donViTinh in Model.DonViTinhs)
     {
-                                                                                                                                                <option disabled>Không có dữ liệu nhóm hàng</option>
+                            <option value="@donViTinh.Id">@donViTinh.Name</option>
     }
-                                                        </select>
-                                                    </td>
-                                                    <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].SoLuong" min="1" required oninput="calculateTotals(this.closest('tr'))"></td>
-                                                    <td>
-                                                        <select class="form-control" name="hangHoaModels[${hangHoaCount}].DonViTinhID" required>
-    @if (Model.DonViTinhs != null && Model.DonViTinhs.Any())
-    {
-        @foreach (var donViTinh in Model.DonViTinhs)
-        {
-                                                                                                                                                                                                            <option value="@donViTinh.Id">@donViTinh.Name</option>
-        }
-    }
-    else
-    {
-                                                                                                                                        <option disabled>Không có dữ liệu đơn vị tính</option>
-    }
-                                                        </select>
-                                                    </td>
-                                                    <td>
-                        <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile" accept="image/*" onchange="previewImage(this, ${hangHoaCount})">
-                        <img id="imagePreview_${hangHoaCount}" src="#" alt="Preview" style="max-width: 100px; max-height: 100px; display: none;" />
-                    </td>
-                                                        <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].DonGiaTruocThue" min="0" required oninput="calculateTotals(this.closest('tr'))"></td>
-                                                    <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].VAT" min="0" max="10" required oninput="calculateTotals(this.closest('tr'))"></td>
-                                                        <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].DonGiaSauThue" readonly></td>
-                                                        <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TongGiaTruocThue" readonly></td>
-                                                        <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TongGiaSauThue" readonly></td>
-                                                `;
+                </select>
+            </td>
+            <td>
+                <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile" accept="image/*" onchange="previewImage(this, ${hangHoaCount})">
+                <img id="imagePreview_${hangHoaCount}" src="#" alt="Preview" style="max-width: 100px; max-height: 100px; display: none;" />
+            </td>
+            <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].DonGiaTruocThue" min="0" required oninput="calculateTotals(this.closest('tr'))"></td>
+            <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].VAT" min="0" max="10" required oninput="calculateTotals(this.closest('tr'))"></td>
+            <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].DonGiaSauThue" readonly></td>
+            <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TongGiaTruocThue" readonly></td>
+            <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TongGiaSauThue" readonly></td>
+        `;
+
         tableBody.appendChild(newRow);
-        hangHoaCount++;
-        setupRow(newRow); // Set up event listeners for the new row
+        hangHoaCount++; // Increment row counter for the next addition
+        setupRow(newRow); // Attach event listeners for the new row
     });
+
+    // Set up event listeners for dynamically added rows
     function setupRow(row) {
         row.querySelector('input[name*="SoLuong"]').addEventListener('input', () => calculateTotals(row));
         row.querySelector('input[name*="DonGiaTruocThue"]').addEventListener('input', () => calculateTotals(row));
         row.querySelector('input[name*="VAT"]').addEventListener('input', () => calculateTotals(row));
     }
-    // Adding event listeners to existing rows
-    document.querySelectorAll('.custom-table tbody tr').forEach(row => setupRow(row));
+
+    // Calculate totals dynamically
     function calculateTotals(row) {
         const qty = parseFloat(row.querySelector('input[name*="SoLuong"]').value) || 0;
         const priceBeforeTax = parseFloat(row.querySelector('input[name*="DonGiaTruocThue"]').value) || 0;
         const vat = parseFloat(row.querySelector('input[name*="VAT"]').value) || 0;
-        // Calculate price after tax
+
         const priceAfterTax = priceBeforeTax * (1 + vat / 100);
-        row.querySelector('input[name*="DonGiaSauThue"]').value = priceAfterTax.toFixed(0);
-        // Calculate total before tax
         const totalBeforeTax = qty * priceBeforeTax;
-        row.querySelector('input[name*="TongGiaTruocThue"]').value = totalBeforeTax.toFixed(0);
-        // Calculate total after tax
         const totalAfterTax = qty * priceAfterTax;
+
+        row.querySelector('input[name*="DonGiaSauThue"]').value = priceAfterTax.toFixed(0);
+        row.querySelector('input[name*="TongGiaTruocThue"]').value = totalBeforeTax.toFixed(0);
         row.querySelector('input[name*="TongGiaSauThue"]').value = totalAfterTax.toFixed(0);
-        // Update total amount
+
         updateTotalAmount();
         updateTotal();
     }
+
     function updateTotalAmount() {
         let totalAmount = 0;
-        const rows = document.querySelectorAll('.custom-table tbody tr');
-        rows.forEach(row => {
+        document.querySelectorAll('.custom-table tbody tr').forEach(row => {
             const totalRow = parseFloat(row.querySelector('input[name*="TongGiaTruocThue"]').value) || 0;
             totalAmount += totalRow;
         });
         document.getElementById('ThanhTien').value = totalAmount.toFixed(0);
     }
+
     function updateTotal() {
         let totalAmount = 0;
-        const rows = document.querySelectorAll('.custom-table tbody tr');
-        rows.forEach(row => {
+        document.querySelectorAll('.custom-table tbody tr').forEach(row => {
             const totalRow = parseFloat(row.querySelector('input[name*="TongGiaSauThue"]').value) || 0;
             totalAmount += totalRow;
         });
         document.getElementById('TongTien').value = totalAmount.toFixed(0);
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const successAlert = document.getElementById("successAlert");
-        if (successAlert) {
-            setTimeout(() => {
-                successAlert.style.display = "none";
-            }, 10000);
-        }
-    });
-    document.addEventListener("DOMContentLoaded", function () {
-        const errorAlert = document.getElementById("errorAlert");
-        if (errorAlert) {
-            setTimeout(() => {
-                errorAlert.style.display = "none";
-            }, 10000);
-        }
-    });
-
     function previewImage(input, index) {
-        var preview = document.getElementById('imagePreview_' + index);
+        const preview = document.getElementById(`imagePreview_${index}`);
         if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
+            const reader = new FileReader();
+            reader.onload = e => {
                 preview.src = e.target.result;
                 preview.style.display = 'block';
-            }
+            };
             reader.readAsDataURL(input.files[0]);
         } else {
             preview.src = "#";

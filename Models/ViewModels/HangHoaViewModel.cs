@@ -13,5 +13,6 @@
         public string NhomHangName { get; set; }
         public NhomHang NhomHang { get; set; }
         public KhoHang KhoHang { get; set; }
+        public byte[]? Image { get; set; }
     }
 }

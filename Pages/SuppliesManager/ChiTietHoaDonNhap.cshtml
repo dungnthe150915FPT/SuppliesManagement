@@ -1,5 +1,6 @@
 ﻿@page "{id:guid}"
 @using SuppliesManagement.Models.ViewModels
+@using System.Globalization
 @model SuppliesManagement.Pages.SuppliesManager.ChiTietHoaDonNhapModel
 @{
     ViewData["Title"] = "Chi Tiết Hóa Đơn Nhập";
@@ -33,26 +34,31 @@
         <dd class="col-sm-9">@Model.HoaDonNhap.Serial</dd>
     </dl>
 </div>
-
+@{
+    var customCulture = (CultureInfo)CultureInfo.InvariantCulture.Clone();
+    customCulture.NumberFormat.NumberGroupSeparator = ".";
+    customCulture.NumberFormat.NumberDecimalSeparator = ",";
+}
 <h4>Danh Sách Hàng Hóa</h4>
 <table class="table table-striped">
     <thead>
         <tr>
             <th>Hàng Hóa</th>
+            <th>Ảnh</th>
             <th>Nhóm hàng</th>
             <th>Đơn vị tính</th>
             <th>Số Lượng</th>
-            <th>Giá Trước Thuế</th>
-            <th>Giá Sau Thuế</th>
-            <th>Tổng Giá Trước Thuế</th>
-            <th>Tổng Giá Sau Thuế</th>
+            <th>Giá Trước Thuế (VNĐ)</th>
+            <th>Giá Sau Thuế (VNĐ)</th>
+            <th>Tổng Giá Trước Thuế (VNĐ)</th>
+            <th>Tổng Giá Sau Thuế (VNĐ)</th>
         </tr>
     </thead>
     <tbody>
         @if (Model.HoaDonNhap.HangHoas.Count == 0)
         {
             <tr>
-                <td colspan="6" class="text-center">Không có hàng hóa nào trong hóa đơn này.</td>
+                <td colspan="9" class="text-center">Không có hàng hóa nào trong hóa đơn này.</td>
             </tr>
         }
         else
@@ -61,15 +67,27 @@
             {
                 <tr>
                     <td>@hangHoa.TenHangHoa</td>
+                    <td>
+                        @if (hangHoa.Image != null && hangHoa.Image.Length > 0)
+                        {
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(hangHoa.Image)" alt="@hangHoa.TenHangHoa"
+                                style="max-width: 100px; max-height: 100px;" />
+                        }
+                        else
+                        {
+                            <span>Không có hình ảnh</span>
+                        }
+                    </td>
                     <td>@hangHoa.NhomHangName</td>
                     <td>@hangHoa.DonViTinh</td>
                     <td>@hangHoa.SoLuong</td>
-                    <td>@hangHoa.DonGiaTruocThue.ToString("#,##0 VNĐ")</td>
-                    <td>@hangHoa.DonGiaSauThue.ToString("#,##0 VNĐ")</td>
-                    <td>@hangHoa.TongGiaTruocThue.ToString("#,##0 VNĐ")</td>
-                    <td>@hangHoa.TongGiaSauThue.ToString("#,##0 VNĐ")</td>
+                    <td>@hangHoa.DonGiaTruocThue.ToString("#,##0", customCulture)</td>
+                    <td>@hangHoa.DonGiaSauThue.ToString("#,##0", customCulture)</td>
+                    <td>@hangHoa.TongGiaTruocThue.ToString("#,##0", customCulture)</td>
+                    <td>@hangHoa.TongGiaSauThue.ToString("#,##0", customCulture)</td>
                 </tr>
             }
         }
     </tbody>
 </table>
+

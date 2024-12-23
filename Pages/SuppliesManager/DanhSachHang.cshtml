@@ -46,6 +46,7 @@
                 </th>
                 <th>SL đã xuất</th>
                 <th>SL còn lại</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -61,6 +62,9 @@
                     <td>@hanghoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</td>
                     <td>@hanghoa.SoLuongDaXuat</td>
                     <td>@hanghoa.SoLuongConLai</td>
+                    <td>
+                        <a asp-page="./ChiTietHang" asp-route-id="@hanghoa.Id" class="btn btn-info">Xem chi tiết</a>
+                    </td>
                 </tr>
             }
         </tbody>

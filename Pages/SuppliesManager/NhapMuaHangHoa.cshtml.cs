@@ -29,6 +29,7 @@ namespace SuppliesManagement.Pages
             {
                 return RedirectToPage("/Error/AccessDenied");
             }
+
             NhomHangs = dBContext.NhomHangs.ToList();
             KhoHangs = dBContext.KhoHangs.Include(k => k.HangHoas).ToList();
             DonViTinhs = dBContext.DonViTinhs
@@ -36,6 +37,7 @@ namespace SuppliesManagement.Pages
                 .OrderBy(d => d.Name)
                 .ToList();
             HangHoas = dBContext.HangHoas.Include(h => h.DonViTinh).ToList();
+
             return Page();
         }
 
@@ -49,14 +51,34 @@ namespace SuppliesManagement.Pages
             List<HangHoaInputModel> hangHoaModels
         )
         {
-            if (!ModelState.IsValid)
+            NhomHangs = dBContext.NhomHangs.ToList();
+            KhoHangs = dBContext.KhoHangs.Include(k => k.HangHoas).ToList();
+            DonViTinhs = dBContext.DonViTinhs
+                .Include(d => d.HangHoas)
+                .OrderBy(d => d.Name)
+                .ToList();
+            HangHoas = dBContext.HangHoas.Include(h => h.DonViTinh).ToList();
+/*            if (!ModelState.IsValid)
             {
                 return Page();
             }
+*/
+            // Check for duplicate invoice
             var SoHoaDonAndSerialExisted = dBContext.HoaDonNhaps.FirstOrDefault(
                 h => h.SoHoaDon == SoHoaDon && h.Serial == SoSerial
             );
-            if (SoHoaDonAndSerialExisted == null)
+
+            if (SoHoaDonAndSerialExisted != null)
+            {
+                TempData["Error"] =
+                    $"Hóa đơn có số hóa đơn: {SoHoaDon} và số Serial: {SoSerial} đã tồn tại";
+                return Page();
+            }
+
+            // Use a transaction for atomicity
+            // using var transaction = dBContext.Database.BeginTransaction();
+
+            try
             {
                 var hoaDonNhap = new HoaDonNhap
                 {
@@ -71,125 +93,148 @@ namespace SuppliesManagement.Pages
                 dBContext.HoaDonNhaps.Add(hoaDonNhap);
                 dBContext.SaveChanges();
 
+                // Process each product
                 foreach (var item in hangHoaModels)
                 {
-                    var hangHoaExisted = dBContext.HangHoas.FirstOrDefault(
-                        h =>
-                            h.TenHangHoa == item.TenHangHoa
-                            && h.NgayNhap == NgayNhap
-                            && h.DonViTinhId == item.DonViTinhID
-                            && h.DonGiaTruocThue == item.DonGiaTruocThue
-                            && h.Image == item.Image
-                    );
-                    if (hangHoaExisted != null)
-                    {
-                        hangHoaExisted.NgayNhap = NgayNhap;
-                        hangHoaExisted.SoLuong += item.SoLuong;
-                        hangHoaExisted.DonGiaTruocThue = hangHoaExisted.DonGiaTruocThue;
-                        hangHoaExisted.Vat = hangHoaExisted.Vat;
-                        hangHoaExisted.DonGiaSauThue =
-                            hangHoaExisted.DonGiaTruocThue * (1 + hangHoaExisted.Vat / 100);
-                        hangHoaExisted.TongGiaTruocThue =
-                            hangHoaExisted.SoLuong * hangHoaExisted.DonGiaTruocThue;
-                        hangHoaExisted.TongGiaSauThue =
-                            hangHoaExisted.SoLuong * hangHoaExisted.DonGiaSauThue;
-                        hangHoaExisted.KhoHangId = khoHangID;
-                        hangHoaExisted.SoLuongConLai += item.SoLuong;
-                        hangHoaExisted.Image = item?.Image; // Update image if needed
-                        dBContext.HangHoas.Update(hangHoaExisted);
-                        var hangHoaHoaDon = new HangHoaHoaDon
-                        {
-                            Id = Guid.NewGuid(),
-                            TenHangHoa = item.TenHangHoa,
-                            NhomHangId = item.NhomHangID,
-                            DonViTinhId = item.DonViTinhID,
-                            SoLuong = item.SoLuong,
-                            Vat = item.VAT,
-                            DonGiaTruocThue = item.DonGiaTruocThue,
-                            DonGiaSauThue = item.DonGiaTruocThue * (1 + item.VAT / 100),
-                            TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
-                            TongGiaSauThue =
-                                item.SoLuong * (item.DonGiaTruocThue * (1 + item.VAT / 100)),
-                            KhoHangId = khoHangID,
-                            Image = item?.Image // Add image to HangHoaHoaDon
-                        };
-                        dBContext.HangHoaHoaDons.Add(hangHoaHoaDon);
-
-                        var nhapKho = new NhapKho
-                        {
-                            NhapKhoId = Guid.NewGuid(),
-                            HoaDonNhapId = hoaDonNhap.Id,
-                            HangHoaHoaDonId = hangHoaHoaDon.Id,
-                        };
-                        dBContext.NhapKhos.Add(nhapKho);
-                    }
-                    else
-                    {
-                        var hangHoa = new HangHoa
-                        {
-                            Id = Guid.NewGuid(),
-                            TenHangHoa = item.TenHangHoa,
-                            NhomHangId = item.NhomHangID,
-                            DonViTinhId = item.DonViTinhID,
-                            SoLuong = item.SoLuong,
-                            Vat = item.VAT,
-                            DonGiaTruocThue = item.DonGiaTruocThue,
-                            DonGiaSauThue = item.DonGiaTruocThue * (1 + item.VAT / 100),
-                            TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
-                            TongGiaSauThue =
-                                item.SoLuong * (item.DonGiaTruocThue * (1 + item.VAT / 100)),
-                            KhoHangId = khoHangID,
-                            SoLuongDaXuat = 0,
-                            SoLuongConLai = item.SoLuong,
-                            NgayNhap = NgayNhap,
-                            Image = item?.Image // Add image to new HangHoa
-                        };
-                        dBContext.HangHoas.Add(hangHoa);
-                        var hangHoaHoaDon = new HangHoaHoaDon
-                        {
-                            Id = Guid.NewGuid(),
-                            TenHangHoa = item.TenHangHoa,
-                            NhomHangId = item.NhomHangID,
-                            DonViTinhId = item.DonViTinhID,
-                            SoLuong = item.SoLuong,
-                            Vat = item.VAT,
-                            DonGiaTruocThue = item.DonGiaTruocThue,
-                            DonGiaSauThue = item.DonGiaTruocThue * (1 + item.VAT / 100),
-                            TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
-                            TongGiaSauThue =
-                                item.SoLuong * (item.DonGiaTruocThue * (1 + item.VAT / 100)),
-                            KhoHangId = khoHangID,
-                            Image = item?.Image // Add image to new HangHoaHoaDon
-                        };
-                        dBContext.HangHoaHoaDons.Add(hangHoaHoaDon);
-                        var nhapKho = new NhapKho
-                        {
-                            NhapKhoId = Guid.NewGuid(),
-                            HoaDonNhapId = hoaDonNhap.Id,
-                            HangHoaHoaDonId = hangHoaHoaDon.Id,
-                        };
-                        dBContext.NhapKhos.Add(nhapKho);
-                    }
+                    ProcessHangHoa(item, hoaDonNhap, khoHangID, NgayNhap);
                 }
+
                 dBContext.SaveChanges();
                 TempData["SuccessMessage"] =
-                    "Nhập mới hóa đơn hàng hóa có số hóa đơn: "
-                    + SoHoaDon
-                    + " và số Serial: "
-                    + SoSerial
-                    + " thành công!";
-                return RedirectToPage("./NhapMuaHangHoa");
+                    $"Nhập mới hóa đơn hàng hóa có số hóa đơn: {SoHoaDon} và số Serial: {SoSerial} thành công!";
+                //return RedirectToPage("./NhapMuaHangHoa");
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Đã xảy ra lỗi khi xử lý: {ex.Message}";
+                //return RedirectToPage("./NhapMuaHangHoa");
+                return Page();
+            }
+        }
+
+        private void ProcessHangHoa(
+            HangHoaInputModel item,
+            HoaDonNhap hoaDonNhap,
+            Guid khoHangID,
+            DateTime NgayNhap
+        )
+        {
+            // Convert image file to byte array if provided
+            if (item.ImageFile != null && item.ImageFile.Length > 0)
+            {
+                using var memoryStream = new MemoryStream();
+                item.ImageFile.CopyTo(memoryStream);
+                item.Image = memoryStream.ToArray();
+            }
+
+            var hangHoaExisted = dBContext.HangHoas.FirstOrDefault(
+                h =>
+                    h.TenHangHoa == item.TenHangHoa
+                    && h.NgayNhap == NgayNhap
+                    && h.DonViTinhId == item.DonViTinhID
+                    && h.DonGiaTruocThue == item.DonGiaTruocThue
+                    && (
+                        h.Image == null && item.Image == null
+                        || h.Image != null
+                            && item.Image != null
+                            && h.Image.SequenceEqual(item.Image)
+                    )
+            );
+
+            if (hangHoaExisted != null)
+            {
+                UpdateExistingHangHoa(hangHoaExisted, item, hoaDonNhap, khoHangID);
             }
             else
             {
-                TempData["Error"] =
-                    "Hóa đơn có số hóa đơn: "
-                    + SoHoaDon
-                    + " và số Serial: "
-                    + SoSerial
-                    + " đã tồn tại";
-                return RedirectToPage("./NhapMuaHangHoa");
+                CreateNewHangHoa(item, hoaDonNhap, khoHangID, NgayNhap);
             }
+        }
+
+        private void UpdateExistingHangHoa(
+            HangHoa hangHoa,
+            HangHoaInputModel item,
+            HoaDonNhap hoaDonNhap,
+            Guid khoHangID
+        )
+        {
+            hangHoa.SoLuong += item.SoLuong;
+            hangHoa.SoLuongConLai += item.SoLuong;
+            hangHoa.TongGiaTruocThue = hangHoa.SoLuong * hangHoa.DonGiaTruocThue;
+            hangHoa.TongGiaSauThue = hangHoa.SoLuong * hangHoa.DonGiaSauThue;
+
+            dBContext.HangHoas.Update(hangHoa);
+
+            // Create HangHoaHoaDon and NhapKho records
+            var hangHoaHoaDon = CreateHangHoaHoaDon(item, khoHangID);
+            CreateNhapKhoRecord(hoaDonNhap.Id, hangHoaHoaDon.Id);
+        }
+
+        private void CreateNewHangHoa(
+            HangHoaInputModel item,
+            HoaDonNhap hoaDonNhap,
+            Guid khoHangID,
+            DateTime NgayNhap
+        )
+        {
+            var hangHoa = new HangHoa
+            {
+                Id = Guid.NewGuid(),
+                TenHangHoa = item.TenHangHoa,
+                NhomHangId = item.NhomHangID,
+                DonViTinhId = item.DonViTinhID,
+                SoLuong = item.SoLuong,
+                Vat = item.VAT,
+                DonGiaTruocThue = item.DonGiaTruocThue,
+                DonGiaSauThue = item.DonGiaTruocThue * (1 + item.VAT / 100),
+                TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
+                TongGiaSauThue = item.SoLuong * (item.DonGiaTruocThue * (1 + item.VAT / 100)),
+                KhoHangId = khoHangID,
+                SoLuongDaXuat = 0,
+                SoLuongConLai = item.SoLuong,
+                NgayNhap = NgayNhap,
+                Image = item?.Image
+            };
+
+            dBContext.HangHoas.Add(hangHoa);
+
+            // Create HangHoaHoaDon and NhapKho records
+            var hangHoaHoaDon = CreateHangHoaHoaDon(item, khoHangID);
+            CreateNhapKhoRecord(hoaDonNhap.Id, hangHoaHoaDon.Id);
+        }
+
+        private HangHoaHoaDon CreateHangHoaHoaDon(HangHoaInputModel item, Guid khoHangID)
+        {
+            var hangHoaHoaDon = new HangHoaHoaDon
+            {
+                Id = Guid.NewGuid(),
+                TenHangHoa = item.TenHangHoa,
+                NhomHangId = item.NhomHangID,
+                DonViTinhId = item.DonViTinhID,
+                SoLuong = item.SoLuong,
+                Vat = item.VAT,
+                DonGiaTruocThue = item.DonGiaTruocThue,
+                DonGiaSauThue = item.DonGiaTruocThue * (1 + item.VAT / 100),
+                TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
+                TongGiaSauThue = item.SoLuong * (item.DonGiaTruocThue * (1 + item.VAT / 100)),
+                KhoHangId = khoHangID,
+                Image = item?.Image
+            };
+
+            dBContext.HangHoaHoaDons.Add(hangHoaHoaDon);
+            return hangHoaHoaDon;
+        }
+
+        private void CreateNhapKhoRecord(Guid hoaDonNhapId, Guid hangHoaHoaDonId)
+        {
+            var nhapKho = new NhapKho
+            {
+                NhapKhoId = Guid.NewGuid(),
+                HoaDonNhapId = hoaDonNhapId,
+                HangHoaHoaDonId = hangHoaHoaDonId
+            };
+            dBContext.NhapKhos.Add(nhapKho);
         }
 
         public IActionResult OnPostImportHoaDon(IFormFile fileXml)

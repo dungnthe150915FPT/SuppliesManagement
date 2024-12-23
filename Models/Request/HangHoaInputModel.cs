@@ -10,6 +10,7 @@
         public int DonViTinhID { get; set; }
         public int VAT { get; set; }
         public byte[]? Image { get; set; }
+        public IFormFile ImageFile { get; set; }
         /*        public string TenNhomHang { get; set; }
                 public string TenDonViTinh { get; set; }*/
     }
