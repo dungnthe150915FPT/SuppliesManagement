@@ -58,11 +58,11 @@ namespace SuppliesManagement.Pages
                 .OrderBy(d => d.Name)
                 .ToList();
             HangHoas = dBContext.HangHoas.Include(h => h.DonViTinh).ToList();
-/*            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-*/
+            /*            if (!ModelState.IsValid)
+                        {
+                            return Page();
+                        }
+            */
             // Check for duplicate invoice
             var SoHoaDonAndSerialExisted = dBContext.HoaDonNhaps.FirstOrDefault(
                 h => h.SoHoaDon == SoHoaDon && h.Serial == SoSerial

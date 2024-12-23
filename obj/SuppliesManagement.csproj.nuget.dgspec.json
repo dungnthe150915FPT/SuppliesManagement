@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\SM\\SuppliesManagement\\SuppliesManagement.csproj": {}
+    "D:\\smtest\\SuppliesManagement\\SuppliesManagement.csproj": {}
   },
   "projects": {
-    "D:\\SM\\SuppliesManagement\\SuppliesManagement.csproj": {
+    "D:\\smtest\\SuppliesManagement\\SuppliesManagement.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SM\\SuppliesManagement\\SuppliesManagement.csproj",
+        "projectUniqueName": "D:\\smtest\\SuppliesManagement\\SuppliesManagement.csproj",
         "projectName": "SuppliesManagement",
-        "projectPath": "D:\\SM\\SuppliesManagement\\SuppliesManagement.csproj",
+        "projectPath": "D:\\smtest\\SuppliesManagement\\SuppliesManagement.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\SM\\SuppliesManagement\\obj\\",
+        "outputPath": "D:\\smtest\\SuppliesManagement\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
