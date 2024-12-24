@@ -77,7 +77,9 @@
                     <th>Nhóm hàng hóa</th>
                     <th>Số lượng</th>
                     <th>Đ.vị tính</th>
-                    <th>Hình ảnh</th>
+                    <th>Hình ảnh 1</th>
+                    <th>Hình ảnh 2</th>
+                    <th>Hình ảnh 3</th>
                     <th>Giá tr.thuế</th>
                     <th>VAT%</th>
                     <th>Giá s.thuế</th>
@@ -139,14 +141,47 @@
                                 }
                             </select>
                         </td>
-                        <td>
+                        @* <td>
                             <input type="file" class="form-control" name="hangHoaModels[@i].ImageFile" accept="image/*"
                                 onchange="previewImage(this, @i)">
                             <img id="imagePreview_@i" src="#" alt="Preview"
                                 style="max-width: 100px; max-height: 100px; display: none;" />
-                            @if (hangHoa.Image != null)
+                            @if (hangHoa.Image1 != null)
                             {
-                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(hangHoa.Image)" alt="Existing Image"
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(hangHoa.Image1)" alt="Existing Image"
+                                    style="max-width: 100px; max-height: 100px;" />
+                            }
+                        </td> *@
+                        <td>
+                            <input type="file" class="form-control" name="hangHoaModels[@i].ImageFile1" accept="image/*"
+                                onchange="previewImage(this, @i, 1)">
+                            <img id="imagePreview_@(i)_1" src="#" alt="Preview 1"
+                                style="max-width: 100px; max-height: 100px; display: none;" />
+                            @if (hangHoa.Image1 != null)
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(hangHoa.Image1)" alt="Existing Image 1"
+                                    style="max-width: 100px; max-height: 100px;" />
+                            }
+                        </td>
+                        <td>
+                            <input type="file" class="form-control" name="hangHoaModels[@i].ImageFile2" accept="image/*"
+                                onchange="previewImage(this, @i, 2)">
+                            <img id="imagePreview_@(i)_2" src="#" alt="Preview 2"
+                                style="max-width: 100px; max-height: 100px; display: none;" />
+                            @if (hangHoa.Image2 != null)
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(hangHoa.Image2)" alt="Existing Image 2"
+                                    style="max-width: 100px; max-height: 100px;" />
+                            }
+                        </td>
+                        <td>
+                            <input type="file" class="form-control" name="hangHoaModels[@i].ImageFile3" accept="image/*"
+                                onchange="previewImage(this, @i, 3)">
+                            <img id="imagePreview_@(i)_3" src="#" alt="Preview 3"
+                                style="max-width: 100px; max-height: 100px; display: none;" />
+                            @if (hangHoa.Image3 != null)
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(hangHoa.Image3)" alt="Existing Image 3"
                                     style="max-width: 100px; max-height: 100px;" />
                             }
                         </td>
@@ -214,7 +249,7 @@
                 <select class="form-control" name="hangHoaModels[${hangHoaCount}].NhomHangID" required>
     @foreach (var nhomHang in Model.NhomHangs)
     {
-                            <option value="@nhomHang.Id">@nhomHang.Name</option>
+                                                            <option value="@nhomHang.Id">@nhomHang.Name</option>
     }
                 </select>
             </td>
@@ -223,13 +258,26 @@
                 <select class="form-control" name="hangHoaModels[${hangHoaCount}].DonViTinhID" required>
     @foreach (var donViTinh in Model.DonViTinhs)
     {
-                            <option value="@donViTinh.Id">@donViTinh.Name</option>
+                                                            <option value="@donViTinh.Id">@donViTinh.Name</option>
     }
                 </select>
             </td>
-            <td>
+    @* image *@
+    @* <td>
                 <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile" accept="image/*" onchange="previewImage(this, ${hangHoaCount})">
                 <img id="imagePreview_${hangHoaCount}" src="#" alt="Preview" style="max-width: 100px; max-height: 100px; display: none;" />
+            </td> *@
+            <td>
+                <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile1" accept="image/*" onchange="previewImage(this, ${hangHoaCount}, 1)">
+                <img id="imagePreview_${hangHoaCount}_1" src="#" alt="Preview 1" style="max-width: 100px; max-height: 100px; display: none;" />
+            </td>
+            <td>
+                <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile2" accept="image/*" onchange="previewImage(this, ${hangHoaCount}, 2)">
+                <img id="imagePreview_${hangHoaCount}_2" src="#" alt="Preview 2" style="max-width: 100px; max-height: 100px; display: none;" />
+            </td>
+            <td>
+                <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile3" accept="image/*" onchange="previewImage(this, ${hangHoaCount}, 3)">
+                <img id="imagePreview_${hangHoaCount}_3" src="#" alt="Preview 3" style="max-width: 100px; max-height: 100px; display: none;" />
             </td>
             <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].DonGiaTruocThue" min="0" required oninput="calculateTotals(this.closest('tr'))"></td>
             <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].VAT" min="0" max="10" required oninput="calculateTotals(this.closest('tr'))"></td>
@@ -286,7 +334,7 @@
         document.getElementById('TongTien').value = totalAmount.toFixed(0);
     }
 
-    function previewImage(input, index) {
+    @* function previewImage(input, index) {
         const preview = document.getElementById(`imagePreview_${index}`);
         if (input.files && input.files[0]) {
             const reader = new FileReader();
@@ -299,5 +347,20 @@
             preview.src = "#";
             preview.style.display = 'none';
         }
-    }
+    } *@
+
+        function previewImage(input, index, imageNumber) {
+            const preview = document.getElementById(`imagePreview_${index}_${imageNumber}`);
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.src = "#";
+                preview.style.display = 'none';
+            }
+        }
 </script>

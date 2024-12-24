@@ -8,6 +8,5 @@ namespace SuppliesManagement.Entities.ViewModels
         public string SoHoaDon { get; set; }
         public DateTime NgayNhap { get; set; } = DateTime.Now;
         public List<HangHoaInputModel> HangHoaModels { get; set; } = new List<HangHoaInputModel>();
-
     }
 }

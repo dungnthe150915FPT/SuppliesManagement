@@ -100,7 +100,7 @@ namespace SuppliesManagement.Pages.Admin
             if (Role == 2)
             {
                 message =
-                    $"Xin chào {Username},\n\n"
+                    $"Xin chào {newAccount.Fullname},\n\n"
                     + $"Tài khoản của bạn đã được tạo thành công với thông tin sau:\n"
                     + $"Tên đăng nhập: {Username}\n"
                     + $"Mật khẩu: {password}\n\n"
@@ -111,7 +111,7 @@ namespace SuppliesManagement.Pages.Admin
             else
             {
                 message =
-                    $"Xin chào {Username},\n\n"
+                    $"Xin chào {newAccount.Fullname},\n\n"
                     + $"Tài khoản của bạn đã được tạo thành công với thông tin sau:\n"
                     + $"Tên đăng nhập: {Username}\n"
                     + $"Mật khẩu: {password}\n\n"

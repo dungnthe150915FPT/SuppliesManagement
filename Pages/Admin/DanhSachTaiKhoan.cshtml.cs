@@ -26,7 +26,9 @@ namespace SuppliesManagement.Pages
             }
             Accounts = context.Accounts
                 .Where(a => a.RoleId != 1)
-                .Include(a => a.Role).OrderBy(a => a.RoleId).ToList();
+                .Include(a => a.Role)
+                .OrderBy(a => a.RoleId)
+                .ToList();
             return Page();
         }
     }

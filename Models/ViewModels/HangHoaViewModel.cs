@@ -13,6 +13,8 @@
         public string NhomHangName { get; set; }
         public NhomHang NhomHang { get; set; }
         public KhoHang KhoHang { get; set; }
-        public byte[]? Image { get; set; }
+        public byte[]? Image1 { get; set; }
+        public byte[]? Image2 { get; set; }
+        public byte[]? Image3 { get; set; }
     }
 }

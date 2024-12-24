@@ -58,7 +58,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                             TongGiaTruocThue = n.HangHoaHoaDon.TongGiaTruocThue,
                             TongGiaSauThue = n.HangHoaHoaDon.TongGiaSauThue,
                             NhomHangName = n.HangHoaHoaDon.NhomHang.Name,
-                            Image = n.HangHoaHoaDon.Image
+                            // Image1 = n.HangHoaHoaDon.Image1
                         }
                 )
                 .ToListAsync();

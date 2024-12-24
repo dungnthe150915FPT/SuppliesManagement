@@ -121,11 +121,23 @@ namespace SuppliesManagement.Pages
         )
         {
             // Convert image file to byte array if provided
-            if (item.ImageFile != null && item.ImageFile.Length > 0)
+            if (item.ImageFile1 != null && item.ImageFile1.Length > 0)
             {
                 using var memoryStream = new MemoryStream();
-                item.ImageFile.CopyTo(memoryStream);
-                item.Image = memoryStream.ToArray();
+                item.ImageFile1.CopyTo(memoryStream);
+                item.Image1 = memoryStream.ToArray();
+            }
+            if (item.ImageFile2 != null && item.ImageFile2.Length > 0)
+            {
+                using var memoryStream = new MemoryStream();
+                item.ImageFile2.CopyTo(memoryStream);
+                item.Image2 = memoryStream.ToArray();
+            }
+            if (item.ImageFile3 != null && item.ImageFile3.Length > 0)
+            {
+                using var memoryStream = new MemoryStream();
+                item.ImageFile3.CopyTo(memoryStream);
+                item.Image3 = memoryStream.ToArray();
             }
 
             var hangHoaExisted = dBContext.HangHoas.FirstOrDefault(
@@ -135,10 +147,22 @@ namespace SuppliesManagement.Pages
                     && h.DonViTinhId == item.DonViTinhID
                     && h.DonGiaTruocThue == item.DonGiaTruocThue
                     && (
-                        h.Image == null && item.Image == null
-                        || h.Image != null
-                            && item.Image != null
-                            && h.Image.SequenceEqual(item.Image)
+                        h.Image1 == null && item.Image1 == null
+                        || h.Image1 != null
+                            && item.Image1 != null
+                            && h.Image1.SequenceEqual(item.Image1)
+                    )
+                    && (
+                        h.Image2 == null && item.Image2 == null
+                        || h.Image2 != null
+                            && item.Image2 != null
+                            && h.Image2.SequenceEqual(item.Image2)
+                    )
+                    && (
+                        h.Image3 == null && item.Image3 == null
+                        || h.Image3 != null
+                            && item.Image3 != null
+                            && h.Image3.SequenceEqual(item.Image3)
                     )
             );
 
@@ -194,7 +218,9 @@ namespace SuppliesManagement.Pages
                 SoLuongDaXuat = 0,
                 SoLuongConLai = item.SoLuong,
                 NgayNhap = NgayNhap,
-                Image = item?.Image
+                Image1 = item?.Image1,
+                Image2 = item?.Image2,
+                Image3 = item?.Image3,
             };
 
             dBContext.HangHoas.Add(hangHoa);
@@ -219,7 +245,9 @@ namespace SuppliesManagement.Pages
                 TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
                 TongGiaSauThue = item.SoLuong * (item.DonGiaTruocThue * (1 + item.VAT / 100)),
                 KhoHangId = khoHangID,
-                Image = item?.Image
+                Image1 = item?.Image1,
+                Image2 = item?.Image2,
+                Image3 = item?.Image3,
             };
 
             dBContext.HangHoaHoaDons.Add(hangHoaHoaDon);

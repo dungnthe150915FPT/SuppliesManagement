@@ -2,7 +2,12 @@
 @model SuppliesManagement.Pages.SuppliesManager.ChiTietHangModel
 @{
 }
-
+@{
+    var images = new List<string>();
+    if (Model.HangHoa?.Image1 != null) images.Add($"data:image/jpeg;base64,{Convert.ToBase64String(Model.HangHoa.Image1)}");
+    if (Model.HangHoa?.Image2 != null) images.Add($"data:image/jpeg;base64,{Convert.ToBase64String(Model.HangHoa.Image2)}");
+    if (Model.HangHoa?.Image3 != null) images.Add($"data:image/jpeg;base64,{Convert.ToBase64String(Model.HangHoa.Image3)}");
+}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 <style>
@@ -45,40 +50,35 @@
                                 <p>@Model.HangHoa.SoLuongConLai</p>
                             </div>
                             <!-- Image Column -->
-                            <div class="col-md-4 text-center">
-                                @if (Model.HangHoa.Image != null)
+                            <div class="col-md-4">
+                                <!-- Image Slideshow -->
+                                @if (images.Any())
                                 {
-                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.HangHoa.Image)"
-                                        alt="Hình ảnh hàng hóa" class="img-fluid rounded shadow-lg"
-                                        style="max-height: 300px; cursor: pointer;" data-bs-toggle="modal"
-                                        data-bs-target="#imageModal" />
-
-                                    <!-- Modal for full-screen image -->
-                                    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog modal-fullscreen">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="imageModalLabel">Hình ảnh hàng hóa:
-                                                        @Model.HangHoa.TenHangHoa</h5>
-                                                    <div>
-                                                        <a href="data:image/jpeg;base64,@Convert.ToBase64String(Model.HangHoa.Image)"
-                                                            download="@(Model.HangHoa.TenHangHoa).jpg"
-                                                            class="btn btn-primary me-2">
-                                                            <i class="bi bi-download"></i> Tải xuống
-                                                        </a>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
+                                    <div id="productImageSlideshow" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-inner">
+                                            @for (int i = 0; i < images.Count; i++)
+                                            {
+                                                <div class="carousel-item @(i == 0 ? "active" : "")">
+                                                    <img src="@images[i]" class="d-block w-100 img-fluid rounded"
+                                                        alt="Hình ảnh sản phẩm @(i+1)"
+                                                        style="max-height: 300px; object-fit: contain; cursor: pointer;"
+                                                        onclick="openImageModal('@images[i]', @i)">
                                                 </div>
-                                                <div
-                                                    class="modal-body d-flex align-items-center justify-content-center bg-dark">
-                                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.HangHoa.Image)"
-                                                        alt="Hình ảnh hàng hóa" class="img-fluid"
-                                                        style="max-height: 90vh; max-width: 90vw; object-fit: contain;" />
-                                                </div>
-                                            </div>
+                                            }
                                         </div>
+                                        @if (images.Count > 1)
+                                        {
+                                            <button class="carousel-control-prev" type="button"
+                                                data-bs-target="#productImageSlideshow" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button"
+                                                data-bs-target="#productImageSlideshow" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                        }
                                     </div>
                                 }
                                 else
@@ -107,4 +107,31 @@
         </div>
     </div>
 </div>
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Chi tiết hình ảnh</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="Chi tiết hình ảnh" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <a id="downloadLink" href="#" class="btn btn-primary" download="product-image.jpg">Tải xuống</a>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function openImageModal(imageSrc, index) {
+        var modal = new bootstrap.Modal(document.getElementById('imageModal'));
+        document.getElementById('modalImage').src = imageSrc;
+        document.getElementById('downloadLink').href = imageSrc;
+        document.getElementById('downloadLink').download = `product-image-${index + 1}.jpg`;
+        modal.show();
+    }
+</script>

@@ -17,7 +17,9 @@ namespace SuppliesManagement.Models
         public Guid KhoHangId { get; set; }
         public int NhomHangId { get; set; }
 
-        public byte[]? Image { get; set; }
+        public byte[]? Image1 { get; set; }
+        public byte[]? Image2 { get; set; }
+        public byte[]? Image3 { get; set; }
         public virtual DonViTinh DonViTinh { get; set; } = null!;
         public virtual NhomHang NhomHang { get; set; } = null!;
         public virtual KhoHang KhoHang { get; set; } = null!;
