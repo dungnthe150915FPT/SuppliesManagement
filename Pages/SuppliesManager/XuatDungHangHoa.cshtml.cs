@@ -56,6 +56,17 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 return Page();
             }
 
+            KhoHangs = _dbContext.KhoHangs?.ToList() ?? new List<KhoHang>();
+            Accounts =
+                _dbContext.Accounts?.Where(a => a.RoleId == 3).ToList() ?? new List<Account>();
+            HangHoas =
+                _dbContext.HangHoas
+                    .Where(h => h.SoLuongConLai > 0)
+                    ?.Include(h => h.NhomHang)
+                    .Include(h => h.DonViTinh)
+                    .OrderByDescending(h => h.TenHangHoa)
+                    .ToList() ?? new List<HangHoa>();
+
             // Kiểm tra danh sách dữ liệu từ form
             // if (HangHoaIds == null || SoLuongs == null || HangHoaIds.Count != SoLuongs.Count)
             // {

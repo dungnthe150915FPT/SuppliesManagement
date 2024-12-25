@@ -141,17 +141,6 @@
                                 }
                             </select>
                         </td>
-                        @* <td>
-                            <input type="file" class="form-control" name="hangHoaModels[@i].ImageFile" accept="image/*"
-                                onchange="previewImage(this, @i)">
-                            <img id="imagePreview_@i" src="#" alt="Preview"
-                                style="max-width: 100px; max-height: 100px; display: none;" />
-                            @if (hangHoa.Image1 != null)
-                            {
-                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(hangHoa.Image1)" alt="Existing Image"
-                                    style="max-width: 100px; max-height: 100px;" />
-                            }
-                        </td> *@
                         <td>
                             <input type="file" class="form-control" name="hangHoaModels[@i].ImageFile1" accept="image/*"
                                 onchange="previewImage(this, @i, 1)">
@@ -249,7 +238,7 @@
                 <select class="form-control" name="hangHoaModels[${hangHoaCount}].NhomHangID" required>
     @foreach (var nhomHang in Model.NhomHangs)
     {
-                                                            <option value="@nhomHang.Id">@nhomHang.Name</option>
+                                                                                            <option value="@nhomHang.Id">@nhomHang.Name</option>
     }
                 </select>
             </td>
@@ -258,7 +247,7 @@
                 <select class="form-control" name="hangHoaModels[${hangHoaCount}].DonViTinhID" required>
     @foreach (var donViTinh in Model.DonViTinhs)
     {
-                                                            <option value="@donViTinh.Id">@donViTinh.Name</option>
+                                                                                            <option value="@donViTinh.Id">@donViTinh.Name</option>
     }
                 </select>
             </td>

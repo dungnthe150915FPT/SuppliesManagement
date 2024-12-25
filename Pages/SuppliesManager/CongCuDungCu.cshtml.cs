@@ -97,135 +97,196 @@ namespace SuppliesManagement.Pages.SuppliesManager
         public IActionResult OnPostExport(int year)
         {
             var currentDate = DateTime.Now;
-            var khoHang = dBContext.KhoHangs.FirstOrDefault(); // Assuming single record
+            var khoHang = dBContext.KhoHangs.FirstOrDefault();
             var hangHoas = dBContext.HangHoas
                 .Include(h => h.DonViTinh)
                 .Where(h => h.NgayNhap.Year == year && h.NhomHangId == 1)
                 .ToList();
 
             using var package = new ExcelPackage();
-            var worksheet = package.Workbook.Worksheets.Add("Công Cụ Dụng Cụ năm " +year);
+            var worksheet = package.Workbook.Worksheets.Add("Công Cụ Dụng Cụ năm " + year);
 
             // Setting default font
             worksheet.Cells.Style.Font.Name = "Times New Roman";
-            worksheet.Cells.Style.Font.Size = 12;
+            worksheet.Cells.Style.Font.Size = 14;
 
             // Header Information
-            worksheet.Cells["A1"].Value = $"Đơn vị: {khoHang?.Ten}";
-            worksheet.Cells["A2"].Value = $"Địa chỉ: {khoHang?.DiaChi}";
-            worksheet.Cells["A3"].Value = $"SỔ THEO DÕI CÔNG CỤ DỤNG CỤ";
-            worksheet.Cells["A3"].Style.Font.Size = 14;
-            worksheet.Cells["A3"].Style.Font.Bold = true;
+            worksheet.Cells["A1:K1"].Merge = true;
+            worksheet.Cells["A1:K1"].Style.Font.Bold = true;
+            worksheet.Cells["A1:K2"].Style.Font.Size = 13;
+            var a1Text = worksheet.Cells["A1"].RichText;
+            var khohang = a1Text.Add("Đơn vị: ");
+            var tenkhohang = a1Text.Add(khoHang?.Ten);
+            worksheet.Cells["A2:K2"].Merge = true;
+            worksheet.Cells["A2:K3"].Style.Font.Bold = true;
+            var a2Text = worksheet.Cells["A2"].RichText;
+            var diachi = a2Text.Add("Địa chỉ: ");
+            var tendiachi = a2Text.Add(khoHang?.DiaChi);
+            tendiachi.Bold = false;
+            tenkhohang.Bold = false;
 
-            worksheet.Cells["A4"].Value = $"Năm: {year}";
-            worksheet.Cells["A1:A4"].Style.Font.Bold = true;
+            worksheet.Cells["A3:K4"].Merge = true;
+            worksheet.Cells["A3:K4"].Style.WrapText = true; // Enable text wrapping
+            var a3Text = worksheet.Cells["A3"].RichText;
+            var tieude = a3Text.Add("SỔ THEO DÕI CÔNG CỤ DỤNG CỤ");
+            a3Text.Add("\n"); // Line break
+            var namtieude = a3Text.Add($"Năm: {year}");
+            // Center align the text
+            worksheet.Cells["A3:K4"]
+                .Style
+                .HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["A3:K4"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells["A1:A3"].Style.Font.Bold = true;
 
             // Merge header cells
-            worksheet.Cells["A1:L1"].Merge = true;
-            worksheet.Cells["A2:L2"].Merge = true;
-            worksheet.Cells["A3:L3"].Merge = true;
-            worksheet.Cells["A4:L4"].Merge = true;
 
-            worksheet.Cells["A1:A4"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["A1:A2"]
+                .Style
+                .HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
             // Table Headers
-            string[] headers =
-            {
-                "STT",
-                "Tên CCDC",
-                "Mã CCDC",
-                "Đặc điểm/TSKT",
-                "ĐVT",
-                "QĐ tăng",
-                "N.Tháng Tăng",
-                "QĐ giảm",
-                "N.Tháng Giảm",
-                "Lý do giảm",
-                "Ghi chú"
-            };
-            for (int i = 0; i < headers.Length; i++)
-            {
-                worksheet.Cells[5, i + 1].Value = headers[i];
-            }
+            worksheet.Cells["A6"].Value = "STT";
+            worksheet.Cells["B6"].Value = "Tên CCDC";
+            worksheet.Cells["C6"].Value = "Mã CCDC";
+            worksheet.Cells["D6"].Value = "Đặc điểm/Thông số kỹ thuật";
+            worksheet.Cells["E6"].Value = "ĐVT";
+            worksheet.Cells["A6:A8"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["A6:A8"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells["B6:B8"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["B6:B8"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells["C6:C8"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["C6:C8"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells["D6:D8"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["D6:D8"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells["E6:E8"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["E6:E8"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells["A6:A8"].Merge = true;
+            worksheet.Cells["B6:B8"].Merge = true;
+            worksheet.Cells["C6:C8"].Merge = true;
+            worksheet.Cells["D6:D8"].Merge = true;
+            worksheet.Cells["E6:E8"].Merge = true;
 
-            worksheet.Cells["A5:L5"].Style.Font.Bold = true;
-            worksheet.Cells["A5:L5"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            worksheet.Cells["A5:L5"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            // Merge cells for "Ghi tăng CCDC"
+            worksheet.Cells["F6:G6"].Merge = true;
+            worksheet.Cells["F6:G6"].Value = "Ghi tăng CCDC";
+            worksheet.Cells["F6:G6"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["F6:G6"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            worksheet.Cells["F7"].Value = "Quyết định";
+            worksheet.Cells["F7:G7"].Merge = true;
+            worksheet.Cells["F7:G7"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["F7:G7"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells["F8"].Value = "Số hiệu";
+            worksheet.Cells["G8"].Value = "Ngày tháng";
+
+            // Merge cells for "Ghi giảm CCDC"
+            worksheet.Cells["H6:J6"].Merge = true;
+            worksheet.Cells["H6:J6"].Value = "Ghi giảm CCDC";
+            worksheet.Cells["H6:J6"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["H6:J6"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            worksheet.Cells["H7"].Value = "Quyết định";
+            worksheet.Cells["H7:I7"].Merge = true;
+            worksheet.Cells["H7:I7"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["H7:I7"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells["H8"].Value = "Số hiệu";
+            worksheet.Cells["I8"].Value = "Ngày tháng";
+            worksheet.Cells["J7"].Value = "Lý do giảm";
+            worksheet.Cells["J7:J8"].Merge = true;
+            worksheet.Cells["J7:J8"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["J7:J8"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            worksheet.Cells["K6:K8"].Merge = true;
+            worksheet.Cells["K6:K8"].Value = "Ghi chú";
+            worksheet.Cells["K6:K8"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["K6:K8"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            // Formatting headers
+            worksheet.Cells["A6:K8"]
+                .Style
+                .Font
+                .Bold = true;
+            worksheet.Cells["A6:K8"].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+            worksheet.Cells["A6:K8"].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            worksheet.Cells["A6:K8"].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+            worksheet.Cells["A6:K8"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            worksheet.Cells["A6:K8"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells["A6:K8"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells["A6:K8"].Style.WrapText = true;
 
             // Adjust column widths
-            worksheet.Column(1).Width = 5; // STT
-            worksheet.Column(2).Width = 30; // Tên CCDC
-            worksheet.Column(3).Width = 20; // Mã CCDC
-            worksheet.Column(4).Width = 15; // Đặc điểm
+            worksheet.Column(1).Width = 6; // STT
+            worksheet.Column(2).Width = 35; // Tên CCDC
+            worksheet.Column(3).Width = 15; // Mã CCDC
+            worksheet.Column(4).Width = 25; // Đặc điểm/Thông số kỹ thuật
             worksheet.Column(5).Width = 10; // ĐVT
-            worksheet.Column(6).Width = 15; // Quyết định ghi tăng
-            worksheet.Column(7).Width = 15; // Ngày tháng tăng
-            worksheet.Column(8).Width = 15; // Quyết định ghi giảm
-            worksheet.Column(9).Width = 15; // Ngày tháng giảm
-            worksheet.Column(10).Width = 15; // Lý do giảm
-            worksheet.Column(11).Width = 15; // Ghi chú
-
-            // Add border around the table header
-            worksheet.Cells["A5:K5"]
-                .Style
-                .Border
-                .Top
-                .Style = ExcelBorderStyle.Thin;
-            worksheet.Cells["A5:K5"].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-            worksheet.Cells["A5:K5"].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-            worksheet.Cells["A5:K5"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            worksheet.Column(6).Width = 12;
+            worksheet.Column(7).Width = 15;
+            worksheet.Column(8).Width = 12;
+            worksheet.Column(9).Width = 15;
+            worksheet.Column(10).Width = 15;
+            worksheet.Column(11).Width = 20;
 
             // Data Rows
-            int rowIndex = 6;
+            int rowIndex = 9;
             int stt = 1;
             foreach (var hangHoa in hangHoas)
             {
                 worksheet.Cells[rowIndex, 1].Value = stt++; // STT
                 worksheet.Cells[rowIndex, 2].Value = hangHoa.TenHangHoa; // Tên CCDC
-                worksheet.Cells[rowIndex, 3].Value = hangHoa.Id.ToString(); // Mã CCDC (GUID)
+                worksheet.Cells[rowIndex, 3].Value = ""; // Mã CCDC
                 worksheet.Cells[rowIndex, 4].Value = ""; // Đặc điểm
                 worksheet.Cells[rowIndex, 5].Value = hangHoa.DonViTinh?.Name; // ĐVT
-                worksheet.Cells[rowIndex, 6].Value = ""; // Quyết định ghi tăng
-                worksheet.Cells[rowIndex, 7].Value = hangHoa.NgayNhap.ToString("dd/MM/yyyy"); // Ngày tháng tăng
-                worksheet.Cells[rowIndex, 8].Value = ""; // Quyết định ghi giảm
-                worksheet.Cells[rowIndex, 9].Value = ""; // Ngày tháng giảm
+                worksheet.Cells[rowIndex, 6].Value = ""; // số hiệu tăng
+                worksheet.Cells[rowIndex, 7].Value = hangHoa.NgayNhap.ToString("dd/MM/yyyy"); // ngày tháng tăng
+                worksheet.Cells[rowIndex, 8].Value = ""; // Số hiệu giảm
+                worksheet.Cells[rowIndex, 9].Value = ""; // ngày tháng giảm
                 worksheet.Cells[rowIndex, 10].Value = ""; // Lý do giảm
                 worksheet.Cells[rowIndex, 11].Value = ""; // Ghi chú
 
-                // Add border for each data row
-                worksheet.Cells[$"A{rowIndex}:K{rowIndex}"]
-                    .Style
-                    .Border
-                    .Top
-                    .Style = ExcelBorderStyle.Thin;
-                worksheet.Cells[$"A{rowIndex}:K{rowIndex}"].Style.Border.Bottom.Style =
-                    ExcelBorderStyle.Thin;
-                worksheet.Cells[$"A{rowIndex}:K{rowIndex}"].Style.Border.Left.Style =
-                    ExcelBorderStyle.Thin;
-                worksheet.Cells[$"A{rowIndex}:K{rowIndex}"].Style.Border.Right.Style =
-                    ExcelBorderStyle.Thin;
+                for (int col = 1; col <= 11; col++)
+                {
+                    worksheet.Cells[rowIndex, col].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                }
 
                 rowIndex++;
             }
 
             // Footer
-            worksheet.Cells[rowIndex + 2, 1].Value =
+            worksheet.Cells[rowIndex + 2, 8].Value =
                 $"Ngày {currentDate.Day} tháng {currentDate.Month} năm {currentDate.Year}";
-            worksheet.Cells[rowIndex + 2, 1].Style.HorizontalAlignment =
+            worksheet.Cells[rowIndex + 2, 8, rowIndex + 2, 11].Merge = true;
+            worksheet.Cells[rowIndex + 2, 8].Style.HorizontalAlignment =
                 ExcelHorizontalAlignment.Center;
-            worksheet.Cells[rowIndex + 2, 1, rowIndex + 2, 11].Merge = true;
 
-            worksheet.Cells[rowIndex + 4, 1].Value = "Người ghi sổ";
-            worksheet.Cells[rowIndex + 4, 5].Value = "Phụ trách kế toán";
-            worksheet.Cells[rowIndex + 4, 10].Value = "Giám đốc";
-
-            worksheet.Cells[rowIndex + 5, 1].Value = "(Ký, họ tên)";
-            worksheet.Cells[rowIndex + 5, 5].Value = "(Ký, họ tên)";
-            worksheet.Cells[rowIndex + 5, 10].Value = "(Ký, họ tên)";
+            worksheet.Cells[rowIndex + 3, 1].Value = "Người ghi sổ";
+            worksheet.Cells[rowIndex + 3, 1, rowIndex + 3, 3].Merge = true;
+            worksheet.Cells[rowIndex + 3, 1].Style.HorizontalAlignment =
+                ExcelHorizontalAlignment.Center;
+            worksheet.Cells[rowIndex + 3, 1, rowIndex + 3, 3].Style.Font.Bold = true;
+            worksheet.Cells[rowIndex + 3, 4].Value = "Phụ trách kế toán";
+            worksheet.Cells[rowIndex + 3, 4, rowIndex + 3, 7].Style.Font.Bold = true;
+            worksheet.Cells[rowIndex + 3, 4, rowIndex + 3, 7].Merge = true;
+            worksheet.Cells[rowIndex + 3, 4].Style.HorizontalAlignment =
+                ExcelHorizontalAlignment.Center;
+            worksheet.Cells[rowIndex + 3, 8].Value = "Giám đốc Đài TTXLTTHH Hà Nội";
+            worksheet.Cells[rowIndex + 3, 8].Style.Font.Bold = true;
+            worksheet.Cells[rowIndex + 3, 8, rowIndex + 3, 11].Merge = true;
+            worksheet.Cells[rowIndex + 3, 8].Style.HorizontalAlignment =
+                ExcelHorizontalAlignment.Center;
 
             worksheet.Cells[rowIndex + 8, 1].Value = "Dương Mạnh Tuấn";
-            worksheet.Cells[rowIndex + 8, 5].Value = "Nguyễn Thị Hảo";
-            worksheet.Cells[rowIndex + 8, 10].Value = "Đỗ Công Biên";
+            worksheet.Cells[rowIndex + 8, 1, rowIndex + 8, 3].Merge = true;
+            worksheet.Cells[rowIndex + 8, 1].Style.HorizontalAlignment =
+                ExcelHorizontalAlignment.Center;
+            worksheet.Cells[rowIndex + 8, 4].Value = "Nguyễn Thị Hảo";
+            worksheet.Cells[rowIndex + 8, 4, rowIndex + 8, 7].Merge = true;
+            worksheet.Cells[rowIndex + 8, 4].Style.HorizontalAlignment =
+                ExcelHorizontalAlignment.Center;
+            worksheet.Cells[rowIndex + 8, 8].Value = "Đỗ Công Biên";
+            worksheet.Cells[rowIndex + 8, 8, rowIndex + 8, 11].Merge = true;
+            worksheet.Cells[rowIndex + 8, 8].Style.HorizontalAlignment =
+                ExcelHorizontalAlignment.Center;
 
             // Save and return file
             var stream = new MemoryStream();
