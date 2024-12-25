@@ -75,6 +75,9 @@ namespace SuppliesManagement.Pages
                 return Page();
             }
 
+            // Use a transaction for atomicity
+            // using var transaction = dBContext.Database.BeginTransaction();
+
             try
             {
                 var hoaDonNhap = new HoaDonNhap
@@ -89,8 +92,6 @@ namespace SuppliesManagement.Pages
                 };
                 dBContext.HoaDonNhaps.Add(hoaDonNhap);
                 dBContext.SaveChanges();
-
-                // Process each product
                 foreach (var item in hangHoaModels)
                 {
                     ProcessHangHoa(item, hoaDonNhap, khoHangID, NgayNhap);
@@ -99,13 +100,11 @@ namespace SuppliesManagement.Pages
                 dBContext.SaveChanges();
                 TempData["SuccessMessage"] =
                     $"Nhập mới hóa đơn hàng hóa có số hóa đơn: {SoHoaDon} và số Serial: {SoSerial} thành công!";
-                //return RedirectToPage("./NhapMuaHangHoa");
                 return Page();
             }
             catch (Exception ex)
             {
                 TempData["Error"] = $"Đã xảy ra lỗi khi xử lý: {ex.Message}";
-                //return RedirectToPage("./NhapMuaHangHoa");
                 return Page();
             }
         }
@@ -117,19 +116,51 @@ namespace SuppliesManagement.Pages
             DateTime NgayNhap
         )
         {
-            if (item.Images != null && item.Images.Count > 0)
+            // Convert image file to byte array if provided
+            if (item.ImageFile1 != null && item.ImageFile1.Length > 0)
             {
-                for (int i = 0; i < item.Images.Count && i < 3; i++) // Limit to 3 images
-                {
-                    using var memoryStream = new MemoryStream();
-                    item.Images[i].CopyTo(memoryStream);
-                    item.ImageBytes[i] = memoryStream.ToArray();
-                }
+                using var memoryStream = new MemoryStream();
+                item.ImageFile1.CopyTo(memoryStream);
+                item.Image1 = memoryStream.ToArray();
+            }
+            if (item.ImageFile2 != null && item.ImageFile2.Length > 0)
+            {
+                using var memoryStream = new MemoryStream();
+                item.ImageFile2.CopyTo(memoryStream);
+                item.Image2 = memoryStream.ToArray();
+            }
+            if (item.ImageFile3 != null && item.ImageFile3.Length > 0)
+            {
+                using var memoryStream = new MemoryStream();
+                item.ImageFile3.CopyTo(memoryStream);
+                item.Image3 = memoryStream.ToArray();
             }
 
-            var hangHoaExisted =
-                dBContext.HangHoas.FirstOrDefault( /* Same conditions */
-                );
+            var hangHoaExisted = dBContext.HangHoas.FirstOrDefault(
+                h =>
+                    h.TenHangHoa == item.TenHangHoa
+                    && h.NgayNhap == NgayNhap
+                    && h.DonViTinhId == item.DonViTinhID
+                    && h.DonGiaTruocThue == item.DonGiaTruocThue
+                    && (
+                        h.Image1 == null && item.Image1 == null
+                        || h.Image1 != null
+                            && item.Image1 != null
+                            && h.Image1.SequenceEqual(item.Image1)
+                    )
+                    && (
+                        h.Image2 == null && item.Image2 == null
+                        || h.Image2 != null
+                            && item.Image2 != null
+                            && h.Image2.SequenceEqual(item.Image2)
+                    )
+                    && (
+                        h.Image3 == null && item.Image3 == null
+                        || h.Image3 != null
+                            && item.Image3 != null
+                            && h.Image3.SequenceEqual(item.Image3)
+                    )
+            );
 
             if (hangHoaExisted != null)
             {
@@ -139,40 +170,6 @@ namespace SuppliesManagement.Pages
             {
                 CreateNewHangHoa(item, hoaDonNhap, khoHangID, NgayNhap);
             }
-        }
-
-        private void CreateNewHangHoa(
-            HangHoaInputModel item,
-            HoaDonNhap hoaDonNhap,
-            Guid khoHangID,
-            DateTime NgayNhap
-        )
-        {
-            var hangHoa = new HangHoa
-            {
-                Id = Guid.NewGuid(),
-                TenHangHoa = item.TenHangHoa,
-                NhomHangId = item.NhomHangID,
-                DonViTinhId = item.DonViTinhID,
-                SoLuong = item.SoLuong,
-                Vat = item.VAT,
-                DonGiaTruocThue = item.DonGiaTruocThue,
-                DonGiaSauThue = item.DonGiaTruocThue * (1 + item.VAT / 100),
-                TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
-                TongGiaSauThue = item.SoLuong * (item.DonGiaTruocThue * (1 + item.VAT / 100)),
-                KhoHangId = khoHangID,
-                SoLuongDaXuat = 0,
-                SoLuongConLai = item.SoLuong,
-                NgayNhap = NgayNhap,
-                Image1 = item.ImageBytes[0],
-                Image2 = item.ImageBytes[1],
-                Image3 = item.ImageBytes[2],
-            };
-
-            dBContext.HangHoas.Add(hangHoa);
-            // Create HangHoaHoaDon and NhapKho records
-            var hangHoaHoaDon = CreateHangHoaHoaDon(item, khoHangID);
-            CreateNhapKhoRecord(hoaDonNhap.Id, hangHoaHoaDon.Id);
         }
 
         private void UpdateExistingHangHoa(
@@ -194,9 +191,44 @@ namespace SuppliesManagement.Pages
             CreateNhapKhoRecord(hoaDonNhap.Id, hangHoaHoaDon.Id);
         }
 
+        private void CreateNewHangHoa(
+            HangHoaInputModel item,
+            HoaDonNhap hoaDonNhap,
+            Guid khoHangID,
+            DateTime NgayNhap
+        )
+        {
+            var hangHoa = new HangHoa
+            {
+                Id = Guid.NewGuid(),
+                TenHangHoa = item.TenHangHoa,
+                NhomHangId = item.NhomHangID,
+                DonViTinhId = item.DonViTinhID,
+                SoLuong = item.SoLuong,
+                Vat = item.VAT,
+                DonGiaTruocThue = item.DonGiaTruocThue,
+                DonGiaSauThue = item.DonGiaTruocThue + (item.DonGiaTruocThue * item.VAT / 100),
+                TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
+                TongGiaSauThue =
+                    (item.DonGiaTruocThue + (item.DonGiaTruocThue * item.VAT / 100)) * item.SoLuong,
+                KhoHangId = khoHangID,
+                SoLuongDaXuat = 0,
+                SoLuongConLai = item.SoLuong,
+                NgayNhap = NgayNhap,
+                Image1 = item?.Image1,
+                Image2 = item?.Image2,
+                Image3 = item?.Image3,
+            };
+
+            dBContext.HangHoas.Add(hangHoa);
+
+            // Create HangHoaHoaDon and NhapKho records
+            var hangHoaHoaDon = CreateHangHoaHoaDon(item, khoHangID);
+            CreateNhapKhoRecord(hoaDonNhap.Id, hangHoaHoaDon.Id);
+        }
+
         private HangHoaHoaDon CreateHangHoaHoaDon(HangHoaInputModel item, Guid khoHangID)
         {
-            // Create a new HangHoaHoaDon object
             var hangHoaHoaDon = new HangHoaHoaDon
             {
                 Id = Guid.NewGuid(),
@@ -206,30 +238,18 @@ namespace SuppliesManagement.Pages
                 SoLuong = item.SoLuong,
                 Vat = item.VAT,
                 DonGiaTruocThue = item.DonGiaTruocThue,
-                DonGiaSauThue = item.DonGiaTruocThue * (1 + item.VAT / 100),
+                DonGiaSauThue = item.DonGiaTruocThue + (item.DonGiaTruocThue * item.VAT / 100),
                 TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
-                TongGiaSauThue = item.SoLuong * (item.DonGiaTruocThue * (1 + item.VAT / 100)),
+                TongGiaSauThue =
+                    (item.DonGiaTruocThue + (item.DonGiaTruocThue * item.VAT / 100)) * item.SoLuong,
                 KhoHangId = khoHangID,
-                Image1 = item.ImageBytes[0],
-                Image2 = item.ImageBytes[1],
-                Image3 = item.ImageBytes[2]
+                Image1 = item?.Image1,
+                Image2 = item?.Image2,
+                Image3 = item?.Image3,
             };
-            try
-            {
-                dBContext.HangHoaHoaDons.Add(hangHoaHoaDon);
-                Console.WriteLine(
-                    $"Added HangHoaHoaDon: {hangHoaHoaDon.Id}, {hangHoaHoaDon.TenHangHoa}"
-                );
-                TempData["SuccessMessage"] =
-                    $"Added HangHoaHoaDon: {hangHoaHoaDon.Id}, {hangHoaHoaDon.TenHangHoa}";
-                return hangHoaHoaDon;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error adding HangHoaHoaDon: {ex.Message}");
-                TempData["Error"] = $"Error adding HangHoaHoaDon: {ex.Message}";
-                throw;
-            }
+
+            dBContext.HangHoaHoaDons.Add(hangHoaHoaDon);
+            return hangHoaHoaDon;
         }
 
         private void CreateNhapKhoRecord(Guid hoaDonNhapId, Guid hangHoaHoaDonId)

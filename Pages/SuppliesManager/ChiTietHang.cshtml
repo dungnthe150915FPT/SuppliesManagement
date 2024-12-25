@@ -34,18 +34,22 @@
                                 <p>@Model.HangHoa.NhomHang.Name</p>
                                 <strong><i class="bi bi-gear"></i> Đơn Vị Tính:</strong>
                                 <p>@Model.HangHoa.DonViTinh.Name</p>
-                                <strong><i class="bi bi-calendar"></i> Ngày Nhập:</strong>
-                                <p>@Model.HangHoa.NgayNhap.ToString("dd/MM/yyyy")</p>
+                                <strong><i class="bi bi-cash"></i> Đơn Giá Trước Thuế:</strong>
+                                <p>@Model.HangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</p>
+                                <strong><i class="bi bi-cash"></i> Đơn Giá Sau Thuế:</strong>
+                                <p>@Model.HangHoa.DonGiaSauThue.ToString("#,##0").Replace(',', '.') VNĐ</p>
                                 <strong><i class="bi bi-box-arrow-up"></i> Số Lượng Đã Xuất:</strong>
                                 <p>@Model.HangHoa.SoLuongDaXuat</p>
                             </div>
                             <div class="col-md-4">
                                 <strong><i class="bi bi-box"></i> Số Lượng:</strong>
                                 <p>@Model.HangHoa.SoLuong</p>
-                                <strong><i class="bi bi-cash"></i> Đơn Giá Trước Thuế:</strong>
-                                <p>@Model.HangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</p>
+                                <strong><i class="bi bi-calendar"></i> Ngày Nhập:</strong>
+                                <p>@Model.HangHoa.NgayNhap.ToString("dd/MM/yyyy")</p>
                                 <strong><i class="bi bi-wallet"></i> Tổng Giá Trước Thuế:</strong>
                                 <p>@Model.HangHoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</p>
+                                <strong><i class="bi bi-wallet"></i> Tổng Giá Sau Thuế:</strong>
+                                <p>@Model.HangHoa.TongGiaSauThue.ToString("#,##0").Replace(',', '.') VNĐ</p>
                                 <strong><i class="bi bi-box-arrow-in-down"></i> Số Lượng Còn Lại:</strong>
                                 <p>@Model.HangHoa.SoLuongConLai</p>
                             </div>
