@@ -77,9 +77,9 @@
                     <th>Nhóm hàng hóa</th>
                     <th>Số lượng</th>
                     <th>Đ.vị tính</th>
-                    <th>Hình ảnh 1</th>
-                    <th>Hình ảnh 2</th>
-                    <th>Hình ảnh 3</th>
+                    <th>Hình ảnh</th>
+                    @* <th>Hình ảnh 2</th>
+                    <th>Hình ảnh 3</th> *@
                     <th>Giá tr.thuế</th>
                     <th>VAT%</th>
                     <th>Giá s.thuế</th>
@@ -141,45 +141,19 @@
                                 }
                             </select>
                         </td>
-                        <td>
-                            <input type="file" class="form-control" name="hangHoaModels[@i].ImageFile1" accept="image/*"
-                                onchange="previewImage(this, @i, 1)">
-                            <img id="imagePreview_@(i)_1" src="#" alt="Preview 1"
-                                style="max-width: 100px; max-height: 100px; display: none;" />
-                            @if (hangHoa.Image1 != null)
-                            {
-                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(hangHoa.Image1)" alt="Existing Image 1"
-                                    style="max-width: 100px; max-height: 100px;" />
-                            }
-                        </td>
-                        <td>
-                            <input type="file" class="form-control" name="hangHoaModels[@i].ImageFile2" accept="image/*"
-                                onchange="previewImage(this, @i, 2)">
-                            <img id="imagePreview_@(i)_2" src="#" alt="Preview 2"
-                                style="max-width: 100px; max-height: 100px; display: none;" />
-                            @if (hangHoa.Image2 != null)
-                            {
-                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(hangHoa.Image2)" alt="Existing Image 2"
-                                    style="max-width: 100px; max-height: 100px;" />
-                            }
-                        </td>
-                        <td>
-                            <input type="file" class="form-control" name="hangHoaModels[@i].ImageFile3" accept="image/*"
-                                onchange="previewImage(this, @i, 3)">
-                            <img id="imagePreview_@(i)_3" src="#" alt="Preview 3"
-                                style="max-width: 100px; max-height: 100px; display: none;" />
-                            @if (hangHoa.Image3 != null)
-                            {
-                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(hangHoa.Image3)" alt="Existing Image 3"
-                                    style="max-width: 100px; max-height: 100px;" />
-                            }
-                        </td>
                         @* <td>
                             <input type="file" class="form-control" name="hangHoaModels[@i].Images" accept="image/*"
                                 multiple onchange="validateImages(this, @i)">
                             <div id="imagePreviews_@(i)" class="image-previews">
                             </div>
                         </td> *@
+                        <td>
+                            <input type="file" class="form-control" name="hangHoaModels[@i].Images" accept="image/*"
+                                multiple onchange="validateAndPreviewImages(this, @i)">
+                            <div id="imagePreviews_@(i)" class="image-previews"
+                                style="display: flex; gap: 5px; margin-top: 10px;">
+                            </div>
+                        </td>
                         <td>
                             <input type="text" class="form-control" name="hangHoaModels[@i].DonGiaTruocThue"
                                 value="@hangHoa.DonGiaTruocThue" min="0" required
@@ -208,14 +182,6 @@
         <button type="button" class="btn btn-secondary" id="addRow">Thêm Hàng Hóa</button>
         <button type="submit" class="btn btn-primary">Lưu thông tin</button>
     </div>
-    @*@if (!string.IsNullOrWhiteSpace(success))
-    {
-    <div class="alert alert-success" role="alert">
-    @success
-    </div>
-    }*@
-
-
 </form>
 @if (TempData["SuccessMessage"] != null)
 {
@@ -244,7 +210,7 @@
                 <select class="form-control" name="hangHoaModels[${hangHoaCount}].NhomHangID" required>
     @foreach (var nhomHang in Model.NhomHangs)
     {
-                                                                                                        <option value="@nhomHang.Id">@nhomHang.Name</option>
+                                                                                                                                    <option value="@nhomHang.Id">@nhomHang.Name</option>
     }
                 </select>
             </td>
@@ -253,7 +219,7 @@
                 <select class="form-control" name="hangHoaModels[${hangHoaCount}].DonViTinhID" required>
     @foreach (var donViTinh in Model.DonViTinhs)
     {
-                                                                                                        <option value="@donViTinh.Id">@donViTinh.Name</option>
+                                                                                                                                    <option value="@donViTinh.Id">@donViTinh.Name</option>
     }
                 </select>
             </td>
@@ -262,7 +228,7 @@
                 <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile" accept="image/*" onchange="previewImage(this, ${hangHoaCount})">
                 <img id="imagePreview_${hangHoaCount}" src="#" alt="Preview" style="max-width: 100px; max-height: 100px; display: none;" />
             </td> *@
-    <td>
+    @* <td>
                 <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile1" accept="image/*" onchange="previewImage(this, ${hangHoaCount}, 1)">
                 <img id="imagePreview_${hangHoaCount}_1" src="#" alt="Preview 1" style="max-width: 100px; max-height: 100px; display: none;" />
             </td>
@@ -273,14 +239,22 @@
             <td>
                 <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile3" accept="image/*" onchange="previewImage(this, ${hangHoaCount}, 3)">
                 <img id="imagePreview_${hangHoaCount}_3" src="#" alt="Preview 3" style="max-width: 100px; max-height: 100px; display: none;" />
-            </td>
-            @* <td>
-    <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].Images" accept="image/*" multiple onchange="validateAndPreviewImages(this, ${hangHoaCount})">
-    <div id="imagePreviews_${hangHoaCount}" class="image-previews" style="display: flex; gap: 5px; margin-top: 10px;">
-        <!-- Preview images will be dynamically added here -->
-    </div> *@
-</td>
+            </td> *@
 
+<td>
+    <input 
+        type="file" 
+        class="form-control" 
+        name="hangHoaModels[${hangHoaCount}].Images" 
+        accept="image/*" 
+        multiple 
+        onchange="validateAndPreviewImages(this, ${hangHoaCount})">
+    <div 
+        id="imagePreviews_${hangHoaCount}" 
+        class="image-previews" 
+        style="display: flex; gap: 5px; margin-top: 10px;">
+    </div>
+</td>
             <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].DonGiaTruocThue" min="0" required oninput="calculateTotals(this.closest('tr'))"></td>
             <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].VAT" min="0" max="10" required oninput="calculateTotals(this.closest('tr'))"></td>
             <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].DonGiaSauThue" readonly></td>
@@ -335,6 +309,7 @@
         });
         document.getElementById('TongTien').value = totalAmount.toFixed(0);
     }
+
     function previewImage(input, index, imageNumber) {
         const preview = document.getElementById(`imagePreview_${index}_${imageNumber}`);
         if (input.files && input.files[0]) {
@@ -350,9 +325,9 @@
         }
     }
 
-    @* function validateImages(input, index) {
-        const maxFiles = 3;
-        const files = input.files;
+    function validateAndPreviewImages(input, rowIndex) {
+        const maxFiles = 3; // Maximum allowed files
+        const files = Array.from(input.files); // Convert FileList to Array
 
         if (files.length > maxFiles) {
             alert(`Chỉ được tải lên tối đa ${maxFiles} ảnh.`);
@@ -360,20 +335,55 @@
             return;
         }
 
-        const previewContainer = document.getElementById(`imagePreviews_${index}`);
+        const previewContainer = document.getElementById(`imagePreviews_${rowIndex}`);
         previewContainer.innerHTML = ""; // Clear previous previews
 
-        Array.from(files).forEach(file => {
+        files.forEach((file, fileIndex) => {
             const reader = new FileReader();
+
             reader.onload = e => {
+                // Create an image container with a remove button
+                const imgContainer = document.createElement("div");
+                imgContainer.style.display = "inline-block";
+                imgContainer.style.position = "relative";
+                imgContainer.style.marginRight = "10px";
+
                 const img = document.createElement("img");
                 img.src = e.target.result;
                 img.style.maxWidth = "100px";
                 img.style.maxHeight = "100px";
-                img.style.marginRight = "5px";
-                previewContainer.appendChild(img);
+                img.style.objectFit = "cover";
+                imgContainer.appendChild(img);
+
+                // Create a remove button
+                const removeBtn = document.createElement("button");
+                removeBtn.textContent = "X";
+                removeBtn.style.position = "absolute";
+                removeBtn.style.top = "5px";
+                removeBtn.style.right = "5px";
+                removeBtn.style.backgroundColor = "red";
+                removeBtn.style.color = "white";
+                removeBtn.style.border = "none";
+                removeBtn.style.borderRadius = "50%";
+                removeBtn.style.width = "20px";
+                removeBtn.style.height = "20px";
+                removeBtn.style.cursor = "pointer";
+                removeBtn.style.fontSize = "12px";
+
+                removeBtn.addEventListener("click", () => {
+                    files.splice(fileIndex, 1); // Remove the file from the array
+                    const newFileList = new DataTransfer(); // Create a new DataTransfer object
+                    files.forEach(file => newFileList.items.add(file)); // Add remaining files to DataTransfer
+                    input.files = newFileList.files; // Update the input's FileList
+                    validateAndPreviewImages(input, rowIndex); // Re-render previews
+                });
+
+                imgContainer.appendChild(removeBtn);
+                previewContainer.appendChild(imgContainer);
             };
-            reader.readAsDataURL(file);
+
+            reader.readAsDataURL(file); // Read the file as Data URL
         });
-    } *@
+    }
+    console.log(`File read successfully: ${e.target.result}`);
 </script>

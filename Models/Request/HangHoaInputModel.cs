@@ -10,15 +10,15 @@
         public int DonViTinhID { get; set; }
         public int VAT { get; set; }
 
-        public byte[]? Image1 { get; set; }
-        public byte[]? Image2 { get; set; }
-        public byte[]? Image3 { get; set; }
-        public IFormFile ImageFile1 { get; set; }
-        public IFormFile ImageFile2 { get; set; }
-        public IFormFile ImageFile3 { get; set; }
+        // public byte[]? Image1 { get; set; }
+        // public byte[]? Image2 { get; set; }
+        // public byte[]? Image3 { get; set; }
+        // public IFormFile ImageFile1 { get; set; }
+        // public IFormFile ImageFile2 { get; set; }
+        // public IFormFile ImageFile3 { get; set; }
         /*        public string TenNhomHang { get; set; }
                 public string TenDonViTinh { get; set; }*/
-        // public List<IFormFile> Images { get; set; } = new();
-        // public byte[][] ImageBytes { get; set; } = new byte[3][];
+        public List<IFormFile> Images { get; set; } = new();
+        public byte[][] ImageBytes { get; set; } = new byte[3][];
     }
 }
