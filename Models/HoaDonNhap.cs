@@ -16,5 +16,6 @@ namespace SuppliesManagement.Models
         // public Guid? NguoiNhapId { get; set; }
         // public virtual Account NguoiNhap { get; set; } = null!;
         public virtual KhoHang KhoHang { get; set; } = null!;
+        public byte[]? PDFFile { get; set; }
     }
 }

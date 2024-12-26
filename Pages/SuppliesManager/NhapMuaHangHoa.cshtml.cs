@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SuppliesManagement.Models;
 using SuppliesManagement.Models.Request;
+using System;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -48,6 +49,7 @@ namespace SuppliesManagement.Pages
             string SoSerial,
             string SoHoaDon,
             decimal ThanhTien,
+            IFormFile PDFFile,
             List<HangHoaInputModel> hangHoaModels
         )
         {
@@ -74,7 +76,15 @@ namespace SuppliesManagement.Pages
                     $"Hóa đơn có số hóa đơn: {SoHoaDon} và số Serial: {SoSerial} đã tồn tại";
                 return Page();
             }
-
+            byte[] pdfBytes = null;
+            if (PDFFile != null && PDFFile.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    PDFFile.CopyTo(memoryStream);
+                    pdfBytes = memoryStream.ToArray();
+                }
+            }
             try
             {
                 var hoaDonNhap = new HoaDonNhap
@@ -86,6 +96,7 @@ namespace SuppliesManagement.Pages
                     NgayNhap = NgayNhap,
                     Serial = SoSerial,
                     ThanhTien = ThanhTien,
+                    PDFFile = pdfBytes
                 };
                 dBContext.HoaDonNhaps.Add(hoaDonNhap);
                 dBContext.SaveChanges();

@@ -5,89 +5,146 @@
 @{
     ViewData["Title"] = "Chi Tiết Hóa Đơn Nhập";
 }
-
 <h2>Chi Tiết Hóa Đơn Nhập</h2>
+<div class="row">
+    <div class="col-md-6">
+        <h4>Thông Tin Hóa Đơn</h4>
+        <div class="form-group mb-3">
+            <label>Nhà Cung Cấp:</label>
+            <input type="text" class="form-control" value="@Model.HoaDonNhap.NhaCungCap" readonly>
+        </div>
+        <div class="form-group mb-3">
+            <label>Nhập vào kho:</label>
+            <input type="text" class="form-control" value="@Model.HoaDonNhap.KhoHang" readonly>
+        </div>
+        <div class="form-group mb-3">
+            <label>Ngày Nhập:</label>
+            <input type="text" class="form-control" value="@Model.HoaDonNhap.NgayNhap.ToString("dd/MM/yyyy")" readonly>
+        </div>
+        <div class="form-group mb-3">
+            <label>Số Hóa Đơn:</label>
+            <input type="text" class="form-control" value="@Model.HoaDonNhap.SoHoaDon" readonly>
+        </div>
+        <div class="form-group mb-3">
+            <label>Tổng Tiền:</label>
+            <input type="text" class="form-control" value="@Model.HoaDonNhap.ThanhTien.ToString("N0") VNĐ" readonly>
+        </div>
+        <div class="form-group mb-3">
+            <label>Số Serial:</label>
+            <input type="text" class="form-control" value="@Model.HoaDonNhap.Serial" readonly>
+        </div>
+    </div>
 
-<form method="post" asp-page-handler="Export" asp-route-id="@Model.HoaDonNhap.ID">
-    <button type="submit" class="btn btn-primary">Xuất Excel</button>
-</form>
-
-<div>
-    <h4>Thông Tin Hóa Đơn</h4>
-    <dl class="row">
-        <dt class="col-sm-3">Nhà Cung Cấp:</dt>
-        <dd class="col-sm-9">@Model.HoaDonNhap.NhaCungCap</dd>
-
-        <dt class="col-sm-3">Nhập vào kho:</dt>
-        <dd class="col-sm-9">@Model.HoaDonNhap.KhoHang</dd>
-
-        <dt class="col-sm-3">Ngày Nhập:</dt>
-        <dd class="col-sm-9">@Model.HoaDonNhap.NgayNhap.ToString("dd/MM/yyyy")</dd>
-
-        <dt class="col-sm-3">Số Hóa Đơn:</dt>
-        <dd class="col-sm-9">@Model.HoaDonNhap.SoHoaDon</dd>
-
-        <dt class="col-sm-3">Tổng Tiền:</dt>
-        <dd class="col-sm-9">@Model.HoaDonNhap.ThanhTien.ToString("N0") VNĐ</dd>
-
-        <dt class="col-sm-3">Số Serial:</dt>
-        <dd class="col-sm-9">@Model.HoaDonNhap.Serial</dd>
-    </dl>
-</div>
-@{
-    var customCulture = (CultureInfo)CultureInfo.InvariantCulture.Clone();
-    customCulture.NumberFormat.NumberGroupSeparator = ".";
-    customCulture.NumberFormat.NumberDecimalSeparator = ",";
-}
-<h4>Danh Sách Hàng Hóa</h4>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Hàng Hóa</th>
-            @* <th>Ảnh</th> *@
-            <th>Nhóm hàng</th>
-            <th>Đơn vị tính</th>
-            <th>Số Lượng</th>
-            <th>Giá Trước Thuế (VNĐ)</th>
-            <th>Giá Sau Thuế (VNĐ)</th>
-            <th>Tổng Giá Trước Thuế (VNĐ)</th>
-            <th>Tổng Giá Sau Thuế (VNĐ)</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.HoaDonNhap.HangHoas.Count == 0)
+    <div class="col-md-6">
+        @if (Model.HasPDF)
         {
-            <tr>
-                <td colspan="9" class="text-center">Không có hàng hóa nào trong hóa đơn này.</td>
-            </tr>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h4>Hóa Đơn PDF</h4>
+                <div>
+                    <form method="post" asp-page-handler="Export" asp-route-id="@Model.HoaDonNhap.ID" class="d-inline">
+                        <button type="submit" class="btn btn-primary">Xuất Excel</button>
+                    </form>
+                    <a asp-page-handler="DownloadPDF" asp-route-id="@Model.HoaDonNhap.ID" class="btn btn-primary ml-2">Tải
+                        xuống PDF</a>
+                </div>
+            </div>
+            <div id="pdf-container" style="width: 100%; height: 400px; overflow: auto; border: 1px solid #ddd;">
+                <div id="pdf-viewer" style="width: 100%; height: 100%;"></div>
+            </div>
+            <div class="mt-2">
+                <button id="zoom-in" class="btn btn-secondary">Phóng to</button>
+                <button id="zoom-out" class="btn btn-secondary">Thu nhỏ</button>
+            </div>
         }
         else
         {
-            foreach (var hangHoa in Model.HoaDonNhap.HangHoas)
+            <p>Không có file PDF cho hóa đơn này.</p>
+        }
+    </div>
+</div>
+
+<h4 class="mt-5">Danh Sách Hàng Hóa</h4>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Hàng Hóa</th>
+                <th>Nhóm hàng</th>
+                <th>Đơn vị tính</th>
+                <th>Số Lượng</th>
+                <th>Giá Trước Thuế (VNĐ)</th>
+                <th>Giá Sau Thuế (VNĐ)</th>
+                <th>Tổng Giá Trước Thuế (VNĐ)</th>
+                <th>Tổng Giá Sau Thuế (VNĐ)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.HoaDonNhap.HangHoas.Count == 0)
             {
                 <tr>
-                    <td>@hangHoa.TenHangHoa</td>
-                    @* <td>
-                        @if (hangHoa.Image != null && hangHoa.Image.Length > 0)
-                        {
-                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(hangHoa.Image)" alt="@hangHoa.TenHangHoa"
-                                style="max-width: 100px; max-height: 100px;" />
-                        }
-                        else
-                        {
-                            <span>Không có hình ảnh</span>
-                        }
-                    </td> *@
-                    <td>@hangHoa.NhomHangName</td>
-                    <td>@hangHoa.DonViTinh</td>
-                    <td>@hangHoa.SoLuong</td>
-                    <td>@hangHoa.DonGiaTruocThue.ToString("#,##0", customCulture)</td>
-                    <td>@hangHoa.DonGiaSauThue.ToString("#,##0", customCulture)</td>
-                    <td>@hangHoa.TongGiaTruocThue.ToString("#,##0", customCulture)</td>
-                    <td>@hangHoa.TongGiaSauThue.ToString("#,##0", customCulture)</td>
+                    <td colspan="8" class="text-center">Không có hàng hóa nào trong hóa đơn này.</td>
                 </tr>
             }
-        }
-    </tbody>
-</table>
+            else
+            {
+                @foreach (var hangHoa in Model.HoaDonNhap.HangHoas)
+                {
+                    <tr>
+                        <td>@hangHoa.TenHangHoa</td>
+                        <td>@hangHoa.NhomHangName</td>
+                        <td>@hangHoa.DonViTinh</td>
+                        <td>@hangHoa.SoLuong</td>
+                        <td>@hangHoa.DonGiaTruocThue.ToString("#,##0")</td>
+                        <td>@hangHoa.DonGiaSauThue.ToString("#,##0")</td>
+                        <td>@hangHoa.TongGiaTruocThue.ToString("#,##0")</td>
+                        <td>@hangHoa.TongGiaSauThue.ToString("#,##0")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
 
+@section Scripts {
+    @if (Model.HasPDF)
+    {
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+        <script>
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js';
+
+            var url = '@Url.Page("./ChiTietHoaDonNhap", "DisplayPDF", new { id = Model.HoaDonNhap.ID })';
+            var pdfDoc = null;
+            var scale = 1.0;
+            var canvas = document.createElement('canvas');
+
+            function renderPage(pageNumber, scale) {
+                pdfDoc.getPage(pageNumber).then(function (page) {
+                    var viewport = page.getViewport({ scale: scale });
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    var renderContext = {
+                        canvasContext: canvas.getContext('2d'),
+                        viewport: viewport
+                    };
+                    page.render(renderContext);
+                });
+            }
+
+            pdfjsLib.getDocument(url).promise.then(function (pdf) {
+                pdfDoc = pdf;
+                renderPage(1, scale);
+                document.getElementById('pdf-viewer').appendChild(canvas);
+            });
+
+            document.getElementById('zoom-in').addEventListener('click', function () {
+                scale *= 1.2;
+                renderPage(1, scale);
+            });
+
+            document.getElementById('zoom-out').addEventListener('click', function () {
+                scale /= 1.2;
+                renderPage(1, scale);
+            });
+        </script>
+    }
+}

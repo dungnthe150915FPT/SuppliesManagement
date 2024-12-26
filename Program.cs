@@ -40,6 +40,8 @@ builder.Services
             options.AccessDeniedPath = "/Error/AccessDenied";
         }
     );
+builder.Services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
+
 builder.Services.AddAuthorization(
 /*    options =>
 {

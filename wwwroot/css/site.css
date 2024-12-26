@@ -16,3 +16,19 @@ html {
 body {
   margin-bottom: 60px;
 }
+footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  margin-top: 20px; /* Add some top margin */
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  flex: 1 0 auto;
+}

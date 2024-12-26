@@ -23,6 +23,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
         }
 
         public HoaDonNhapDetailViewModel HoaDonNhap { get; set; }
+        public bool HasPDF { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
@@ -74,6 +75,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 KhoHang = hoaDon.KhoHang.Ten, // Gán thông tin kho hàng
                 HangHoas = hangHoas
             };
+            HasPDF = hoaDon.PDFFile != null && hoaDon.PDFFile.Length > 0;
             return Page();
         }
 
@@ -497,6 +499,28 @@ namespace SuppliesManagement.Pages.SuppliesManager
             }
 
             return words.Trim();
+        }
+
+        public async Task<IActionResult> OnGetDownloadPDFAsync(Guid id)
+        {
+            var hoaDon = await dBContext.HoaDonNhaps.FindAsync(id);
+            if (hoaDon == null || hoaDon.PDFFile == null || hoaDon.PDFFile.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(hoaDon.PDFFile, "application/pdf", $"HoaDon_{hoaDon.SoHoaDon}.pdf");
+        }
+
+        public async Task<IActionResult> OnGetDisplayPDFAsync(Guid id)
+        {
+            var hoaDon = await dBContext.HoaDonNhaps.FindAsync(id);
+            if (hoaDon == null || hoaDon.PDFFile == null || hoaDon.PDFFile.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(hoaDon.PDFFile, "application/pdf");
         }
     }
 }
