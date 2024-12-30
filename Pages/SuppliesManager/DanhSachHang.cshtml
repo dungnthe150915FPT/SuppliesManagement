@@ -48,8 +48,8 @@
             <tr>
                 <th>Mặt hàng</th>
                 <th>Loại hàng</th>
-                <th>Đ.vị tính</th>
-                <th>Ng.Nhập</th>
+                <th>Đơn vị tính</th>
+                <th>Ngày nhập</th>
                 <th>
                     <a asp-page="./DanhSachHang" asp-route-sortOrder="SoLuongAsc"
                         asp-route-pageNumber="@Model.CurrentPage">SL nhập ↑</a> |
@@ -58,18 +58,18 @@
                 </th>
                 <th>
                     <a asp-page="./DanhSachHang" asp-route-sortOrder="DonGiaAsc"
-                        asp-route-pageNumber="@Model.CurrentPage">Đơn giá ↑</a> |
+                        asp-route-pageNumber="@Model.CurrentPage">Đơn giá (VNĐ) ↑</a> |
                     <a asp-page="./DanhSachHang" asp-route-sortOrder="DonGiaDesc"
                         asp-route-pageNumber="@Model.CurrentPage">↓</a>
                 </th>
                 <th>
                     <a asp-page="./DanhSachHang" asp-route-sortOrder="ThanhTienAsc"
-                        asp-route-pageNumber="@Model.CurrentPage">Thành tiền ↑</a> |
+                        asp-route-pageNumber="@Model.CurrentPage">Thành tiền (VNĐ) ↑</a> |
                     <a asp-page="./DanhSachHang" asp-route-sortOrder="ThanhTienDesc"
                         asp-route-pageNumber="@Model.CurrentPage">↓</a>
                 </th>
-                <th>SL đã xuất</th>
-                <th>SL còn lại</th>
+                <th>Số lượng đã xuất</th>
+                <th>Số lượng còn lại</th>
                 <th></th>
             </tr>
         </thead>
@@ -82,8 +82,8 @@
                     <td>@hanghoa.DonViTinh.Name</td>
                     <td>@hanghoa.NgayNhap.ToString("dd/MM/yyyy")</td>
                     <td>@hanghoa.SoLuong</td>
-                    <td>@hanghoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</td>
-                    <td>@hanghoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</td>
+                    <td>@hanghoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
+                    <td>@hanghoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
                     <td>@hanghoa.SoLuongDaXuat</td>
                     <td>@hanghoa.SoLuongConLai</td>
                     <td>

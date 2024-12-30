@@ -30,22 +30,29 @@
         <thead class="thead-dark">
             <tr>
                 <th>Mặt hàng</th>
-                <th>Đ.vị tính</th>
-                <th>Ng.Nhập</th>
+                <th>Đơn vị tính</th>
+                <th>Ngày nhập</th>
                 <th>
-                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="SoLuongAsc" asp-route-pageNumber="@Model.CurrentPage">S.lượng nhập ↑</a> |
-                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="SoLuongDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="SoLuongAsc"
+                        asp-route-pageNumber="@Model.CurrentPage">Số lượng nhập ↑</a> |
+                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="SoLuongDesc"
+                        asp-route-pageNumber="@Model.CurrentPage">↓</a>
                 </th>
                 <th>
-                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="DonGiaAsc" asp-route-pageNumber="@Model.CurrentPage">Đơn giá ↑</a> |
-                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="DonGiaDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="DonGiaAsc"
+                        asp-route-pageNumber="@Model.CurrentPage">Đơn giá (VNĐ) ↑</a> |
+                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="DonGiaDesc"
+                        asp-route-pageNumber="@Model.CurrentPage">↓</a>
                 </th>
                 <th>
-                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="ThanhTienAsc" asp-route-pageNumber="@Model.CurrentPage">Thành tiền ↑</a> |
-                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="ThanhTienDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="ThanhTienAsc"
+                        asp-route-pageNumber="@Model.CurrentPage">Thành tiền (VNĐ) ↑</a> |
+                    <a asp-page="./PhuTungThayThe" asp-route-sortOrder="ThanhTienDesc"
+                        asp-route-pageNumber="@Model.CurrentPage">↓</a>
                 </th>
-                <th>S.lượng đã xuất</th>
-                <th>S.lượng còn lại</th>
+                <th>Số lượng đã xuất</th>
+                <th>Số lượng còn lại</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -56,10 +63,13 @@
                     <td>@hanghoa.DonViTinh.Name</td>
                     <td>@hanghoa.NgayNhap.ToString("dd/MM/yyyy")</td>
                     <td>@hanghoa.SoLuong</td>
-                    <td>@hanghoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</td>
-                    <td>@hanghoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</td>
+                    <td>@hanghoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
+                    <td>@hanghoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
                     <td>@hanghoa.SoLuongDaXuat</td>
                     <td>@hanghoa.SoLuongConLai</td>
+                    <td>
+                        <a asp-page="./ChiTietHang" asp-route-id="@hanghoa.Id" class="btn btn-info">Xem chi tiết</a>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -70,31 +80,25 @@
         @if (Model.CurrentPage > 1)
         {
             <li class="page-item">
-                <a class="page-link" asp-page="./PhuTungThayThe"
-                   asp-route-pageNumber="@(Model.CurrentPage - 1)"
-                   asp-route-sortOrder="@Request.Query["sortOrder"]"
-                   asp-route-hanghoa="@Model.Hanghoa"
-                   asp-route-year="@Model.Year">Trước</a>
+                <a class="page-link" asp-page="./PhuTungThayThe" asp-route-pageNumber="@(Model.CurrentPage - 1)"
+                    asp-route-sortOrder="@Request.Query["sortOrder"]" asp-route-hanghoa="@Model.Hanghoa"
+                    asp-route-year="@Model.Year">Trước</a>
             </li>
         }
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
             <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
-                <a class="page-link" asp-page="./PhuTungThayThe"
-                   asp-route-pageNumber="@i"
-                   asp-route-sortOrder="@Request.Query["sortOrder"]"
-                   asp-route-hanghoa="@Model.Hanghoa"
-                   asp-route-year="@Model.Year">@i</a>
+                <a class="page-link" asp-page="./PhuTungThayThe" asp-route-pageNumber="@i"
+                    asp-route-sortOrder="@Request.Query["sortOrder"]" asp-route-hanghoa="@Model.Hanghoa"
+                    asp-route-year="@Model.Year">@i</a>
             </li>
         }
         @if (Model.CurrentPage < Model.TotalPages)
         {
             <li class="page-item">
-                <a class="page-link" asp-page="./PhuTungThayThe"
-                   asp-route-pageNumber="@(Model.CurrentPage + 1)"
-                   asp-route-sortOrder="@Request.Query["sortOrder"]"
-                   asp-route-hanghoa="@Model.Hanghoa"
-                   asp-route-year="@Model.Year">Sau</a>
+                <a class="page-link" asp-page="./PhuTungThayThe" asp-route-pageNumber="@(Model.CurrentPage + 1)"
+                    asp-route-sortOrder="@Request.Query["sortOrder"]" asp-route-hanghoa="@Model.Hanghoa"
+                    asp-route-year="@Model.Year">Sau</a>
             </li>
         }
     </ul>

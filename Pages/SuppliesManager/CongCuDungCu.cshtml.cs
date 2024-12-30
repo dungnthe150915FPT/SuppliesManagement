@@ -23,7 +23,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
         public List<NhomHang> NhomHangs { get; set; }
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
-        public const int PageSize = 3;
+        public const int PageSize = 10;
         private readonly SuppliesManagementProjectContext dBContext;
 
         public IActionResult OnGet(
