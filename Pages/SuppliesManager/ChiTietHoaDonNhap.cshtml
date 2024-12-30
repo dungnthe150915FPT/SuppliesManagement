@@ -26,8 +26,8 @@
             <input type="text" class="form-control" value="@Model.HoaDonNhap.SoHoaDon" readonly>
         </div>
         <div class="form-group mb-3">
-            <label>Tổng Tiền:</label>
-            <input type="text" class="form-control" value="@Model.HoaDonNhap.ThanhTien.ToString("N0") VNĐ" readonly>
+            <label>Tổng Tiền (VNĐ):</label>
+            <input type="text" class="form-control" value="@Model.HoaDonNhap.ThanhTien.ToString("#,##0").Replace(',', '.')" readonly>
         </div>
         <div class="form-group mb-3">
             <label>Số Serial:</label>
@@ -106,10 +106,10 @@
                         <td>@hangHoa.NhomHangName</td>
                         <td>@hangHoa.DonViTinh</td>
                         <td>@hangHoa.SoLuong</td>
-                        <td>@hangHoa.DonGiaTruocThue.ToString("#,##0")</td>
-                        <td>@hangHoa.DonGiaSauThue.ToString("#,##0")</td>
-                        <td>@hangHoa.TongGiaTruocThue.ToString("#,##0")</td>
-                        <td>@hangHoa.TongGiaSauThue.ToString("#,##0")</td>
+                        <td>@hangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
+                        <td>@hangHoa.DonGiaSauThue.ToString("#,##0").Replace(',', '.')</td>
+                        <td>@hangHoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
+                        <td>@hangHoa.TongGiaSauThue.ToString("#,##0").Replace(',', '.')</td>
                     </tr>
                 }
             }

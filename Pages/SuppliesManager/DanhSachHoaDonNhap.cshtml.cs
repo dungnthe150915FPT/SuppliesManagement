@@ -18,7 +18,7 @@ namespace SuppliesManagement.Pages
         public List<HoaDonNhapViewModel> HoaDonNhaps { get; set; }
         public int CurrentPage { get; set; } = 1;
         public int TotalPages { get; set; }
-        public const int PageSize = 10;
+        public const int PageSize = 3;
 
         public IActionResult OnGet(
             DateTime? startDate,

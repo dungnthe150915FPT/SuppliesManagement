@@ -25,8 +25,8 @@
         <dt class="col-sm-3">Ngày Xuất:</dt>
         <dd class="col-sm-9">@Model.HoaDonXuat.NgayNhan.ToString("dd/MM/yyyy")</dd>
 
-        <dt class="col-sm-3">Tổng Tiền:</dt>
-        <dd class="col-sm-9">@Model.HoaDonXuat.ThanhTien.ToString("N0") VNĐ</dd>
+        <dt class="col-sm-3">Tổng Tiền chưa tính thuế (VNĐ):</dt>
+        <dd class="col-sm-9">@Model.HoaDonXuat.ThanhTien.ToString("#,##0").Replace(',', '.')</dd>
     </dl>
 </div>
 
@@ -60,10 +60,10 @@
                     <td>@hangHoa.NhomHangName</td>
                     <td>@hangHoa.DonViTinh</td>
                     <td>@hangHoa.SoLuong</td>
-                    <td>@hangHoa.DonGiaTruocThue.ToString("#,##0 VNĐ")</td>
-                    <td>@hangHoa.DonGiaSauThue.ToString("#,##0 VNĐ")</td>
-                    <td>@hangHoa.TongGiaTruocThue.ToString("#,##0 VNĐ")</td>
-                    <td>@hangHoa.TongGiaSauThue.ToString("#,##0 VNĐ")</td>
+                    <td>@hangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
+                    <td>@hangHoa.DonGiaSauThue.ToString("#,##0").Replace(',', '.')</td>
+                    <td>@hangHoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
+                    <td>@hangHoa.TongGiaSauThue.ToString("#,##0").Replace(',', '.')</td>
                 </tr>
             }
         }

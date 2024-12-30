@@ -41,7 +41,7 @@
             <th>Nhà Cung Cấp</th>
             <th>Nhập vào kho</th>
             <th>Ngày Nhập</th>
-            <th>Tổng Tiền</th>
+            <th>Tổng Tiền (VNĐ)</th>
             <th>Số Lượng Mặt hàng</th>
         </tr>
     </thead>
@@ -62,7 +62,7 @@
                     <td>@Model.HoaDonNhaps[i].NhaCungCap</td>
                     <td>@Model.HoaDonNhaps[i].KhoNhap</td>
                     <td>@Model.HoaDonNhaps[i].NgayNhap.ToString("dd/MM/yyyy")</td>
-                    <td>@Model.HoaDonNhaps[i].ThanhTien.ToString("#,##0").Replace(',', '.') VNĐ</td>
+                    <td>@Model.HoaDonNhaps[i].ThanhTien.ToString("#,##0").Replace(',', '.')</td>
                     <td>@Model.HoaDonNhaps[i].SoLuongMatHang</td>
                 </tr>
             }
