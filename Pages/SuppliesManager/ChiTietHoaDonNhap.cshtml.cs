@@ -72,7 +72,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 SoHoaDon = hoaDon.SoHoaDon,
                 ThanhTien = hoaDon.ThanhTien,
                 Serial = hoaDon.Serial,
-                KhoHang = hoaDon.KhoHang.Ten, // Gán thông tin kho hàng
+                KhoHang = hoaDon.KhoHang.Ten,
                 HangHoas = hangHoas
             };
             HasPDF = hoaDon.PDFFile != null && hoaDon.PDFFile.Length > 0;

@@ -14,6 +14,11 @@ namespace SuppliesManagement.Pages.SuppliesManager
             this.dBContext = dBContext;
         }
 
+        [BindProperty(SupportsGet = true)]
+        public string Hanghoa { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int? Year { get; set; }
         public List<HangHoa> HangHoas { get; set; }
         public List<NhomHang> NhomHangs { get; set; }
         public int CurrentPage { get; set; }
@@ -42,13 +47,21 @@ namespace SuppliesManagement.Pages.SuppliesManager
             }
 
             // Tìm kiếm theo tên hàng hóa
-            if (!string.IsNullOrEmpty(hanghoa))
+            // if (!string.IsNullOrEmpty(hanghoa))
+            // {
+            //     query = query.Where(
+            //         t =>
+            //             t.TenHangHoa.Contains(hanghoa)
+            //             || t.NhomHang.Name.Contains(hanghoa)
+            //             || t.DonViTinh.Name.Contains(hanghoa)
+            //     );
+            // }
+            if (!string.IsNullOrEmpty(Hanghoa))
             {
                 query = query.Where(
-                    t =>
-                        t.TenHangHoa.Contains(hanghoa)
-                        || t.NhomHang.Name.Contains(hanghoa)
-                        || t.DonViTinh.Name.Contains(hanghoa)
+                    t => t.TenHangHoa.Contains(Hanghoa)
+                // || t.NhomHang.Name.Contains(Hanghoa)
+                // || t.DonViTinh.Name.Contains(Hanghoa)
                 );
             }
 

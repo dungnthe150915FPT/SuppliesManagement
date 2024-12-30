@@ -15,10 +15,19 @@ namespace SuppliesManagement.Pages
             _dbContext = dbContext;
         }
 
+        [BindProperty(SupportsGet = true)]
+        public DateTime? StartDate { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public DateTime? EndDate { get; set; }
+
         public List<HoaDonNhapViewModel> HoaDonNhaps { get; set; }
         public int CurrentPage { get; set; } = 1;
         public int TotalPages { get; set; }
-        public const int PageSize = 3;
+        public const int PageSize = 10;
+
+        [BindProperty(SupportsGet = true)]
+        public string SearchTerm { get; set; }
 
         public IActionResult OnGet(
             DateTime? startDate,
@@ -47,12 +56,16 @@ namespace SuppliesManagement.Pages
             {
                 query = query.Where(h => h.HoaDonNhap.NgayNhap <= endDate.Value);
             }
-            if (!string.IsNullOrEmpty(hoadon))
+            if (!string.IsNullOrEmpty(SearchTerm))
             {
                 query = query.Where(
                     h =>
-                        h.HoaDonNhap.NhaCungCap.Contains(hoadon)
-                        || h.HoaDonNhap.SoHoaDon.Contains(hoadon)
+                        h.HoaDonNhap.NhaCungCap.Contains(SearchTerm)
+                        || h.HoaDonNhap.SoHoaDon.Contains(SearchTerm)
+                        || h.HoaDonNhap.Serial.Contains(SearchTerm)
+                        || h.HoaDonNhap.ThanhTien.ToString().Contains(SearchTerm)
+                        || h.HoaDonNhap.KhoHang.Ten.Contains(SearchTerm)
+                        || h.HoaDonNhap.Id.ToString().Contains(SearchTerm)
                 );
             }
 

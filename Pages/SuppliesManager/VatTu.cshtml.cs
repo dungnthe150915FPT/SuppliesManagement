@@ -16,6 +16,14 @@ namespace SuppliesManagement.Pages
             this.dBContext = dBContext;
         }
 
+        [BindProperty(SupportsGet = true)]
+        public string Hanghoa { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int? Year { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int? Month { get; set; }
         public List<HangHoa> HangHoas { get; set; }
         public List<NhomHang> NhomHangs { get; set; }
         public int CurrentPage { get; set; }
@@ -30,6 +38,9 @@ namespace SuppliesManagement.Pages
             int? month = null
         )
         {
+            Hanghoa = hanghoa;
+            Year = year;
+            Month = month;
             NhomHangs = dBContext.NhomHangs.ToList();
 
             IQueryable<HangHoa> query = dBContext.HangHoas
@@ -46,16 +57,25 @@ namespace SuppliesManagement.Pages
             }
 
             // Tìm kiếm theo tên hàng hóa
-            if (!string.IsNullOrEmpty(hanghoa))
+            // if (!string.IsNullOrEmpty(hanghoa))
+            // {
+            //     query = query.Where(
+            //         t =>
+            //             t.TenHangHoa.Contains(hanghoa)
+            //             || t.NhomHang.Name.Contains(hanghoa)
+            //             || t.DonViTinh.Name.Contains(hanghoa)
+            //     );
+            // }
+
+            if (!string.IsNullOrEmpty(Hanghoa))
             {
                 query = query.Where(
                     t =>
-                        t.TenHangHoa.Contains(hanghoa)
-                        || t.NhomHang.Name.Contains(hanghoa)
-                        || t.DonViTinh.Name.Contains(hanghoa)
+                        t.TenHangHoa.Contains(Hanghoa)
+                        || t.NhomHang.Name.Contains(Hanghoa)
+                        || t.DonViTinh.Name.Contains(Hanghoa)
                 );
             }
-
             // Sắp xếp theo tiêu chí
             switch (sortOrder)
             {

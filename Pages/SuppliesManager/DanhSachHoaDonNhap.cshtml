@@ -12,26 +12,25 @@
     <input type="Submit" value="Search" />
 </div> *@
 
-<div class="form-group">
-    @* <form method="get"> *@
+<form method="get">
+    <div class="form-group">
         <label for="searchInput">Tìm kiếm:</label>
-        <input type="text" class="form-control"   
-         id="searchInput" 
-   name="hoadon"
+        <input type="text" class="form-control" id="searchInput" name="SearchTerm" value="@Model.SearchTerm"
             placeholder="Nhập tên nhà cung cấp hoặc số hóa đơn...">
-        @* <input class="btn btn-primary" type="Submit" value="Search" /> *@
-    @* </form> *@
-</div>
+    </div>
 
-<div class="form-group">
-    <label for="startDate">Từ ngày:</label>
-    <input type="date" class="form-control" id="startDate" />
-</div>
-<div class="form-group">
-    <label for="endDate">Đến ngày:</label>
-    <input type="date" class="form-control" id="endDate" />
-</div>
-<button type="button" class="btn btn-primary" id="filterDateBtn">Lọc</button>
+    <div class="form-group">
+        <label for="startDate">Từ ngày:</label>
+        <input type="date" class="form-control" id="startDate" name="startDate"
+            value="@(Model.StartDate?.ToString("yyyy-MM-dd"))" />
+    </div>
+    <div class="form-group">
+        <label for="endDate">Đến ngày:</label>
+        <input type="date" class="form-control" id="endDate" name="endDate"
+            value="@(Model.EndDate?.ToString("yyyy-MM-dd"))" />
+    </div>
+    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+</form>
 
 <table class="table table-striped table-bordered">
     <thead class="thead-dark">
@@ -57,7 +56,8 @@
             for (int i = 0; i < Model.HoaDonNhaps.Count; i++)
             {
                 <tr>
-                    <td><a asp-page="/SuppliesManager/ChiTietHoaDonNhap" asp-route-id="@Model.HoaDonNhaps[i].ID">@Model.HoaDonNhaps[i].SoHoaDon</a></td>
+                    <td><a asp-page="/SuppliesManager/ChiTietHoaDonNhap"
+                            asp-route-id="@Model.HoaDonNhaps[i].ID">@Model.HoaDonNhaps[i].SoHoaDon</a></td>
                     <td>@Model.HoaDonNhaps[i].Serial</td>
                     <td>@Model.HoaDonNhaps[i].NhaCungCap</td>
                     <td>@Model.HoaDonNhaps[i].KhoNhap</td>
@@ -75,21 +75,27 @@
         @if (Model.CurrentPage > 1)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)" asp-route-hanghoa="@Request.Query["hanghoa"]">Trước</a>
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)"
+                    asp-route-SearchTerm="@Model.SearchTerm" asp-route-startDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                    asp-route-endDate="@Model.EndDate?.ToString("yyyy-MM-dd")">Trước</a>
             </li>
         }
 
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
             <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
-                <a class="page-link" asp-route-pageNumber="@i" asp-route-hanghoa="@Request.Query["hanghoa"]">@i</a>
+                <a class="page-link" asp-route-pageNumber="@i" asp-route-SearchTerm="@Model.SearchTerm"
+                    asp-route-startDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                    asp-route-endDate="@Model.EndDate?.ToString("yyyy-MM-dd")">@i</a>
             </li>
         }
 
         @if (Model.CurrentPage < Model.TotalPages)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)" asp-route-hanghoa="@Request.Query["hanghoa"]">Sau</a>
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)"
+                    asp-route-SearchTerm="@Model.SearchTerm" asp-route-startDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                    asp-route-endDate="@Model.EndDate?.ToString("yyyy-MM-dd")">Sau</a>
             </li>
         }
     </ul>
@@ -123,7 +129,7 @@
             });
     });
 
-    function filterTable(searchTerm) {
+    @* function filterTable(searchTerm) {
         var rows = document.querySelectorAll('tbody tr');
         rows.forEach(function (row) {
             var cells = row.getElementsByTagName('td');
@@ -136,5 +142,5 @@
             }
             row.style.display = found ? '' : 'none';
         });
-    }
+    } *@
 </script>

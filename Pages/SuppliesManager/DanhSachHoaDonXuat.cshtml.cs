@@ -21,6 +21,15 @@ namespace SuppliesManagement.Pages.SuppliesManager
         public int TotalPages { get; set; }
         public const int PageSize = 10;
 
+        [BindProperty(SupportsGet = true)]
+        public string SearchTerm { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public DateTime? StartDate { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public DateTime? EndDate { get; set; }
+
         public IActionResult OnGet(DateTime? startDate, DateTime? endDate, int pageNumber = 1)
         {
             var role = HttpContext.Session.GetInt32("RoleId");
@@ -29,15 +38,30 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 return RedirectToPage("/Error/AccessDenied");
             }
 
-            var query = context.HoaDonXuats.Include(n => n.KhoHang).AsQueryable();
+            var query = context.HoaDonXuats
+                .Include(x => x.KhoHang)
+                .Include(x => x.NguoiNhan)
+                .AsQueryable();
 
-            if (startDate.HasValue)
+            if (StartDate.HasValue)
             {
-                query = query.Where(h => h.NgayNhan >= startDate.Value);
+                query = query.Where(h => h.NgayNhan >= StartDate.Value);
             }
-            if (endDate.HasValue)
+            if (EndDate.HasValue)
             {
-                query = query.Where(h => h.NgayNhan <= endDate.Value);
+                query = query.Where(h => h.NgayNhan <= EndDate.Value);
+            }
+            if (!string.IsNullOrEmpty(SearchTerm))
+            {
+                query = query.Where(
+                    h =>
+                        h.NguoiNhan.Fullname.Contains(SearchTerm)
+                        || h.Id.ToString().Contains(SearchTerm)
+                        || h.KhoHang.Ten.Contains(SearchTerm)
+                        || h.LyDoNhan.Contains(SearchTerm)
+                        || h.ThanhTien.ToString().Contains(SearchTerm)
+                        || h.NguoiNhan.Username.Contains(SearchTerm)
+                );
             }
 
             // Tổng số hóa đơn để xác định số trang
