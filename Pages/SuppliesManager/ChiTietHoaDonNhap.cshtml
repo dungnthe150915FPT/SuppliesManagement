@@ -41,11 +41,13 @@
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <h4>Hóa Đơn PDF</h4>
                 <div>
-                    <form method="post" asp-page-handler="Export" asp-route-id="@Model.HoaDonNhap.ID" class="d-inline">
+                    @* <form method="post" asp-page-handler="Export" asp-route-id="@Model.HoaDonNhap.ID" class="d-inline">
                         <button type="submit" class="btn btn-primary">Xuất Excel</button>
-                    </form>
+                    </form> *@
                     <a asp-page-handler="DownloadPDF" asp-route-id="@Model.HoaDonNhap.ID" class="btn btn-primary ml-2">Tải
                         xuống PDF</a>
+                    <button type="button" class="btn btn-primary ml-2" onclick="viewExcelFile('@Model.HoaDonNhap.ID')">Xem
+                        file Excel</button>
                 </div>
             </div>
             <div id="pdf-container" style="width: 100%; height: 400px; overflow: auto; border: 1px solid #ddd;">
@@ -58,6 +60,16 @@
         }
         else
         {
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h4>Hóa Đơn PDF</h4>
+                <div>
+                    <form method="post" asp-page-handler="Export" asp-route-id="@Model.HoaDonNhap.ID" class="d-inline">
+                        <button type="submit" class="btn btn-primary">Xuất Excel</button>
+                    </form>
+                    <button type="button" class="btn btn-primary ml-2" onclick="viewExcelFile('@Model.HoaDonNhap.ID')">Xem
+                        file Excel</button>
+                </div>
+            </div>
             <p>Không có file PDF cho hóa đơn này.</p>
         }
     </div>
@@ -104,11 +116,31 @@
         </tbody>
     </table>
 </div>
-
+<!-- Modal -->
+<div class="modal fade" id="excelPreviewModal" tabindex="-1" role="dialog" aria-labelledby="excelPreviewModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="excelPreviewModalLabel">Phiếu nhập kho</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="excelPreviewContent">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <form method="post" asp-page-handler="Export" asp-route-id="@Model.HoaDonNhap.ID" class="d-inline">
+                    <button type="submit" class="btn btn-primary ml-3">Xuất Excel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts {
     @if (Model.HasPDF)
     {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-excel-preview/1.0.0/excel-preview.min.js"></script>
         <script>
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js';
 
@@ -147,4 +179,120 @@
             });
         </script>
     }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        function viewExcelFile(id) {
+            fetch(`?handler=ViewExcel&id=${id}`)
+                .then(response => response.arrayBuffer())
+                .then(data => {
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const html = XLSX.utils.sheet_to_html(worksheet);
+
+                    const modalContent = document.getElementById('excelPreviewContent');
+                    modalContent.innerHTML = `
+                                        <style>
+                                            table { border-collapse: collapse; width: 100%; }
+                                            th, td { 
+                                                border: 1px solid #ddd; 
+                                                padding: 8px; 
+                                                text-align: center; 
+                                                vertical-align: middle;
+                                            }
+                                            th { 
+                                                background-color: #f2f2f2; 
+                                                font-weight: bold;
+                                            }
+                                            .role { font-weight: bold; }
+                                            .left-align { text-align: left; }
+                                            .center-align { text-align: center; }
+                                            .bold { font-weight: bold; }
+                                        </style>
+                                        ${html}
+                                    `;
+
+                    modalContent.querySelectorAll('td, th').forEach(cell => {
+                        if (['Người lập phiếu', 'Người nhận hàng', 'Thủ kho', 'Kế toán', 'Giám đốc'].includes(cell.textContent.trim())) {
+                            cell.classList.add('role', 'bold', 'center-align');
+                        }
+
+                        modalContent.querySelectorAll('td').forEach(cell => {
+                            if (cell.textContent.trim() === 'Người nhận hàng') {
+                                cell.classList.add('center-align', 'bold');
+                            }
+                        });
+                        const leftAlignContent = [
+                            'Tổng số tiền (viết bằng chữ):',
+                            'Số chứng từ gốc kèm theo:',
+                            'Họ và tên người giao hàng:',
+                            'Địa chỉ bộ phận:',
+                            'Theo hóa đơn số:',
+                            'Nhập tại kho (ngăn lô):',
+                            'Tổng tiền (Chưa có VAT):',
+                            'Đơn vị:',
+                            'Bộ phận:'
+                        ];
+
+                        const centerAlignContent = [
+                            'Thành tiền',
+                            'Người lập phiếu',
+                            'Mẫu số: 02 – VT',
+                            '(Ban hành theo Thông tư số: 200/2014/TT-BTC Ngày 22/12/2014 của Bộ Tài chính)',
+                            'PHIẾU NHẬP KHO'
+                        ];
+
+                        if (leftAlignContent.some(content => cell.textContent.includes(content))) {
+                            cell.classList.add('left-align');
+                        } else if (centerAlignContent.some(content => cell.textContent.includes(content))) {
+                            cell.classList.add('center-align');
+                        }
+
+                        // Make all th elements (column headers) bold
+                        if (cell.tagName === 'TH') {
+                            cell.classList.add('bold');
+                        }
+
+                        // Left-align cells in the "Tên, nhãn hiệu, quy cách..." column
+                        if (cell.cellIndex === 1) {
+                            cell.classList.add('left-align');
+                        }
+
+                        // Center-align the date above 'Kế toán' and 'Giám đốc'
+                        if (cell.textContent.trim().match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+                            const nextRow = cell.parentElement.nextElementSibling;
+                            if (nextRow && ['Kế toán', 'Giám đốc'].some(role => nextRow.textContent.includes(role))) {
+                                cell.classList.add('center-align');
+                            }
+                        }
+
+                        // Make "Tổng tiền (Chưa có VAT):" bold
+                        if (cell.textContent.includes('Tổng tiền (Chưa có VAT):')) {
+                            cell.classList.add('bold');
+                        }
+
+                        // Center-align "PHIẾU NHẬP KHO" and the date
+                        if (cell.textContent.includes('PHIẾU NHẬP KHO') ||
+                            (cell.textContent.trim().match(/^Ngày\s+\d{1,2}\s+tháng\s+\d{1,2}\s+năm\s+\d{4}$/))) {
+                            cell.classList.add('center-align');
+                        }
+
+                        // Make specific headers bold
+                        const boldHeaders = ['Stt', 'Tên, nhãn hiệu, quy cách, phẩm chất vật tư, dụng cụ, sản phẩm, hàng hóa',
+                            'Mã số', 'Đơn vị tính', 'Số lượng', 'Đơn giá', 'Thành tiền', 'Yêu cầu', 'Thực nhập'];
+                        if (boldHeaders.includes(cell.textContent.trim())) {
+                            cell.classList.add('bold');
+                        }
+
+                        // Center-align "Người nhận hàng"
+                        if (cell.textContent.trim() === 'Người nhận hàng') {
+                            cell.classList.add('center-align');
+                        }
+                    });
+
+                    // Show the modal
+                    $('#excelPreviewModal').modal('show');
+                });
+        }
+    </script>
 }
