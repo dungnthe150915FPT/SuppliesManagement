@@ -1,4 +1,4 @@
-﻿html {
+﻿/* html {
     background-color: #000121;
     font-family: 'Roboto', sans-serif;
 }
@@ -202,4 +202,11 @@
         transform: scale(0.4) translate(100px, 300px)
     }
 }
+ */
 
+ body {
+    background: #dedede;
+}
+.page-wrap {
+    min-height: 100vh;
+}

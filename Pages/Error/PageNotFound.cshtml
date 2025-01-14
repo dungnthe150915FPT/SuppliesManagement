@@ -1,11 +1,11 @@
 ﻿@page
 @model ErrorModel
 @{
-    ViewData["Title"] = "Page Not Found";
-    Layout = null;
+     ViewData["Title"] = "Page Not Found";
+     Layout = null;
 }
 <link href="~/css/Error.css" rel="stylesheet" />
-<div class="maincontainer">
+@* <div class="maincontainer">
     <div class="bat">
         <img class="wing leftwing"
              src="https://aimieclouse.com/Media/Portfolio/Error403Forbidden/bat-wing.png">
@@ -34,4 +34,18 @@
 
 </div>
 <h1 class="errorcode">Page not found 404</h1>
-<div class="errortext">Không tìm thấy trang này.</div>
+<div class="errortext">Không tìm thấy trang này.</div> *@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<div class="page-wrap d-flex flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 text-center">
+                <span class="display-1 d-block">404</span>
+                <div class="mb-4 lead">Trang bạn truy cập vào không tồn tại</div>
+            </div>
+        </div>
+    </div>
+</div>

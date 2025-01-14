@@ -57,7 +57,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Hàng hóa - Ngày nhập</th>
+                    <th>Hàng hóa - Ngày nhập - SL còn lại</th>
                     <th>Nhóm hàng</th>
                     <th>Số lượng</th>
                     <th>Đ.vị tính</th>
@@ -105,7 +105,7 @@
                                         data-don-vi-tinh="@hangHoa.DonViTinh.Name"
                                         data-gia-truoc-thue="@hangHoa.DonGiaTruocThue"
                                         data-vat="@hangHoa.Vat">
-                @hangHoa.TenHangHoa - @hangHoa.NgayNhap.ToString("dd/MM/yyyy")
+                @hangHoa.TenHangHoa - @hangHoa.NgayNhap.ToString("dd/MM/yyyy") - SL còn lại: @hangHoa.SoLuongConLai
                                                 </option>
         }
     }
