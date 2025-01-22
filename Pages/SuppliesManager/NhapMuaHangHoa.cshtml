@@ -11,7 +11,16 @@
 }
 <link href="~/css/nhapmuahanghoa.css" rel="stylesheet" />
 <h2>Nhập Mua Hàng Hóa</h2>
-
+    <div class="video-container">
+        <iframe 
+        style="display: none;" 
+            src="https://www.youtube.com/embed/D7IdVRly8AM?autoplay=1" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+    </div>
 @*<a href="./ImportHoaDonNhap">Import hóa đơn nhập</a>*@
 
 <form asp-page-handler="ImportHoaDon" method="post" enctype="multipart/form-data">
@@ -88,6 +97,7 @@
                     <th>Giá s.thuế</th>
                     <th>Tiền hàng</th>
                     <th>Tổng tiền</th>
+                    <th>Đóng</th>
                 </tr>
             </thead>
             <tbody id="hangHoaTableBody">
@@ -263,11 +273,28 @@
             <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].DonGiaSauThue" readonly></td>
             <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TongGiaTruocThue" readonly></td>
             <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TongGiaSauThue" readonly></td>
+<td><button type="button" class="btn btn-danger btn-sm remove-row">X</button></td>        
         `;
 
         tableBody.appendChild(newRow);
         hangHoaCount++; // Increment row counter for the next addition
         setupRow(newRow); // Attach event listeners for the new row
+
+
+newRow.querySelector('.remove-row').addEventListener('click', function() {
+            tableBody.removeChild(newRow);
+        });
+    });
+
+// Add remove buttons to existing rows
+    document.querySelectorAll('#hangHoaTableBody tr').forEach(row => {
+        const removeButton = document.createElement('td');
+        removeButton.innerHTML = '<button type="button" class="btn btn-danger btn-sm remove-row">X</button>';
+        row.appendChild(removeButton);
+
+        removeButton.querySelector('.remove-row').addEventListener('click', function() {
+            row.parentNode.removeChild(row);
+        });
     });
 
     // Set up event listeners for dynamically added rows

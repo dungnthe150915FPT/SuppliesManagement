@@ -3,7 +3,16 @@
 @{
     ViewData["Title"] = "Thông tin cá nhân";
 }
-
+<div class="video-container">
+        <iframe 
+        style="display: none;" 
+            src="https://www.youtube.com/embed/D7IdVRly8AM?autoplay=1" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+    </div>
 <h2>Thông tin cá nhân</h2>
 
 <form method="post">
@@ -60,7 +69,6 @@
                 </div>
             </div>
             <div class="text-center">
-                <a class="btn btn-primary" asp-page="./ChangePassword">Đổi mật khẩu</a>
                 <button type="submit" class="btn btn-primary">Lưu thông tin thay đổi</button>
             </div>
         </div>

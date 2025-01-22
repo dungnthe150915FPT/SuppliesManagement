@@ -3,7 +3,16 @@
 @{
     ViewData["Title"] = "Chi Tiết Hóa Đơn Xuất";
 }
-
+    <div class="video-container">
+        <iframe 
+        style="display: none;" 
+            src="https://www.youtube.com/embed/D7IdVRly8AM?autoplay=1" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+    </div>
 <h2>Chi Tiết Hóa Đơn Xuất</h2>
 
 <form method="post" asp-page-handler="Export" asp-route-id="@Model.HoaDonXuat.ID">
