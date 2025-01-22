@@ -18,95 +18,197 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div id="successAlert" class="alert alert-success" role="alert">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
             @if (Model.HangHoa != null)
             {
                 <div class="card shadow-lg">
-                    <div class="card-header bg-primary text-white">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">
                             <i class="bi bi-box-seam"></i> Chi Tiết Hàng Hóa: @Model.HangHoa.TenHangHoa
                         </h4>
+                        <button id="editButton" class="btn btn-light" onclick="toggleEdit()">Chỉnh sửa</button>
                     </div>
                     <div class="card-body">
-                        <div class="row align-items-center">
-                            <!-- Information Columns -->
-                            <div class="col-md-4">
-                                <strong><i class="bi bi-grid"></i> Nhóm Hàng:</strong>
-                                <p>@Model.HangHoa.NhomHang.Name</p>
-                                <strong><i class="bi bi-gear"></i> Đơn Vị Tính:</strong>
-                                <p>@Model.HangHoa.DonViTinh.Name</p>
-                                <strong><i class="bi bi-cash"></i> Đơn Giá Trước Thuế:</strong>
-                                <p>@Model.HangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</p>
-                                <strong><i class="bi bi-cash"></i> Đơn Giá Sau Thuế:</strong>
-                                <p>@Model.HangHoa.DonGiaSauThue.ToString("#,##0").Replace(',', '.') VNĐ</p>
-                                <strong><i class="bi bi-box-arrow-up"></i> Số Lượng Đã Xuất:</strong>
-                                <p>@Model.HangHoa.SoLuongDaXuat</p>
-                            </div>
-                            <div class="col-md-4">
-                                <strong><i class="bi bi-box"></i> Số Lượng:</strong>
-                                <p>@Model.HangHoa.SoLuong</p>
-                                <strong><i class="bi bi-calendar"></i> Ngày Nhập:</strong>
-                                <p>@Model.HangHoa.NgayNhap.ToString("dd/MM/yyyy")</p>
-                                <strong><i class="bi bi-wallet"></i> Tổng Giá Trước Thuế:</strong>
-                                <p>@Model.HangHoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.') VNĐ</p>
-                                <strong><i class="bi bi-wallet"></i> Tổng Giá Sau Thuế:</strong>
-                                <p>@Model.HangHoa.TongGiaSauThue.ToString("#,##0").Replace(',', '.') VNĐ</p>
-                                <strong><i class="bi bi-box-arrow-in-down"></i> Số Lượng Còn Lại:</strong>
-                                <p>@Model.HangHoa.SoLuongConLai</p>
-                            </div>
-                            <!-- Image Column -->
-                            <div class="col-md-4">
-                                <!-- Image Slideshow -->
-                                @if (images.Any())
-                                {
-                                    <div id="productImageSlideshow" class="carousel slide" data-bs-ride="carousel">
-                                        <div class="carousel-inner">
-                                            @for (int i = 0; i < images.Count; i++)
+                        <form method="post" enctype="multipart/form-data">
+                            <input type="hidden" asp-for="HangHoa.Id" />
+                            <div class="row align-items-center">
+                                <!-- Information Columns -->
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label asp-for="HangHoa.TenHangHoa" class="form-label">
+                                            <i class="bi bi-box-seam"></i> Tên Hàng Hóa:
+                                        </label>
+                                        <input asp-for="HangHoa.TenHangHoa" class="form-control" readonly />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="HangHoa.NhomHangId" class="form-label">
+                                            <i class="bi bi-grid"></i>
+                                            Nhóm Hàng:
+                                        </label>
+                                        <select asp-for="HangHoa.NhomHangId" asp-items="Model.NhomHangList"
+                                            class="form-select" disabled>
+                                            <option disabled value="">-- Chọn Nhóm Hàng --</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="HangHoa.DonViTinhId" class="form-label">
+                                            <i class="bi bi-gear"></i>
+                                            Đơn Vị Tính:
+                                        </label>
+                                        <select asp-for="HangHoa.DonViTinhId" asp-items="Model.DonViTinhList"
+                                            class="form-select" disabled>
+                                            <option disabled value="">-- Chọn Đơn Vị Tính --</option>
+                                        </select>
+                                    </div>
+                                    @* <div class="mb-3">
+                                        <label asp-for="HangHoa.DonGiaTruocThue" class="form-label">
+                                            <i class="bi bi-cash"></i> Đơn Giá Trước Thuế:
+                                        </label>
+                                        <input asp-for="HangHoa.DonGiaTruocThue" class="form-control" readonly id="DonGiaTruocThue"/>
+                                    </div> *@
+                                    <div class="mb-3">
+                                        <label asp-for="HangHoa.DonGiaTruocThue" class="form-label">
+                                            <i class="bi bi-cash"></i> Đơn Giá Trước Thuế:
+                                        </label>
+                                        <input type="text" class="form-control" id="DonGiaTruocThue"
+                                            value="@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0}", Model.HangHoa.DonGiaTruocThue)"
+                                            readonly name="HangHoa.DonGiaTruocThue" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="HangHoa.DonGiaSauThue" class="form-label">
+                                            <i class="bi bi-cash"></i>
+                                            Đơn Giá Sau Thuế:
+                                        </label>
+                                        @* <input asp-for="HangHoa.DonGiaSauThue" class="form-control" readonly
+                                            id="DonGiaSauThue" /> *@
+                                            <input type="text" class="form-control" id="DonGiaSauThue"
+                                            value="@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0}", Model.HangHoa.DonGiaSauThue)"
+                                            readonly name="HangHoa.DonGiaSauThue" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="HangHoa.Vat" class="form-label">
+                                            <i class="bi bi-currency-exchange"></i> Thuế (%):
+                                        </label>
+                                        <input asp-for="HangHoa.Vat" class="form-control" readonly />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @* <div class="mb-3">
+                                <label asp-for="HangHoa.KhoHang.Ten" class="form-label"><i class="bi bi-box"></i>
+                                Kho hàng:</label>
+                                <input asp-for="HangHoa.KhoHang.Ten" class="form-control" readonly />
+                                </div> *@
+                                    <div class="mb-3">
+                                        <label asp-for="HangHoa.KhoHangId" class="form-label">
+                                            <i class="bi bi-house-door"></i> Kho Hàng:
+                                        </label>
+                                        <select asp-for="HangHoa.KhoHangId" asp-items="Model.KhoHangList"
+                                            class="form-select" disabled>
+                                            <option disabled value="">-- Chọn Kho Hàng --</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="HangHoa.NgayNhap" class="form-label">
+                                            <i class="bi bi-calendar"></i>
+                                            Ngày Nhập:
+                                        </label>
+                                        <input asp-for="HangHoa.NgayNhap" class="form-control" readonly />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="HangHoa.TongGiaTruocThue" class="form-label">
+                                            <i class="bi bi-wallet"></i> Tổng Giá Trước Thuế:
+                                        </label>
+                                        <input type="text" class="form-control" id="TongGiaTruocThue"
+                                            value="@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0}", Model.HangHoa.TongGiaTruocThue)"
+                                            readonly name="HangHoa.TongGiaTruocThue" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="HangHoa.TongGiaSauThue" class="form-label">
+                                            <i class="bi bi-wallet"></i> Tổng Giá Sau Thuế:
+                                        </label>
+                                        <input type="text" class="form-control" id="TongGiaSauThue"
+                                            value="@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0}", Model.HangHoa.TongGiaSauThue)"
+                                            readonly name="HangHoa.TongGiaSauThue" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="HangHoa.SoLuongConLai" class="form-label">
+                                            <i class="bi bi-box-arrow-in-down"></i> Số Lượng Còn Lại:
+                                        </label>
+                                        <input asp-for="HangHoa.SoLuongConLai" class="form-control" readonly />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="HangHoa.SoLuongDaXuat" class="form-label">
+                                            <i class="bi bi-box-arrow-in-up"></i> Số Lượng Đã Xuất:
+                                        </label>
+                                        <input asp-for="HangHoa.SoLuongDaXuat" class="form-control" readonly />
+                                    </div>
+                                </div>
+                                <!-- Image Column -->
+                                <div class="col-md-4">
+                                    <!-- Image Slideshow -->
+                                    @if (images.Any())
+                                    {
+                                        <div id="productImageSlideshow" class="carousel slide" data-bs-ride="carousel">
+                                            <div class="carousel-inner">
+                                                @for (int i = 0; i < images.Count; i++)
+                                                {
+                                                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                                                        <img src="@images[i]" class="d-block w-100 img-fluid rounded"
+                                                            alt="Hình ảnh sản phẩm @(i+1)"
+                                                            style="max-height: 300px; object-fit: contain; cursor: pointer;"
+                                                            onclick="openImageModal('@images[i]', @i)">
+                                                    </div>
+                                                }
+                                            </div>
+                                            @if (images.Count > 1)
                                             {
-                                                <div class="carousel-item @(i == 0 ? "active" : "")">
-                                                    <img src="@images[i]" class="d-block w-100 img-fluid rounded"
-                                                        alt="Hình ảnh sản phẩm @(i+1)"
-                                                        style="max-height: 300px; object-fit: contain; cursor: pointer;"
-                                                        onclick="openImageModal('@images[i]', @i)">
-                                                </div>
+                                                <button class="carousel-control-prev" type="button"
+                                                    data-bs-target="#productImageSlideshow" data-bs-slide="prev">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Previous</span>
+                                                </button>
+                                                <button class="carousel-control-next" type="button"
+                                                    data-bs-target="#productImageSlideshow" data-bs-slide="next">
+                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Next</span>
+                                                </button>
                                             }
                                         </div>
-                                        @if (images.Count > 1)
-                                        {
-                                            <button class="carousel-control-prev" type="button"
-                                                data-bs-target="#productImageSlideshow" data-bs-slide="prev">
-                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                <span class="visually-hidden">Previous</span>
-                                            </button>
-                                            <button class="carousel-control-next" type="button"
-                                                data-bs-target="#productImageSlideshow" data-bs-slide="next">
-                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                <span class="visually-hidden">Next</span>
-                                            </button>
-                                        }
+                                    }
+                                    else
+                                    {
+                                        <p class="text-muted">Không có hình ảnh</p>
+                                    }
+
+                                    <div class="mt-3 d-none" id="imageUploadSection">
+                                        <label class="form-label">Cập nhật hình ảnh (tối đa 3 ảnh)</label>
+                                        <input type="file" class="form-control" id="imageUpload" name="imageUpload" multiple
+                                            accept="image/*" max="3">
+                                        <small class="form-text text-muted">
+                                            Chọn tối đa 3 ảnh. Định dạng hỗ trợ: JPG, PNG,
+                                            GIF.
+                                        </small>
                                     </div>
-                                }
-                                else
-                                {
-                                    <p class="text-muted">Không có hình ảnh</p>
-                                }
-                            </div>
-                        </div>
+
+                                    <!-- Save Changes Button (initially hidden) -->
+                                    <div class="mt-3 text-center d-none" id="saveChangesSection">
+                                        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                    </div>
+
+                        </form>
                     </div>
-                    @* <div class="card-footer text-center">
-                        <a asp-page="./DanhSachHang" class="btn btn-secondary">
-                            <i class="bi bi-arrow-left-circle"></i> Quay Lại
-                        </a>
-                    </div> *@
                 </div>
             }
             else
             {
-                <div class="alert alert-danger">
-                    <i class="bi bi-exclamation-circle"></i> Không tìm thấy thông tin hàng hóa.
+                <div class="alert alert-warning" role="alert">
+                    Không tìm thấy thông tin hàng hóa.
                 </div>
-                @* <a asp-page="./DanhSachHang" class="btn btn-secondary">
-                    <i class="bi bi-arrow-left-circle"></i> Quay Lại
-                </a> *@
             }
         </div>
     </div>
@@ -129,13 +231,51 @@
         </div>
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    function toggleEdit() {
+        const inputs = document.querySelectorAll('input.form-control, select.form-select');
+        const editButton = document.getElementById('editButton');
+        const imageUploadSection = document.getElementById('imageUploadSection');
+        const saveChangesSection = document.getElementById('saveChangesSection');
+
+        inputs.forEach(input => {
+            if (input.tagName === 'SELECT') {
+                input.disabled = !input.disabled;
+            } else {
+                input.readOnly = !input.readOnly;
+            }
+        });
+
+        if (editButton.textContent === 'Chỉnh sửa') {
+            editButton.textContent = 'Hủy chỉnh sửa';
+            editButton.classList.remove('btn-light');
+            editButton.classList.add('btn-danger');
+            imageUploadSection.classList.remove('d-none');
+            saveChangesSection.classList.remove('d-none');
+        } else {
+            editButton.textContent = 'Chỉnh sửa';
+            editButton.classList.remove('btn-danger');
+            editButton.classList.add('btn-light');
+            imageUploadSection.classList.add('d-none');
+            saveChangesSection.classList.add('d-none');
+        }
+    }
+
     function openImageModal(imageSrc, index) {
-        var modal = new bootstrap.Modal(document.getElementById('imageModal'));
-        document.getElementById('modalImage').src = imageSrc;
-        document.getElementById('downloadLink').href = imageSrc;
-        document.getElementById('downloadLink').download = `product-image-${index + 1}.jpg`;
+        const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+        const modalImage = document.getElementById('modalImage');
+        modalImage.src = imageSrc;
         modal.show();
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const successAlert = document.getElementById("successAlert");
+        if (successAlert) {
+            setTimeout(() => {
+                successAlert.style.display = "none";
+            }, 10000);
+        }
+    });
 </script>

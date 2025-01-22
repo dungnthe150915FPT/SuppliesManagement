@@ -32,11 +32,11 @@ namespace SuppliesManagement.Pages.Common
                 return RedirectToPage("/Common/SignIn");
             }
 
-            var user = _dbContext.Accounts.Include(u => u.Role).FirstOrDefault(a => a.Id == userId);
-            if (user == null)
-            {
-                return RedirectToPage("/Error/AccessDenied");
-            }
+            // var user = _dbContext.Accounts.Include(u => u.Role).FirstOrDefault(a => a.Id == userId);
+            // if (user == null)
+            // {
+            //     return RedirectToPage("/Error/AccessDenied");
+            // }
             return Page();
         }
 
