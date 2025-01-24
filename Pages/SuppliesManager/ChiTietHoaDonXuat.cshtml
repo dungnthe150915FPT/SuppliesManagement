@@ -47,10 +47,8 @@
             <th>Nhóm Hàng</th>
             <th>Đơn Vị Tính</th>
             <th>Số Lượng</th>
-            <th>Giá Trước Thuế</th>
-            <th>Giá Sau Thuế</th>
-            <th>Tổng Giá Trước Thuế</th>
-            <th>Tổng Giá Sau Thuế</th>
+            <th>Đơn Giá</th>
+            <th>Thành Tiền</th>
         </tr>
     </thead>
     <tbody>
@@ -70,9 +68,7 @@
                     <td>@hangHoa.DonViTinh</td>
                     <td>@hangHoa.SoLuong</td>
                     <td>@hangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
-                    <td>@hangHoa.DonGiaSauThue.ToString("#,##0").Replace(',', '.')</td>
                     <td>@hangHoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
-                    <td>@hangHoa.TongGiaSauThue.ToString("#,##0").Replace(',', '.')</td>
                 </tr>
             }
         }

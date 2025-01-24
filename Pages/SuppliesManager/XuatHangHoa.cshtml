@@ -55,36 +55,49 @@
         <label for="LyDoNhan">Lý do xuất:</label>
         <input type="text" class="form-control" name="LyDoNhan" required>
     </div>
-    <div class="form-group">
-        <label for="ThanhTien">Thành Tiền (Chưa tính thuế VAT):</label>
-        <input id="ThanhTien" type="text" class="form-control" name="ThanhTien" readonly>
-    </div>
-        <div class="form-group">
-        <label for="TongTien">Tổng Tiền (Đã tính thuế VAT):</label>
-        <input id="TongTien" type="text" class="form-control" name="TongTien" readonly>
-    </div>
     <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
                     <th>Hàng hóa - Ngày nhập - SL còn lại</th>
                     <th>Nhóm hàng</th>
-                    <th>Số lượng</th>
-                    <th>Đ.vị tính</th>
-                    <th>Đ.giá trước thuế</th>
-                    <th>VAT%</th>
-                    <th>Đ.giá sau thuế</th>
-                    <th>Tiền hàng</th>
-                    <th>Tổng tiền</th>
-                    <th>Đóng</th>
+                    <th>Đơn vị tính</th>
+                    <th>Đơn giá trước thuế</th>
+                    <th>Số lượng xuất</th>
                 </tr>
             </thead>
-            <tbody id="hangHoaTableBody">
+            <tbody>
+                @if (Model.HangHoas != null && Model.HangHoas.Any())
+                {
+                    @foreach (var hangHoa in Model.HangHoas.Where(h => h.SoLuongConLai > 0))
+                    {
+                        <tr>
+                            <td>@hangHoa.TenHangHoa - @hangHoa.NgayNhap.ToString("dd/MM/yyyy") - SL còn lại: @hangHoa.SoLuongConLai</td>
+                            <td>@hangHoa.NhomHang.Name</td>
+                            <td>@hangHoa.DonViTinh.Name</td>
+                            <td>@hangHoa.DonGiaTruocThue.ToString("N0")</td>
+                            <td>
+                                <input 
+                                    type="number" 
+                                    name="SoLuongs[@hangHoa.Id]" 
+                                    class="form-control" 
+                                    min="1" 
+                                    max="@hangHoa.SoLuongConLai" 
+                                    placeholder="Nhập SL xuất" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">Không có hàng hóa đủ số lượng trong kho</td>
+                    </tr>
+                }
             </tbody>
         </table>
-        <button type="button" id="addRow" class="btn btn-secondary">Thêm hàng hóa</button>
-        <button type="submit" class="btn btn-primary">Xuất hàng hóa</button>
     </div>
+    <button type="submit" class="btn btn-primary">Xuất hàng hóa</button>
 </form>
 @if (TempData["SuccessMessage"] != null)
 {
@@ -98,68 +111,10 @@
         @TempData["Error"]
     </div>
 }
+
 <script>
-    document.getElementById("addRow").addEventListener("click", function () {
-        const tableBody = document.getElementById("hangHoaTableBody");
-        const newRow = document.createElement("tr");
-
-        newRow.innerHTML = `
-                <td>
-                    <select name="HangHoaIds[]" class="form-control" onchange="fillHangHoaDetails(this)" required>
-                        <option value="" disabled selected>Chọn hàng hóa</option>
-    @if (Model.HangHoas != null && Model.HangHoas.Any())
-    {
-        @foreach (var hangHoa in Model.HangHoas)
-        {
-                                                <option value="@hangHoa.Id"
-                                        data-nhom-hang="@hangHoa.NhomHang.Name"
-                                        data-don-vi-tinh="@hangHoa.DonViTinh.Name"
-                                        data-gia-truoc-thue="@hangHoa.DonGiaTruocThue"
-                                        data-vat="@hangHoa.Vat">
-                @hangHoa.TenHangHoa - @hangHoa.NgayNhap.ToString("dd/MM/yyyy") - SL còn lại: @hangHoa.SoLuongConLai
-                                                </option>
-        }
-    }
-    else
-    {
-                <p>Không có hàng hóa trong kho</p>
-    }
-
-                    </select>
-                </td>
-                <td><input type="text" name="NhomHang[]" class="form-control" readonly></td>
-                <td><input type="number" name="SoLuongs[]" class="form-control" min="1" required oninput="calculateRowTotals(this.closest('tr'))"></td>
-                <td><input type="text" name="DonViTinh[]" class="form-control" readonly></td>
-                <td><input type="text" name="GiaTriTruocThue[]" class="form-control" readonly></td>
-                <td><input type="text" name="VAT[]" class="form-control" readonly></td>
-                <td><input type="text" name="GiaTriSauThue[]" class="form-control" readonly></td>
-                <td><input type="text" name="TienHang[]" class="form-control" readonly></td>
-                <td><input type="text" name="TongTien[]" class="form-control" readonly></td>
-                <td><button type="button" class="btn btn-danger btn-sm remove-row">X</button></td>
-            `;
-
-        tableBody.appendChild(newRow);
-
-        // Add event listener to the new remove button
-        newRow.querySelector('.remove-row').addEventListener('click', function() {
-            tableBody.removeChild(newRow);
-        });
-    });
-
-// Add remove buttons to existing rows
-    document.querySelectorAll('#hangHoaTableBody tr').forEach(row => {
-        const removeButton = document.createElement('td');
-        removeButton.innerHTML = '<button type="button" class="btn btn-danger btn-sm remove-row">X</button>';
-        row.appendChild(removeButton);
-
-        removeButton.querySelector('.remove-row').addEventListener('click', function() {
-            row.parentNode.removeChild(row);
-        });
-    });
-
     function fillHangHoaDetails(selectElement) {
         const selectedOption = selectElement.options[selectElement.selectedIndex];
-
         const nhomHang = selectedOption.getAttribute("data-nhom-hang");
         const donViTinh = selectedOption.getAttribute("data-don-vi-tinh");
         const giaTruocThue = parseFloat(selectedOption.getAttribute("data-gia-truoc-thue"));

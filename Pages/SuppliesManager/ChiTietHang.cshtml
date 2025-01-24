@@ -65,30 +65,19 @@
                                             <option disabled value="">-- Chọn Đơn Vị Tính --</option>
                                         </select>
                                     </div>
-                                    @* <div class="mb-3">
-                                        <label asp-for="HangHoa.DonGiaTruocThue" class="form-label">
-                                            <i class="bi bi-cash"></i> Đơn Giá Trước Thuế:
-                                        </label>
-                                        <input asp-for="HangHoa.DonGiaTruocThue" class="form-control" readonly id="DonGiaTruocThue"/>
-                                    </div> *@
                                     <div class="mb-3">
                                         <label asp-for="HangHoa.DonGiaTruocThue" class="form-label">
                                             <i class="bi bi-cash"></i> Đơn Giá Trước Thuế:
                                         </label>
-                                        <input type="text" class="form-control" id="DonGiaTruocThue"
-                                            value="@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0}", Model.HangHoa.DonGiaTruocThue)"
-                                            readonly name="HangHoa.DonGiaTruocThue" />
+                                        <input asp-for="HangHoa.DonGiaTruocThue" class="form-control" readonly
+                                            id="DonGiaTruocThue" />
                                     </div>
                                     <div class="mb-3">
                                         <label asp-for="HangHoa.DonGiaSauThue" class="form-label">
-                                            <i class="bi bi-cash"></i>
-                                            Đơn Giá Sau Thuế:
+                                            <i class="bi bi-cash"></i> Đơn Giá Sau Thuế:
                                         </label>
-                                        @* <input asp-for="HangHoa.DonGiaSauThue" class="form-control" readonly
-                                            id="DonGiaSauThue" /> *@
-                                            <input type="text" class="form-control" id="DonGiaSauThue"
-                                            value="@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0}", Model.HangHoa.DonGiaSauThue)"
-                                            readonly name="HangHoa.DonGiaSauThue" />
+                                        <input asp-for="HangHoa.DonGiaSauThue" class="form-control" readonly
+                                            id="DonGiaSauThue" />
                                     </div>
                                     <div class="mb-3">
                                         <label asp-for="HangHoa.Vat" class="form-label">
@@ -121,19 +110,17 @@
                                     </div>
                                     <div class="mb-3">
                                         <label asp-for="HangHoa.TongGiaTruocThue" class="form-label">
-                                            <i class="bi bi-wallet"></i> Tổng Giá Trước Thuế:
+                                            <i class="bi bi-cash"></i>Tổng Giá Trước Thuế:
                                         </label>
-                                        <input type="text" class="form-control" id="TongGiaTruocThue"
-                                            value="@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0}", Model.HangHoa.TongGiaTruocThue)"
-                                            readonly name="HangHoa.TongGiaTruocThue" />
+                                        <input asp-for="HangHoa.TongGiaTruocThue" class="form-control" readonly
+                                            id="TongGiaTruocThue" />
                                     </div>
                                     <div class="mb-3">
                                         <label asp-for="HangHoa.TongGiaSauThue" class="form-label">
-                                            <i class="bi bi-wallet"></i> Tổng Giá Sau Thuế:
+                                            <i class="bi bi-cash"></i>Tổng Giá Trước Thuế:
                                         </label>
-                                        <input type="text" class="form-control" id="TongGiaSauThue"
-                                            value="@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0}", Model.HangHoa.TongGiaSauThue)"
-                                            readonly name="HangHoa.TongGiaSauThue" />
+                                        <input asp-for="HangHoa.TongGiaSauThue" class="form-control" readonly
+                                            id="TongGiaSauThue" />
                                     </div>
                                     <div class="mb-3">
                                         <label asp-for="HangHoa.SoLuongConLai" class="form-label">
