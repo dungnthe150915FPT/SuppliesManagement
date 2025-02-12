@@ -5,16 +5,15 @@
 @{
     ViewData["Title"] = "Chi Tiết Hóa Đơn Nhập";
 }
-    <div class="video-container">
-        <iframe 
-        style="display: none;" 
-            src="https://www.youtube.com/embed/D7IdVRly8AM?autoplay=1" 
-            title="YouTube video player" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen>
-        </iframe>
-    </div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+<div class="video-container">
+    <iframe style="display: none;" src="https://www.youtube.com/embed/D7IdVRly8AM?autoplay=1"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+    </iframe>
+</div>
 <h2>Chi Tiết Hóa Đơn Nhập</h2>
 <div class="row">
     <div class="col-md-6">
@@ -52,12 +51,15 @@
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <h4>Hóa Đơn PDF</h4>
                 <div>
+                    <a onclick="goBack()" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Quay Lại
+                    </a>
                     <a asp-page-handler="DownloadPDF" asp-route-id="@Model.HoaDonNhap.ID" class="btn btn-primary ml-2">Tải
                         xuống PDF</a>
                     @* <button type="button" class="btn btn-primary ml-2" onclick="viewExcelFile('@Model.HoaDonNhap.ID')">Xem
                         file Excel</button> *@
                     <button class="btn btn-primary" onclick="viewExcelFile('@Model.HoaDonNhap.ID')">Xem phiếu nhập kho
-                        </button>
+                    </button>
                     @* <button type="button" class="btn btn-primary ml-2" onclick="viewPdfFile('@Model.HoaDonNhap.ID')">Xem
                         phiếu xuất kho PDF</button> *@
                 </div>
@@ -232,25 +234,25 @@
 
                     const modalContent = document.getElementById('excelPreviewContent');
                     modalContent.innerHTML = `
-                            <style>
-                            table { border-collapse: collapse; width: 100%; }
-                            th, td { 
-                            border: 1px solid #ddd; 
-                            padding: 8px; 
-                            text-align: center; 
-                            vertical-align: middle;
-                            }
-                            th { 
-                            background-color: #f2f2f2; 
-                            font-weight: bold;
-                            }
-                            .role { font-weight: bold; }
-                            .left-align { text-align: left; }
-                            .center-align { text-align: center; }
-                            .bold { font-weight: bold; }
-                            </style>
-                            ${html}
-                            `;
+                                    <style>
+                                    table { border-collapse: collapse; width: 100%; }
+                                    th, td { 
+                                    border: 1px solid #ddd; 
+                                    padding: 8px; 
+                                    text-align: center; 
+                                    vertical-align: middle;
+                                    }
+                                    th { 
+                                    background-color: #f2f2f2; 
+                                    font-weight: bold;
+                                    }
+                                    .role { font-weight: bold; }
+                                    .left-align { text-align: left; }
+                                    .center-align { text-align: center; }
+                                    .bold { font-weight: bold; }
+                                    </style>
+                                    ${html}
+                                    `;
 
                     modalContent.querySelectorAll('td, th').forEach(cell => {
                         if (['Người lập phiếu', 'Người nhận hàng', 'Thủ kho', 'Kế toán', 'Giám đốc'].includes(cell.textContent.trim())) {
@@ -365,6 +367,9 @@
             const modalElement = document.getElementById('excelPreviewModal');
             currentModal = new bootstrap.Modal(modalElement);
             currentModal.show();
+        }
+        function goBack() {
+            window.history.back();
         }
     </script>
 }

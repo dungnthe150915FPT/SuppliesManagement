@@ -13,6 +13,9 @@ namespace SuppliesManagement.Pages
         public DanhSachHoaDonNhapModel(SuppliesManagementProjectContext dbContext)
         {
             _dbContext = dbContext;
+            HoaDonNhaps = new List<HoaDonNhapViewModel>();
+            SearchTerm = string.Empty;
+            SortOrder = "NgayNhapDesc";
         }
 
         [BindProperty(SupportsGet = true)]
@@ -94,12 +97,8 @@ namespace SuppliesManagement.Pages
                                 .Count()
                         }
                 )
-                .ToList(); // Chuyển thành List trước khi sắp xếp
-
-            // Sắp xếp danh sách sau khi lấy dữ liệu
+                .ToList();
             hoaDonList = SortHoaDonList(hoaDonList, SortOrder);
-
-            // Phân trang sau khi sắp xếp
             HoaDonNhaps = hoaDonList.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
 
             return Page();
