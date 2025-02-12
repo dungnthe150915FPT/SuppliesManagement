@@ -107,7 +107,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 // Set print settings
                 worksheet.PrinterSettings.FitToPage = true;
                 worksheet.PrinterSettings.PaperSize = ePaperSize.A4;
-                worksheet.PrinterSettings.Orientation = eOrientation.Portrait; // Change to portrait orientation
+                worksheet.PrinterSettings.Orientation = eOrientation.Portrait;
 
                 // General formatting
                 worksheet.Cells.Style.Font.Name = "Times New Roman";
@@ -131,13 +131,6 @@ namespace SuppliesManagement.Pages.SuppliesManager
                     ExcelHorizontalAlignment.Center;
                 worksheet.Cells["C2:D3"].Style.Font.Bold = true;
 
-                // Ô tiêu đề "PHIẾU XUẤT KHO"
-                worksheet.Cells["C2:D3"].Merge = true;
-                worksheet.Cells["C2:D3"].Style.WrapText = true;
-                worksheet.Cells["C2:D3"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                worksheet.Cells["C2:D3"].Style.HorizontalAlignment =
-                    ExcelHorizontalAlignment.Center;
-                worksheet.Cells["C2:D3"].Style.Font.Bold = true;
                 var richText = worksheet.Cells["C2"].RichText;
                 var titleText = richText.Add("PHIẾU NHẬP KHO");
                 titleText.Size = 13;
@@ -151,7 +144,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
 
                 worksheet.Cells["E2:H3"].Merge = true;
                 worksheet.Cells["E2:H3"].Value =
-                    "Mẫu số: 02 – VT"
+                    "Mẫu số: 01 – VT"
                     + Environment.NewLine
                     + "(Ban hành theo Thông tư số: 200/2014/TT-BTC Ngày 22/12/2014 của Bộ Tài chính)";
                 worksheet.Cells["E2:H3"].Style.WrapText = true;
@@ -334,7 +327,6 @@ namespace SuppliesManagement.Pages.SuppliesManager
                     "Kế toán",
                     "Giám đốc"
                 };
-
                 string[] signers =
                 {
                     "Dương Mạnh Tuấn",

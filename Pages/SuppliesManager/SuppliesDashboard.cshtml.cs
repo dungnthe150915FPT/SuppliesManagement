@@ -9,12 +9,6 @@ namespace SuppliesManagement.Pages.SuppliesManager
     {
         private readonly SuppliesManagementProjectContext _dbContext;
 
-        /*************  ✨ Codeium Command ⭐  *************/
-        /// <summary>
-        /// Dashboard model for Admin, User.
-        /// </summary>
-        /// <param name="dbContext">The database context.</param>
-        /******  00cbb285-778a-4f5b-940d-3f4dd0648781  *******/
         public SuppliesDashboardModel(SuppliesManagementProjectContext dbContext)
         {
             _dbContext = dbContext;

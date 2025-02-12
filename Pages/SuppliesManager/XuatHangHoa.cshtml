@@ -59,10 +59,12 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Hàng hóa - Ngày nhập - SL còn lại</th>
+                    <th>Hàng hóa</th>
                     <th>Nhóm hàng</th>
                     <th>Đơn vị tính</th>
-                    <th>Đơn giá trước thuế</th>
+                    <th>Ngày nhập</th>
+                    <th>Đơn giá</th>
+                    <th>Số lượng còn lại</th>
                     <th>Số lượng xuất</th>
                 </tr>
             </thead>
@@ -72,10 +74,12 @@
                     @foreach (var hangHoa in Model.HangHoas.Where(h => h.SoLuongConLai > 0))
                     {
                         <tr>
-                            <td>@hangHoa.TenHangHoa - @hangHoa.NgayNhap.ToString("dd/MM/yyyy") - SL còn lại: @hangHoa.SoLuongConLai</td>
+                            <td>@hangHoa.TenHangHoa</td>
                             <td>@hangHoa.NhomHang.Name</td>
                             <td>@hangHoa.DonViTinh.Name</td>
-                            <td>@hangHoa.DonGiaTruocThue.ToString("N0")</td>
+                            <td>@hangHoa.NgayNhap.ToString("dd/MM/yyyy")</td>
+                            <td>@hangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
+                            <td>@hangHoa.SoLuongConLai</td>
                             <td>
                                 <input 
                                     type="number" 

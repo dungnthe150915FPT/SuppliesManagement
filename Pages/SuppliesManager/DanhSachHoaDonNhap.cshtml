@@ -11,16 +11,13 @@
      name="hoadon" placeholder="Nhập tên nhà cung cấp hoặc số hóa đơn...">
     <input type="Submit" value="Search" />
 </div> *@
-    <div class="video-container">
-        <iframe 
-        style="display: none;" 
-            src="https://www.youtube.com/embed/D7IdVRly8AM?autoplay=1" 
-            title="YouTube video player" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen>
-        </iframe>
-    </div>
+<div class="video-container">
+    <iframe style="display: none;" src="https://www.youtube.com/embed/D7IdVRly8AM?autoplay=1"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+    </iframe>
+</div>
 <form method="get">
     <div class="form-group">
         <label for="searchInput">Tìm kiếm:</label>
@@ -48,9 +45,24 @@
             <th>Serial</th>
             <th>Nhà Cung Cấp</th>
             <th>Nhập vào kho</th>
-            <th>Ngày Nhập</th>
-            <th>Tổng Tiền (VNĐ)</th>
-            <th>Số Lượng Mặt hàng</th>
+            <th>
+                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="NgayNhapAsc"
+                    asp-route-pageNumber="@Model.CurrentPage">Ngày Nhập ↑</a> |
+                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="NgayNhapDesc"
+                    asp-route-pageNumber="@Model.CurrentPage">↓</a>
+            </th>
+            <th>
+                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="TongTienAsc"
+                    asp-route-pageNumber="@Model.CurrentPage">Tổng Tiền (VNĐ) ↑</a> |
+                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="TongTienDesc"
+                    asp-route-pageNumber="@Model.CurrentPage">↓</a>
+            </th>
+            <th>
+                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="SoLuongMatHangAsc"
+                    asp-route-pageNumber="@Model.CurrentPage">Số Lượng Mặt hàng ↑</a> |
+                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="SoLuongMatHangDesc"
+                    asp-route-pageNumber="@Model.CurrentPage">↓</a>
+            </th>
         </tr>
     </thead>
     <tbody id="invoiceTableBody">
@@ -138,6 +150,12 @@
             });
     });
 
+    document.getElementById('clearSearch').addEventListener('click', function () {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('startDate').value = '';
+        document.getElementById('endDate').value = '';
+        document.getElementById('searchForm').submit();
+    });
     @* function filterTable(searchTerm) {
         var rows = document.querySelectorAll('tbody tr');
         rows.forEach(function (row) {
