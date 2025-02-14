@@ -67,16 +67,6 @@ namespace SuppliesManagement.Pages.SuppliesManager
                     .OrderByDescending(h => h.TenHangHoa)
                     .ToList() ?? new List<HangHoa>();
 
-            // Kiểm tra danh sách dữ liệu từ form
-            // if (HangHoaIds == null || SoLuongs == null || HangHoaIds.Count != SoLuongs.Count)
-            // {
-            //     ModelState.AddModelError(
-            //         string.Empty,
-            //         "Danh sách hàng hóa hoặc số lượng không hợp lệ."
-            //     );
-            //     return Page();
-            // }
-
             if (HangHoaIds.Count == 0)
             {
                 ModelState.AddModelError(string.Empty, "Không có hàng hóa nào để xuất.");

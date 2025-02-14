@@ -150,7 +150,6 @@ namespace SuppliesManagement.Pages.SuppliesManager
             {
                 await _dbContext.SaveChangesAsync();
                 TempData["SuccessMessage"] = $"Chỉnh sửa thông tin hàng hóa thành công";
-                /*return Page();*/
                 return RedirectToPage("./ChiTietHang", new { id });
             }
             catch (DbUpdateConcurrencyException)

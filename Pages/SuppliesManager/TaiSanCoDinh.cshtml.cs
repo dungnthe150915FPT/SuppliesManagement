@@ -45,24 +45,9 @@ namespace SuppliesManagement.Pages.SuppliesManager
             {
                 query = query.Where(h => h.NgayNhap.Year == year.Value);
             }
-
-            // Tìm kiếm theo tên hàng hóa
-            // if (!string.IsNullOrEmpty(hanghoa))
-            // {
-            //     query = query.Where(
-            //         t =>
-            //             t.TenHangHoa.Contains(hanghoa)
-            //             || t.NhomHang.Name.Contains(hanghoa)
-            //             || t.DonViTinh.Name.Contains(hanghoa)
-            //     );
-            // }
             if (!string.IsNullOrEmpty(Hanghoa))
             {
-                query = query.Where(
-                    t => t.TenHangHoa.Contains(Hanghoa)
-                // || t.NhomHang.Name.Contains(Hanghoa)
-                // || t.DonViTinh.Name.Contains(Hanghoa)
-                );
+                query = query.Where(t => t.TenHangHoa.Contains(Hanghoa));
             }
             // Sắp xếp theo tiêu chí
             switch (sortOrder)

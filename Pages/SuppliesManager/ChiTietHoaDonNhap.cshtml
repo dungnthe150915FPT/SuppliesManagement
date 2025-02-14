@@ -7,13 +7,6 @@
 }
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-<div class="video-container">
-    <iframe style="display: none;" src="https://www.youtube.com/embed/D7IdVRly8AM?autoplay=1"
-        title="YouTube video player" frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-    </iframe>
-</div>
 <h2>Chi Tiết Hóa Đơn Nhập</h2>
 <div class="row">
     <div class="col-md-6">
@@ -120,41 +113,26 @@
                 @foreach (var hangHoa in Model.HoaDonNhap.HangHoas)
                 {
                     <tr>
-                        <td>@hangHoa.TenHangHoa</td>
+                        <td><input class="form-control" type="text" name="TenHangHoa" value="@hangHoa.TenHangHoa" readonly />
+                        </td>
                         <td>@hangHoa.NhomHangName</td>
                         <td>@hangHoa.DonViTinh</td>
-                        <td>@hangHoa.SoLuong</td>
-                        <td>@hangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
-                        <td>@hangHoa.DonGiaSauThue.ToString("#,##0").Replace(',', '.')</td>
-                        <td>@hangHoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
-                        <td>@hangHoa.TongGiaSauThue.ToString("#,##0").Replace(',', '.')</td>
+                        <td><input class="form-control" type="number" name="SoLuong" value="@hangHoa.SoLuong" min="0"
+                                readonly /></td>
+                        <td><input class="form-control" type="number" name="DonGiaTruocThue" value="@hangHoa.DonGiaTruocThue"
+                                readonly min="0" /></td>
+                        <td><input class="form-control" type="number" name="DonGiaSauThue" value="@hangHoa.DonGiaSauThue"
+                                readonly min="0" /></td>
+                        <td><input class="form-control" type="number" name="TongGiaTruocThue" value="@hangHoa.TongGiaTruocThue"
+                                min="0" readonly /></td>
+                        <td><input class="form-control" type="number" name="TongGiaSauThue" value="@hangHoa.TongGiaSauThue"
+                                min="0" readonly /></td>
                     </tr>
                 }
             }
         </tbody>
     </table>
 </div>
-<!-- Modal -->
-@* <div class="modal fade" id="excelPreviewModal" tabindex="-1" role="dialog" aria-labelledby="excelPreviewModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="excelPreviewModalLabel">Phiếu nhập kho</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="excelPreviewContent">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <form method="post" asp-page-handler="Export" asp-route-id="@Model.HoaDonNhap.ID" class="d-inline">
-                    <button type="submit" class="btn btn-primary ml-3">Xuất Excel</button>
-                </form>
-                <button type="button" class="btn btn-primary" onclick="printExcelPreview()">In</button>
-            </div>
-        </div>
-    </div>
-</div> *@
 <!-- Modal -->
 <div class="modal fade" id="excelPreviewModal" tabindex="-1" role="dialog" aria-labelledby="excelPreviewModalLabel"
     aria-hidden="true">
@@ -234,25 +212,25 @@
 
                     const modalContent = document.getElementById('excelPreviewContent');
                     modalContent.innerHTML = `
-                                    <style>
-                                    table { border-collapse: collapse; width: 100%; }
-                                    th, td { 
-                                    border: 1px solid #ddd; 
-                                    padding: 8px; 
-                                    text-align: center; 
-                                    vertical-align: middle;
-                                    }
-                                    th { 
-                                    background-color: #f2f2f2; 
-                                    font-weight: bold;
-                                    }
-                                    .role { font-weight: bold; }
-                                    .left-align { text-align: left; }
-                                    .center-align { text-align: center; }
-                                    .bold { font-weight: bold; }
-                                    </style>
-                                    ${html}
-                                    `;
+                                                    <style>
+                                                    table { border-collapse: collapse; width: 100%; }
+                                                    th, td { 
+                                                    border: 1px solid #ddd; 
+                                                    padding: 8px; 
+                                                    text-align: center; 
+                                                    vertical-align: middle;
+                                                    }
+                                                    th { 
+                                                    background-color: #f2f2f2; 
+                                                    font-weight: bold;
+                                                    }
+                                                    .role { font-weight: bold; }
+                                                    .left-align { text-align: left; }
+                                                    .center-align { text-align: center; }
+                                                    .bold { font-weight: bold; }
+                                                    </style>
+                                                    ${html}
+                                                    `;
 
                     modalContent.querySelectorAll('td, th').forEach(cell => {
                         if (['Người lập phiếu', 'Người nhận hàng', 'Thủ kho', 'Kế toán', 'Giám đốc'].includes(cell.textContent.trim())) {

@@ -10,6 +10,7 @@ using OfficeOpenXml.Style;
 using SuppliesManagement.Models;
 using System.IO;
 using SkiaSharp;
+using System.Globalization;
 
 namespace SuppliesManagement.Pages
 {
@@ -40,6 +41,12 @@ namespace SuppliesManagement.Pages
         [BindProperty(SupportsGet = true)]
         public string SortOrder { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public DateTime? StartDate { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public DateTime? EndDate { get; set; }
+
         public IActionResult OnGet(int pageNumber = 1)
         {
             NhomHangs = dBContext.NhomHangs.ToList();
@@ -57,6 +64,16 @@ namespace SuppliesManagement.Pages
             if (Year.HasValue)
             {
                 query = query.Where(h => h.NgayNhap.Year == Year.Value);
+            }
+
+            if (StartDate.HasValue)
+            {
+                query = query.Where(h => h.NgayNhap >= StartDate.Value);
+            }
+
+            if (EndDate.HasValue)
+            {
+                query = query.Where(h => h.NgayNhap <= EndDate.Value);
             }
 
             if (!string.IsNullOrEmpty(SearchTerm))
