@@ -2,7 +2,22 @@
 @model SuppliesManagement.Pages.SuppliesManager.XuatHangHoaModel
 @{
 }
-<h2>Xuất Dùng Hàng Hóa</h2>
+<style>
+    th a {
+        margin: 0 3px;
+        color: #333;
+    }
+
+    th a:hover {
+        color: #007bff;
+    }
+
+    th .separator {
+        color: #ccc;
+        margin: 0 2px;
+    }
+</style>
+<h2>Xuất Hàng Hóa</h2>
 <link href="~/css/nhapmuahanghoa.css" rel="stylesheet" />
 <form method="post">
     <div class="form-group">
@@ -29,7 +44,7 @@
         <label for="NguoiNhanId">Người nhận:</label>
         <select class="form-control" name="NguoiNhanId" required>
             @if (Model.Accounts != null && Model.Accounts.Any())
-            { 
+            {
                 @foreach (var account in Model.Accounts)
                 {
                     <option value="@account.Id">@account.Username - @account.Fullname</option>
@@ -46,13 +61,23 @@
         <input type="text" class="form-control" name="LyDoNhan" required>
     </div>
     <div class="table-responsive">
+        <button type="submit" class="btn btn-primary">Xuất hàng hóa</button>
         <table class="table">
             <thead>
                 <tr>
                     <th>Hàng hóa</th>
                     <th>Nhóm hàng</th>
                     <th>Đơn vị tính</th>
-                    <th>Ngày nhập</th>
+                    <th>
+                        Ngày nhập
+                        <a asp-page="./XuatHangHoa" asp-route-sortOrder="date_asc" class="text-decoration-none">
+                            @(Model.SortOrder == "date_asc" ? "▲" : "△")
+                        </a>
+                        |
+                        <a asp-page="./XuatHangHoa" asp-route-sortOrder="date_desc" class="text-decoration-none">
+                            @(Model.SortOrder == "date_desc" ? "▼" : "▽")
+                        </a>
+                    </th>
                     <th>Đơn giá</th>
                     <th>Số lượng còn lại</th>
                     <th>Số lượng xuất</th>
@@ -71,13 +96,8 @@
                             <td>@hangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
                             <td>@hangHoa.SoLuongConLai</td>
                             <td>
-                                <input 
-                                    type="number" 
-                                    name="SoLuongs[@hangHoa.Id]" 
-                                    class="form-control" 
-                                    min="1" 
-                                    max="@hangHoa.SoLuongConLai" 
-                                    placeholder="Nhập SL xuất" />
+                                <input type="number" name="SoLuongs[@hangHoa.Id]" class="form-control" min="1"
+                                    max="@hangHoa.SoLuongConLai" placeholder="Nhập SL xuất" />
                             </td>
                         </tr>
                     }
@@ -85,13 +105,12 @@
                 else
                 {
                     <tr>
-                        <td colspan="5">Không có hàng hóa đủ số lượng trong kho</td>
+                        <td colspan="7">Không có hàng hóa đủ số lượng trong kho</td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
-    <button type="submit" class="btn btn-primary">Xuất hàng hóa</button>
 </form>
 @if (TempData["SuccessMessage"] != null)
 {
@@ -152,7 +171,7 @@
 
         document.getElementById('ThanhTien').value = totalThanhTien.toFixed(0);
     }
-function updateTotalTongTien() {
+    function updateTotalTongTien() {
         const rows = document.querySelectorAll('#hangHoaTableBody tr');
         let totalTongTien = 0;
 

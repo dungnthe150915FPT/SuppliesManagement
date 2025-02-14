@@ -18,7 +18,10 @@ namespace SuppliesManagement.Pages.SuppliesManager
         public List<Account> Accounts { get; set; }
         public List<HangHoa> HangHoas { get; set; }
 
-        public IActionResult OnGet()
+        [BindProperty(SupportsGet = true)]
+        public string SortOrder { get; set; }
+
+        public IActionResult OnGet(string sortOrder)
         {
             var role = HttpContext.Session.GetInt32("RoleId");
             if (role != 2 && role != 1)
@@ -29,13 +32,28 @@ namespace SuppliesManagement.Pages.SuppliesManager
             KhoHangs = _dbContext.KhoHangs?.ToList() ?? new List<KhoHang>();
             Accounts =
                 _dbContext.Accounts?.Where(a => a.RoleId == 3).ToList() ?? new List<Account>();
-            HangHoas =
-                _dbContext.HangHoas
-                    .Where(h => h.SoLuongConLai > 0)
-                    ?.Include(h => h.NhomHang)
-                    .Include(h => h.DonViTinh)
-                    .OrderByDescending(h => h.TenHangHoa)
-                    .ToList() ?? new List<HangHoa>();
+            IQueryable<HangHoa> query = _dbContext.HangHoas
+                .Where(h => h.SoLuongConLai > 0)
+                .Include(h => h.NhomHang)
+                .Include(h => h.DonViTinh);
+
+            SortOrder = sortOrder;
+
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    query = query.OrderByDescending(h => h.NgayNhap);
+                    break;
+                case "date_asc":
+                    query = query.OrderBy(h => h.NgayNhap);
+                    break;
+                default:
+                    query = query.OrderByDescending(h => h.NgayNhap);
+                    break;
+            }
+
+            HangHoas = query.ToList();
+
             return Page();
         }
 
@@ -48,11 +66,11 @@ namespace SuppliesManagement.Pages.SuppliesManager
         )
         {
             // Kiểm tra ModelState hợp lệ
-/*            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError(string.Empty, "Dữ liệu đầu vào không hợp lệ.");
-                return Page();
-            }*/
+            /*            if (!ModelState.IsValid)
+                        {
+                            ModelState.AddModelError(string.Empty, "Dữ liệu đầu vào không hợp lệ.");
+                            return Page();
+                        }*/
 
             // Kiểm tra danh sách số lượng
             if (SoLuongs == null || SoLuongs.Count == 0)
