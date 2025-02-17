@@ -160,7 +160,6 @@ namespace SuppliesManagement.Pages
                 CaptchaGenerated = GenerateCaptcha();
                 HttpContext.Session.SetString("CaptchaGenerated", CaptchaGenerated);
             }
-
             TempData["ErrorMessage"] = "Tên tài khoản hoặc mật khẩu không đúng!";
             return Page();
         }

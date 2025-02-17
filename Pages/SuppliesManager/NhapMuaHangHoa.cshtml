@@ -2,7 +2,7 @@
 @using SuppliesManagement.Models.Request
 @model SuppliesManagement.Pages.NhapMuaHangHoaModel
 @{
-    //ViewData["Title"] = "Nhập Mua Hàng Hóa";
+    ViewData["Title"] = "Nhập Hàng Hóa";
     //var success = ViewData["Success"]?.ToString();
     var hangHoaListJson = TempData["HangHoaList"] as string;
     List<HangHoaInputModel> hangHoaList = !string.IsNullOrEmpty(hangHoaListJson)

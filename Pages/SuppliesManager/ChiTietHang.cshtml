@@ -1,6 +1,7 @@
 ﻿@page
 @model SuppliesManagement.Pages.SuppliesManager.ChiTietHangModel
 @{
+    ViewData["Title"] = @Model.HangHoa?.TenHangHoa ?? "Chi Tiết Hàng Hóa";
 }
 @{
     var images = new List<string>();

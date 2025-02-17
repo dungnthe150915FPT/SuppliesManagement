@@ -1,6 +1,7 @@
 ﻿@page
 @model SuppliesManagement.Pages.SuppliesManager.XuatHangHoaModel
 @{
+    ViewData["Title"] = "Xuất Hàng Hóa";
 }
 <style>
     th a {
@@ -61,7 +62,11 @@
         <input type="text" class="form-control" name="LyDoNhan" required>
     </div>
     <div class="table-responsive">
-        <button type="submit" class="btn btn-primary">Xuất hàng hóa</button>
+        @* <button type="submit" class="btn btn-primary">Xuất hàng hóa</button> *@
+        <br />
+        <div class="d-flex justify-content-end mb-3">
+            <button type="submit" class="btn btn-primary">Xuất hàng hóa</button>
+        </div>
         <table class="table">
             <thead>
                 <tr>
@@ -78,9 +83,29 @@
                             @(Model.SortOrder == "date_desc" ? "▼" : "▽")
                         </a>
                     </th>
-                    <th>Đơn giá</th>
-                    <th>Số lượng còn lại</th>
-                    <th>Số lượng xuất</th>
+                    @* <th>Đơn giá</th> *@
+                    <th>
+                        Đơn giá
+                        <a asp-page="./XuatHangHoa" asp-route-sortOrder="dongia_asc" class="text-decoration-none">
+                            @(Model.SortOrder == "dongia_asc" ? "▲" : "△")
+                        </a>
+                        |
+                        <a asp-page="./XuatHangHoa" asp-route-sortOrder="dongia_desc" class="text-decoration-none">
+                            @(Model.SortOrder == "dongia_desc" ? "▼" : "▽")
+                        </a>
+                    </th>
+                    @* <th>Số lượng còn lại</th> *@
+                    <th>
+                        SL còn lại
+                        <a asp-page="./XuatHangHoa" asp-route-sortOrder="slcl_asc" class="text-decoration-none">
+                            @(Model.SortOrder == "slcl_asc" ? "▲" : "△")
+                        </a>
+                        |
+                        <a asp-page="./XuatHangHoa" asp-route-sortOrder="slcl_desc" class="text-decoration-none">
+                            @(Model.SortOrder == "slcl_desc" ? "▼" : "▽")
+                        </a>
+                    </th>
+                    <th>SL xuất</th>
                 </tr>
             </thead>
             <tbody>

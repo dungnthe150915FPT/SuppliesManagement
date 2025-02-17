@@ -26,7 +26,7 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = ".CaptchaSession";
-    options.IdleTimeout = TimeSpan.FromMinutes(10);
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -41,6 +41,7 @@ builder.Services
         }
     );
 builder.Services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
+// builder.Services.AddScoped<ISignInService, SignInService>();
 
 builder.Services.AddAuthorization(
 /*    options =>

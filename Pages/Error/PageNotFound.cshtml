@@ -1,7 +1,7 @@
 ﻿@page
 @model ErrorModel
 @{
-     ViewData["Title"] = "Page Not Found";
+     ViewData["Title"] = "Lỗi 404: Page Not Found";
      Layout = null;
 }
 <link href="~/css/Error.css" rel="stylesheet" />
@@ -39,12 +39,20 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <div class="page-wrap d-flex flex-row align-items-center">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12 text-center">
-                <span class="display-1 d-block">404</span>
-                <div class="mb-4 lead">Trang bạn truy cập vào không tồn tại</div>
-            </div>
-        </div>
-    </div>
+     <div class="container">
+          <div class="row justify-content-center">
+               <div class="col-md-12 text-center">
+                    <span class="display-1 d-block">404</span>
+                    <div class="mb-4 lead">Trang bạn truy cập vào không tồn tại</div>
+                    <a onclick="goBack()" class="btn btn-secondary">
+                         <i class="bi bi-arrow-left-circle"></i> Quay Lại
+                    </a>
+               </div>
+          </div>
+     </div>
 </div>
+<script>
+     function goBack() {
+          window.history.back();
+     }
+</script>

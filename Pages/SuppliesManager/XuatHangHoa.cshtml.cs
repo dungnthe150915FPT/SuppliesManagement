@@ -47,6 +47,18 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 case "date_asc":
                     query = query.OrderBy(h => h.NgayNhap);
                     break;
+                case "dongia_asc":
+                    query = query.OrderBy(h => h.DonGiaTruocThue);
+                    break;
+                case "dongia_desc":
+                    query = query.OrderByDescending(h => h.DonGiaTruocThue);
+                    break;
+                case "slcl_desc":
+                    query = query.OrderByDescending(h => h.SoLuongConLai);
+                    break;
+                case "slcl_asc":
+                    query = query.OrderBy(h => h.SoLuongConLai);
+                    break;
                 default:
                     query = query.OrderByDescending(h => h.NgayNhap);
                     break;

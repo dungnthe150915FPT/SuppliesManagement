@@ -1,6 +1,7 @@
 ﻿@page "{id:guid}"
 @model SuppliesManagement.Pages.Admin.UserDetailModel
 @{
+    ViewData["Title"] = @Model.Account.Fullname;
 }
 <h2>Thông tin User</h2>
 <form method="post">
