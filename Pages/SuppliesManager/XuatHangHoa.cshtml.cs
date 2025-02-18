@@ -85,9 +85,11 @@ namespace SuppliesManagement.Pages.SuppliesManager
                         }*/
 
             // Kiểm tra danh sách số lượng
-            if (SoLuongs == null || SoLuongs.Count == 0)
+            if (SoLuongs == null || SoLuongs.Count == 0 || !SoLuongs.Any(s => s.Value > 0))
             {
                 ModelState.AddModelError(string.Empty, "Không có hàng hóa nào được chọn để xuất.");
+                TempData["Error"] = "Không có hàng hóa nào được chọn để xuất.";
+                OnGet(null);
                 return Page();
             }
 

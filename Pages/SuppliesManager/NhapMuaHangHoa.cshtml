@@ -3,16 +3,13 @@
 @model SuppliesManagement.Pages.NhapMuaHangHoaModel
 @{
     ViewData["Title"] = "Nhập Hàng Hóa";
-    //var success = ViewData["Success"]?.ToString();
     var hangHoaListJson = TempData["HangHoaList"] as string;
     List<HangHoaInputModel> hangHoaList = !string.IsNullOrEmpty(hangHoaListJson)
     ? System.Text.Json.JsonSerializer.Deserialize<List<HangHoaInputModel>>(hangHoaListJson)
     : new List<HangHoaInputModel>();
 }
 <link href="~/css/nhapmuahanghoa.css" rel="stylesheet" />
-<h2>Nhập Hàng Hóa</h2>
-@*<a href="./ImportHoaDonNhap">Import hóa đơn nhập</a>*@
-
+<h1>Nhập Hàng Hóa</h1>
 <form asp-page-handler="ImportHoaDon" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label for="fileXml">Chọn file hóa đơn (XML):</label>
@@ -172,14 +169,14 @@
                         </td>
                         <td>
                             <input type="text" class="form-control" name="hangHoaModels[@i].TongGiaTruocThue"
-                                value="@(hangHoa.DonGiaTruocThue * hangHoa.SoLuong)" readonly>
+                                value="@(hangHoa.DonGiaTruocThue* hangHoa.SoLuong)" readonly>
                         </td>
                         <td>
                             <input type="text" class="form-control" name="hangHoaModels[@i].TongGiaSauThue" value="@((hangHoa.DonGiaTruocThue * hangHoa.SoLuong)
-+ (hangHoa.DonGiaTruocThue * hangHoa.SoLuong * hangHoa.VAT / 100))" readonly>
-                        </td>
-                    </tr>
-                }
+    +(hangHoa.DonGiaTruocThue * hangHoa.SoLuong * hangHoa.VAT / 100))" readonly>
+                    </td>
+                </tr>
+                                }
             </tbody>
         </table>
         <button type="button" class="btn btn-secondary" id="addRow">Thêm Hàng Hóa</button>
@@ -208,81 +205,81 @@
 
         // Dynamically add new row content
         newRow.innerHTML = `
-            <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TenHangHoa" required></td>
-            <td>
-                <select class="form-control" name="hangHoaModels[${hangHoaCount}].NhomHangID" required>
-    @foreach (var nhomHang in Model.NhomHangs)
-    {
+        <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TenHangHoa" required></td>
+        <td>
+            <select class="form-control" name="hangHoaModels[${hangHoaCount}].NhomHangID" required>
+@foreach (var nhomHang in Model.NhomHangs)
+{
                                                                                                                                         <option value="@nhomHang.Id">@nhomHang.Name</option>
-    }
-                </select>
-            </td>
-            <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].SoLuong" min="1" required oninput="calculateTotals(this.closest('tr'))"></td>
-            <td>
-                <select class="form-control" name="hangHoaModels[${hangHoaCount}].DonViTinhID" required>
-    @foreach (var donViTinh in Model.DonViTinhs)
-    {
+}
+            </select>
+        </td>
+        <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].SoLuong" min="1" required oninput="calculateTotals(this.closest('tr'))"></td>
+        <td>
+            <select class="form-control" name="hangHoaModels[${hangHoaCount}].DonViTinhID" required>
+@foreach (var donViTinh in Model.DonViTinhs)
+{
                                                                                                                                         <option value="@donViTinh.Id">@donViTinh.Name</option>
-    }
-                </select>
-            </td>
-    @* image *@
-    @* <td>
-                <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile" accept="image/*" onchange="previewImage(this, ${hangHoaCount})">
-                <img id="imagePreview_${hangHoaCount}" src="#" alt="Preview" style="max-width: 100px; max-height: 100px; display: none;" />
-            </td> *@
-    @* <td>
-                <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile1" accept="image/*" onchange="previewImage(this, ${hangHoaCount}, 1)">
-                <img id="imagePreview_${hangHoaCount}_1" src="#" alt="Preview 1" style="max-width: 100px; max-height: 100px; display: none;" />
-            </td>
-            <td>
-                <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile2" accept="image/*" onchange="previewImage(this, ${hangHoaCount}, 2)">
-                <img id="imagePreview_${hangHoaCount}_2" src="#" alt="Preview 2" style="max-width: 100px; max-height: 100px; display: none;" />
-            </td>
-            <td>
-                <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile3" accept="image/*" onchange="previewImage(this, ${hangHoaCount}, 3)">
-                <img id="imagePreview_${hangHoaCount}_3" src="#" alt="Preview 3" style="max-width: 100px; max-height: 100px; display: none;" />
-            </td> *@
+}
+            </select>
+        </td>
+@* image *@
+@* <td>
+            <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile" accept="image/*" onchange="previewImage(this, ${hangHoaCount})">
+            <img id="imagePreview_${hangHoaCount}" src="#" alt="Preview" style="max-width: 100px; max-height: 100px; display: none;" />
+        </td> *@
+@* <td>
+            <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile1" accept="image/*" onchange="previewImage(this, ${hangHoaCount}, 1)">
+            <img id="imagePreview_${hangHoaCount}_1" src="#" alt="Preview 1" style="max-width: 100px; max-height: 100px; display: none;" />
+        </td>
+        <td>
+            <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile2" accept="image/*" onchange="previewImage(this, ${hangHoaCount}, 2)">
+            <img id="imagePreview_${hangHoaCount}_2" src="#" alt="Preview 2" style="max-width: 100px; max-height: 100px; display: none;" />
+        </td>
+        <td>
+            <input type="file" class="form-control" name="hangHoaModels[${hangHoaCount}].ImageFile3" accept="image/*" onchange="previewImage(this, ${hangHoaCount}, 3)">
+            <img id="imagePreview_${hangHoaCount}_3" src="#" alt="Preview 3" style="max-width: 100px; max-height: 100px; display: none;" />
+        </td> *@
 
 <td>
-    <input 
-        type="file" 
-        class="form-control" 
-        name="hangHoaModels[${hangHoaCount}].Images" 
-        accept="image/*" 
-        multiple 
-        onchange="validateAndPreviewImages(this, ${hangHoaCount})">
-    <div 
-        id="imagePreviews_${hangHoaCount}" 
-        class="image-previews" 
-        style="display: flex; gap: 5px; margin-top: 10px;">
-    </div>
+<input 
+    type="file" 
+    class="form-control" 
+    name="hangHoaModels[${hangHoaCount}].Images" 
+    accept="image/*" 
+    multiple 
+    onchange="validateAndPreviewImages(this, ${hangHoaCount})">
+<div 
+    id="imagePreviews_${hangHoaCount}" 
+    class="image-previews" 
+    style="display: flex; gap: 5px; margin-top: 10px;">
+</div>
 </td>
-            <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].DonGiaTruocThue" min="0" required oninput="calculateTotals(this.closest('tr'))"></td>
-            <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].VAT" min="0" max="10" required oninput="calculateTotals(this.closest('tr'))"></td>
-            <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].DonGiaSauThue" readonly></td>
-            <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TongGiaTruocThue" readonly></td>
-            <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TongGiaSauThue" readonly></td>
+        <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].DonGiaTruocThue" min="0" required oninput="calculateTotals(this.closest('tr'))"></td>
+        <td><input type="number" class="form-control" name="hangHoaModels[${hangHoaCount}].VAT" min="0" max="10" required oninput="calculateTotals(this.closest('tr'))"></td>
+        <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].DonGiaSauThue" readonly></td>
+        <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TongGiaTruocThue" readonly></td>
+        <td><input type="text" class="form-control" name="hangHoaModels[${hangHoaCount}].TongGiaSauThue" readonly></td>
 <td><button type="button" class="btn btn-danger btn-sm remove-row">X</button></td>        
-        `;
+    `;
 
         tableBody.appendChild(newRow);
         hangHoaCount++; // Increment row counter for the next addition
         setupRow(newRow); // Attach event listeners for the new row
 
 
-newRow.querySelector('.remove-row').addEventListener('click', function() {
+        newRow.querySelector('.remove-row').addEventListener('click', function () {
             tableBody.removeChild(newRow);
         });
     });
 
-// Add remove buttons to existing rows
+    // Add remove buttons to existing rows
     document.querySelectorAll('#hangHoaTableBody tr').forEach(row => {
         const removeButton = document.createElement('td');
         removeButton.innerHTML = '<button type="button" class="btn btn-danger btn-sm remove-row">X</button>';
         row.appendChild(removeButton);
 
-        removeButton.querySelector('.remove-row').addEventListener('click', function() {
+        removeButton.querySelector('.remove-row').addEventListener('click', function () {
             row.parentNode.removeChild(row);
         });
     });

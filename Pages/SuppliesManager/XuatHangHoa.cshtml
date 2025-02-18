@@ -3,138 +3,151 @@
 @{
     ViewData["Title"] = "Xuất Hàng Hóa";
 }
-<style>
-    th a {
-        margin: 0 3px;
-        color: #333;
-    }
-
-    th a:hover {
-        color: #007bff;
-    }
-
-    th .separator {
-        color: #ccc;
-        margin: 0 2px;
-    }
-</style>
-<h2>Xuất Hàng Hóa</h2>
-<link href="~/css/nhapmuahanghoa.css" rel="stylesheet" />
-<form method="post">
-    <div class="form-group">
-        <label for="KhoHang">Kho xuất:</label>
-        <select class="form-control" name="KhoHangId" required>
-            @if (Model.KhoHangs != null && Model.KhoHangs.Any())
-            {
-                @foreach (var kho in Model.KhoHangs)
-                {
-                    <option value="@kho.Id">@kho.Ten - @kho.DiaChi</option>
-                }
-            }
-            else
-            {
-                <option disabled>Không có kho hàng</option>
-            }
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="NgayNhan">Ngày xuất:</label>
-        <input type="date" class="form-control" name="NgayNhan" required>
-    </div>
-    <div class="form-group">
-        <label for="NguoiNhanId">Người nhận:</label>
-        <select class="form-control" name="NguoiNhanId" required>
-            @if (Model.Accounts != null && Model.Accounts.Any())
-            {
-                @foreach (var account in Model.Accounts)
-                {
-                    <option value="@account.Id">@account.Username - @account.Fullname</option>
-                }
-            }
-            else
-            {
-                <option disabled>Không có người nhận</option>
-            }
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="LyDoNhan">Lý do xuất:</label>
-        <input type="text" class="form-control" name="LyDoNhan" required>
-    </div>
-    <div class="table-responsive">
-        @* <button type="submit" class="btn btn-primary">Xuất hàng hóa</button> *@
-        <br />
-        <div class="d-flex justify-content-end mb-3">
-            <button type="submit" class="btn btn-primary">Xuất hàng hóa</button>
+<h1>Xuất Hàng Hóa</h1>
+<link href="~/css/SuppliesManager/XuatDungHangHoa.css" rel="stylesheet" />
+<form method="post" id="xuatHangHoaForm">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-file-export"></i> Thông tin xuất hàng</h5>
         </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Hàng hóa</th>
-                    <th>Nhóm hàng</th>
-                    <th>Đơn vị tính</th>
-                    <th>
-                        Ngày nhập
-                        <a asp-page="./XuatHangHoa" asp-route-sortOrder="date_asc" class="text-decoration-none">
-                            @(Model.SortOrder == "date_asc" ? "▲" : "△")
-                        </a>
-                        |
-                        <a asp-page="./XuatHangHoa" asp-route-sortOrder="date_desc" class="text-decoration-none">
-                            @(Model.SortOrder == "date_desc" ? "▼" : "▽")
-                        </a>
-                    </th>
-                    @* <th>Đơn giá</th> *@
-                    <th>
-                        Đơn giá
-                        <a asp-page="./XuatHangHoa" asp-route-sortOrder="dongia_asc" class="text-decoration-none">
-                            @(Model.SortOrder == "dongia_asc" ? "▲" : "△")
-                        </a>
-                        |
-                        <a asp-page="./XuatHangHoa" asp-route-sortOrder="dongia_desc" class="text-decoration-none">
-                            @(Model.SortOrder == "dongia_desc" ? "▼" : "▽")
-                        </a>
-                    </th>
-                    @* <th>Số lượng còn lại</th> *@
-                    <th>
-                        SL còn lại
-                        <a asp-page="./XuatHangHoa" asp-route-sortOrder="slcl_asc" class="text-decoration-none">
-                            @(Model.SortOrder == "slcl_asc" ? "▲" : "△")
-                        </a>
-                        |
-                        <a asp-page="./XuatHangHoa" asp-route-sortOrder="slcl_desc" class="text-decoration-none">
-                            @(Model.SortOrder == "slcl_desc" ? "▼" : "▽")
-                        </a>
-                    </th>
-                    <th>SL xuất</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.HangHoas != null && Model.HangHoas.Any())
-                {
-                    @foreach (var hangHoa in Model.HangHoas.Where(h => h.SoLuongConLai > 0))
-                    {
+
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="KhoHang" class="form-label">Kho xuất:</label>
+                    <select class="form-select" name="KhoHangId" required>
+                        @if (Model.KhoHangs != null && Model.KhoHangs.Any())
+                        {
+                            @foreach (var kho in Model.KhoHangs)
+                            {
+                                <option value="@kho.Id">@kho.Ten - @kho.DiaChi</option>
+                            }
+                        }
+                        else
+                        {
+                            <option disabled>Không có kho hàng</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="NgayNhan" class="form-label">Ngày xuất:</label>
+                    <input type="date" class="form-control" name="NgayNhan" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="NguoiNhanId" class="form-label">Người nhận:</label>
+                    <select class="form-select" name="NguoiNhanId" required>
+                        @if (Model.Accounts != null && Model.Accounts.Any())
+                        {
+                            @foreach (var account in Model.Accounts)
+                            {
+                                <option value="@account.Id">@account.Username - @account.Fullname</option>
+                            }
+                        }
+                        else
+                        {
+                            <option disabled>Không có người nhận</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="LyDoNhan" class="form-label">Lý do xuất:</label>
+                    <input type="text" class="form-control" name="LyDoNhan" required>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    @* <button type="submit" class="btn btn-primary" id="submitButton">
+                        <i class="fas fa-file-export"></i> Xuất hàng hóa
+                    </button> *@
+                    <div class="d-flex justify-content-end mb-3">
+                        <button type="submit" class="btn btn-primary">Xuất hàng hóa</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0"><i class="fas fa-list"></i> Danh sách hàng hóa</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
                         <tr>
-                            <td>@hangHoa.TenHangHoa</td>
-                            <td>@hangHoa.NhomHang.Name</td>
-                            <td>@hangHoa.DonViTinh.Name</td>
-                            <td>@hangHoa.NgayNhap.ToString("dd/MM/yyyy")</td>
-                            <td>@hangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
-                            <td>@hangHoa.SoLuongConLai</td>
-                            <td>
-                                <input type="number" name="SoLuongs[@hangHoa.Id]" class="form-control" min="1"
-                                    max="@hangHoa.SoLuongConLai" placeholder="Nhập SL xuất" />
-                            </td>
+                            <th>Hàng hóa</th>
+                            <th>Nhóm hàng</th>
+                            <th>Đơn vị tính</th>
+                            <th>
+                                Ngày nhập
+                                <a asp-page="./XuatHangHoa" asp-route-sortOrder="date_asc" class="text-decoration-none">
+                                    @(Model.SortOrder == "date_asc" ? "▲" : "△")
+                                </a>
+                                |
+                                <a asp-page="./XuatHangHoa" asp-route-sortOrder="date_desc"
+                                    class="text-decoration-none">
+                                    @(Model.SortOrder == "date_desc" ? "▼" : "▽")
+                                </a>
+                            </th>
+                            @* <th>Đơn giá</th> *@
+                            <th>
+                                Đơn giá
+                                <a asp-page="./XuatHangHoa" asp-route-sortOrder="dongia_asc"
+                                    class="text-decoration-none">
+                                    @(Model.SortOrder == "dongia_asc" ? "▲" : "△")
+                                </a>
+                                |
+                                <a asp-page="./XuatHangHoa" asp-route-sortOrder="dongia_desc"
+                                    class="text-decoration-none">
+                                    @(Model.SortOrder == "dongia_desc" ? "▼" : "▽")
+                                </a>
+                            </th>
+                            @* <th>Số lượng còn lại</th> *@
+                            <th>
+                                SL còn lại
+                                <a asp-page="./XuatHangHoa" asp-route-sortOrder="slcl_asc" class="text-decoration-none">
+                                    @(Model.SortOrder == "slcl_asc" ? "▲" : "△")
+                                </a>
+                                |
+                                <a asp-page="./XuatHangHoa" asp-route-sortOrder="slcl_desc"
+                                    class="text-decoration-none">
+                                    @(Model.SortOrder == "slcl_desc" ? "▼" : "▽")
+                                </a>
+                            </th>
+                            <th>SL xuất</th>
                         </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="7">Không có hàng hóa đủ số lượng trong kho</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody>
+                        @if (Model.HangHoas != null && Model.HangHoas.Any())
+                        {
+                            @foreach (var hangHoa in Model.HangHoas.Where(h => h.SoLuongConLai > 0))
+                            {
+                                <tr>
+                                    <td>@hangHoa.TenHangHoa</td>
+                                    <td>@hangHoa.NhomHang.Name</td>
+                                    <td>@hangHoa.DonViTinh.Name</td>
+                                    <td>@hangHoa.NgayNhap.ToString("dd/MM/yyyy")</td>
+                                    <td>@hangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
+                                    <td>@hangHoa.SoLuongConLai</td>
+                                    <td>
+                                        <input type="number" name="SoLuongs[@hangHoa.Id]" class="form-control" min="1"
+                                            max="@hangHoa.SoLuongConLai" placeholder="Nhập SL xuất" />
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7">Không có hàng hóa đủ số lượng trong kho</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </form>
 @if (TempData["SuccessMessage"] != null)
@@ -150,77 +163,5 @@
     </div>
 }
 
-<script>
-    function fillHangHoaDetails(selectElement) {
-        const selectedOption = selectElement.options[selectElement.selectedIndex];
-        const nhomHang = selectedOption.getAttribute("data-nhom-hang");
-        const donViTinh = selectedOption.getAttribute("data-don-vi-tinh");
-        const giaTruocThue = parseFloat(selectedOption.getAttribute("data-gia-truoc-thue"));
-        const vat = parseFloat(selectedOption.getAttribute("data-vat"));
-
-        const row = selectElement.closest("tr");
-
-        row.querySelector('input[name="NhomHang[]"]').value = nhomHang || "";
-        row.querySelector('input[name="DonViTinh[]"]').value = donViTinh || "";
-        row.querySelector('input[name="GiaTriTruocThue[]"]').value = giaTruocThue.toFixed(0);
-        row.querySelector('input[name="VAT[]"]').value = vat.toFixed(0);
-
-        calculateRowTotals(row);
-    }
-
-    function calculateRowTotals(row) {
-        const soLuong = parseFloat(row.querySelector('input[name="SoLuongs[]"]').value) || 0;
-        const giaTruocThue = parseFloat(row.querySelector('input[name="GiaTriTruocThue[]"]').value) || 0;
-        const vat = parseFloat(row.querySelector('input[name="VAT[]"]').value) || 0;
-
-        const giaSauThue = giaTruocThue * (1 + vat / 100);
-        const tienHang = soLuong * giaTruocThue;
-        const tongTien = soLuong * giaSauThue;
-
-        row.querySelector('input[name="GiaTriSauThue[]"]').value = giaSauThue.toFixed(0);
-        row.querySelector('input[name="TienHang[]"]').value = tienHang.toFixed(0);
-        row.querySelector('input[name="TongTien[]"]').value = tongTien.toFixed(0);
-
-        updateTotalThanhTien();
-        updateTotalTongTien();
-    }
-
-    function updateTotalThanhTien() {
-        const rows = document.querySelectorAll('#hangHoaTableBody tr');
-        let totalThanhTien = 0;
-
-        rows.forEach(row => {
-            const tienHang = parseFloat(row.querySelector('input[name="TienHang[]"]').value) || 0;
-            totalThanhTien += tienHang;
-        });
-
-        document.getElementById('ThanhTien').value = totalThanhTien.toFixed(0);
-    }
-    function updateTotalTongTien() {
-        const rows = document.querySelectorAll('#hangHoaTableBody tr');
-        let totalTongTien = 0;
-
-        rows.forEach(row => {
-            const tienHang = parseFloat(row.querySelector('input[name="TongTien[]"]').value) || 0;
-            totalTongTien += tienHang;
-        });
-
-        document.getElementById('TongTien').value = totalTongTien.toFixed(0);
-    }
-    document.addEventListener("DOMContentLoaded", function () {
-        const successAlert = document.getElementById("successAlert");
-        if (successAlert) {
-            setTimeout(() => {
-                successAlert.style.display = "none";
-            }, 10000);
-        }
-    });
-    document.addEventListener("DOMContentLoaded", function () {
-        const errorAlert = document.getElementById("errorAlert");
-        if (errorAlert) {
-            setTimeout(() => {
-                errorAlert.style.display = "none";
-            }, 10000);
-        }
-    });
+<script src="~/js/SuppliesManager/XuatDungHangHoa.js">
 </script>

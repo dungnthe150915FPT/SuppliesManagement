@@ -1,36 +1,59 @@
-﻿body {
+﻿th a {
+  margin: 0 3px;
+  color: #333;
 }
+
+th a:hover {
+  color: #007bff;
+}
+
+th .separator {
+  color: #ccc;
+  margin: 0 2px;
+}
+
 #successAlert {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1050;
-    animation: fadein 1s;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
+  animation: fadein 1s;
 }
 
 @keyframes fadein {
-    from {
-        opacity: 0;
-    }
+  from {
+    opacity: 0;
+  }
 
-    to {
-        opacity: 1;
-    }
+  to {
+    opacity: 1;
+  }
 }
 #errorAlert {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1050;
-    animation: fadein 1s;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
+  animation: fadein 1s;
 }
 
 @keyframes fadein {
-    from {
-        opacity: 0;
-    }
+  from {
+    opacity: 0;
+  }
 
-    to {
-        opacity: 1;
-    }
+  to {
+    opacity: 1;
+  }
+}
+.card-header h5 {
+    margin-bottom: 0;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+#searchForm .btn {
+    margin-right: 10px;
 }

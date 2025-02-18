@@ -3,8 +3,86 @@
 @{
     ViewData["Title"] = "Danh Sách Tài Khoản";
 }
+<link href="~/css/Admin/DanhSachTaiKhoan.css" rel="stylesheet" />
 <h1>Danh Sách Tài Khoản</h1>
-<a class="btn btn-primary" asp-page="./AddUser">Thêm mới tài khoản</a>
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-search"></i> Tìm kiếm người dùng</h5>
+    </div>
+    <div class="card-body">
+        <form method="get" id="searchForm">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="searchInput" class="form-label">Tên tài khoản</label>
+                    <input id="searchInput" class="form-control" type="text" name="SearchTerm" value="@Model.SearchTerm"
+                        placeholder="Nhập tên tài khoản" />
+                </div>
+                <div class="col-md-4">
+                    <label for="phoneInput" class="form-label">Số điện thoại</label>
+                    <input id="phoneInput" class="form-control" type="text" name="Phone" value="@Model.Phone"
+                        placeholder="Nhập số điện thoại" />
+                </div>
+                <div class="col-md-4">
+                    <label for="fullNameInput" class="form-label">Họ tên</label>
+                    <input id="fullNameInput" class="form-control" type="text" name="Fullname" value="@Model.Fullname"
+                        placeholder="Nhập họ tên" />
+                </div>
+                <div class="col-md-4">
+                    <label for="emailInput" class="form-label">Gmail</label>
+                    <input id="emailInput" class="form-control" type="text" name="Email" value="@Model.Email"
+                        placeholder="Nhập địa chỉ gmail" />
+                </div>
+                <div class="col-md-2">
+                    <label for="genderSelect" class="form-label">Giới tính</label>
+                    <select id="genderSelect" name="Gender" class="form-select">
+                        <option value="">-- Tất cả --</option>
+                        <option value="true" selected="@(Model.Gender == true)">Nam</option>
+                        <option value="false" selected="@(Model.Gender == false)">Nữ</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="roleSelect" class="form-label">Quyền</label>
+                    <select id="roleSelect" name="RoleId" class="form-select">
+                        <option value="">-- Tất cả --</option>
+                        @foreach (var role in Model.Roles)
+                        {
+                            @if (Model.RoleId.ToString() == role.Value)
+                            {
+                                <option value="@role.Value" selected>@role.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@role.Value">@role.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="startDate" class="form-label">Sinh nhật (Từ ngày)</label>
+                    <input id="startDate" class="form-control" type="date" name="StartDate"
+                        value="@Model.StartDate?.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-md-2">
+                    <label for="endDate" class="form-label">Sinh nhật (Đến ngày)</label>
+                    <input id="endDate" class="form-control" type="date" name="EndDate"
+                        value="@Model.EndDate?.ToString("yyyy-MM-dd")" />
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Tìm kiếm
+                    </button>
+                    <button type="button" id="clearSearch" class="btn btn-secondary">
+                        <i class="fas fa-eraser"></i> Xóa tìm kiếm
+                    </button>
+                    <a class="btn btn-dark" asp-page="./AddUser">Thêm mới tài khoản</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <div class="table-responsive">
     <table class="table table-striped table-bordered">
         <thead class="thead-dark">
@@ -13,7 +91,7 @@
                 <th>Họ và tên</th>
                 <th>Giới tính</th>
                 <th>Số điện thoại</th>
-                <th>Email</th>
+                <th>Gmail</th>
                 <th>Quyền</th>
                 <th>Xem</th>
             </tr>
@@ -27,11 +105,14 @@
                     <td>@(taikhoan.Gender == true ? "Nam" : "Nữ")</td>
                     <td>@taikhoan.Phone</td>
                     <td>@taikhoan.Email</td>
-                    @if(taikhoan.RoleId == 2){
-                        <td style ="color: red">Thủ kho</td>
-                    }else{
+                    @if (taikhoan.RoleId == 2)
+                    {
+                        <td style="color: red">Thủ kho</td>
+                    }
+                    else
+                    {
                         <td style="color: purple">Người nhận hàng</td>
-                    }          
+                    }
                     <td><a asp-page="/Admin/UserDetail" asp-route-id="@taikhoan.Id" class="btn btn-primary">Chi tiết</a>
                     </td>
                 </tr>
@@ -39,7 +120,37 @@
         </tbody>
     </table>
 </div>
-<script>
-    let password = document.getElementById('password');
-    password.type = password.type == 'text' ? 'password' : 'text';
-</script>
+<nav>
+    <ul class="pagination">
+        @if (Model.CurrentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)"
+                    asp-route-SearchTerm="@Model.SearchTerm" asp-route-Phone="@Model.Phone" asp-route-Gender="@Model.Gender"
+                    asp-route-RoleId="@Model.RoleId" asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                    asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")">Trước</a>
+            </li>
+        }
+
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                <a class="page-link" asp-route-pageNumber="@i" asp-route-SearchTerm="@Model.SearchTerm"
+                    asp-route-Phone="@Model.Phone" asp-route-Gender="@Model.Gender" asp-route-RoleId="@Model.RoleId"
+                    asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                    asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")">@i</a>
+            </li>
+        }
+
+        @if (Model.CurrentPage < Model.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)"
+                    asp-route-SearchTerm="@Model.SearchTerm" asp-route-Phone="@Model.Phone" asp-route-Gender="@Model.Gender"
+                    asp-route-RoleId="@Model.RoleId" asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                    asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")">Sau</a>
+            </li>
+        }
+    </ul>
+</nav>
+<script src="~/js/Admin/DanhSachTaiKhoan.js"></script>

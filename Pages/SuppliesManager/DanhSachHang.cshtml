@@ -4,19 +4,7 @@
 @{
     ViewData["Title"] = "Danh Sách Hàng Hóa";
 }
-<style>
-    .card-header h5 {
-        margin-bottom: 0;
-    }
-
-    .form-label {
-        font-weight: 500;
-    }
-
-    #searchForm .btn {
-        margin-right: 10px;
-    }
-</style>
+<link rel="stylesheet" href="~/css/SuppliesManager/DanhSachHang.css">
 <div class="card mb-4">
     <div class="card-header bg-primary text-white">
         <h5 class="mb-0"><i class="fas fa-search"></i> Tìm kiếm hàng hóa</h5>
@@ -63,88 +51,111 @@
                     <button type="button" id="clearSearch" class="btn btn-secondary">
                         <i class="fas fa-eraser"></i> Xóa tìm kiếm
                     </button>
+                    <a class="btn btn-dark" asp-page="./NhapMuaHangHoa">Nhập mua hàng hóa</a>
+                    <a class="btn btn-dark" asp-page="./XuatDungHangHoa">Xuất dùng hàng hóa</a>
                 </div>
             </div>
         </form>
     </div>
 </div>
-<br />
-<a class="btn btn-dark" asp-page="./NhapMuaHangHoa">Nhập mua hàng hóa</a>
-<a class="btn btn-dark" asp-page="./XuatDungHangHoa">Xuất dùng hàng hóa</a>
-<div class="table-responsive" style="margin-top: 5%">
-    <table class="table table-striped table-bordered">
-        <thead class="thead-dark">
-            <tr>
-                <th>Mặt hàng</th>
-                <th>Loại hàng</th>
-                <th>Đơn vị tính</th>
-                <th>Ngày nhập</th>
-                <th>
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="SoLuongAsc"
-                        asp-route-pageNumber="@Model.CurrentPage" asp-route-SearchTerm="@Model.SearchTerm"
-                        asp-route-Year="@Model.Year" asp-route-NhomHangHoaId="@Model.NhomHangHoaId"
-                        asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
-                        asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")">SL nhập ↑</a> |
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="SoLuongDesc"
-                        asp-route-pageNumber="@Model.CurrentPage" asp-route-SearchTerm="@Model.SearchTerm"
-                        asp-route-Year="@Model.Year" asp-route-NhomHangHoaId="@Model.NhomHangHoaId"
-                        asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
-                        asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")">↓</a>
-                </th>
-                <th>
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="DonGiaAsc"
-                        asp-route-pageNumber="@Model.CurrentPage" asp-route-SearchTerm="@Model.SearchTerm"
-                        asp-route-Year="@Model.Year" asp-route-NhomHangHoaId="@Model.NhomHangHoaId"
-                        asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
-                        asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")">Đơn giá (VNĐ) ↑</a> |
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="DonGiaDesc"
-                        asp-route-pageNumber="@Model.CurrentPage" asp-route-SearchTerm="@Model.SearchTerm"
-                        asp-route-Year="@Model.Year" asp-route-NhomHangHoaId="@Model.NhomHangHoaId"
-                        asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
-                        asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")">↓</a>
-                </th>
-                <th>
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="ThanhTienAsc"
-                        asp-route-pageNumber="@Model.CurrentPage" asp-route-SearchTerm="@Model.SearchTerm"
-                        asp-route-Year="@Model.Year" asp-route-NhomHangHoaId="@Model.NhomHangHoaId"
-                        asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
-                        asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")">Thành tiền (VNĐ) ↑</a> |
-                    <a asp-page="./DanhSachHang" asp-route-sortOrder="ThanhTienDesc"
-                        asp-route-pageNumber="@Model.CurrentPage" asp-route-SearchTerm="@Model.SearchTerm"
-                        asp-route-Year="@Model.Year" asp-route-NhomHangHoaId="@Model.NhomHangHoaId"
-                        asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
-                        asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")">↓</a>
-                </th>
-                <th>Số lượng đã xuất</th>
-                <th>Số lượng còn lại</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var hanghoa in Model.HangHoas)
-            {
-                <tr>
-                    <td>@hanghoa.TenHangHoa</td>
-                    <td>@hanghoa.NhomHang.Name</td>
-                    <td>@hanghoa.DonViTinh.Name</td>
-                    <td>@hanghoa.NgayNhap.ToString("dd/MM/yyyy")</td>
-                    <td>@hanghoa.SoLuong</td>
-                    <td>@hanghoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
-                    <td>@hanghoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
-                    <td>@hanghoa.SoLuongDaXuat</td>
-                    <td>@hanghoa.SoLuongConLai</td>
-                    <td>
-                        <a asp-page="./ChiTietHang" asp-route-id="@hanghoa.Id" class="btn btn-info">Xem chi tiết</a>
-                    </td>
-                    @* <td>
-                        <button type="button" class="btn btn-info view-details-btn" data-id="@hanghoa.Id">Xem chi
-                            tiết</button>
-                    </td> *@
-                </tr>
-            }
-        </tbody>
-    </table>
+<div class="card mt-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-list"></i> Danh sách hàng hóa</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Mặt hàng</th>
+                        <th>Loại hàng</th>
+                        <th>Đơn vị tính</th>
+                        <th>Ngày nhập</th>
+                        <th>
+                            SL nhập
+                            <a asp-page="./DanhSachHang" asp-route-sortOrder="SoLuongAsc"
+                                asp-route-pageNumber="@Model.CurrentPage" asp-route-SearchTerm="@Model.SearchTerm"
+                                asp-route-Year="@Model.Year" asp-route-NhomHangHoaId="@Model.NhomHangHoaId"
+                                asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                                asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")" class="text-decoration-none">
+                                @(Model.SortOrder == "SoLuongAsc" ? "▲" : "△")
+                            </a>
+                            |
+                            <a asp-page="./DanhSachHang" asp-route-sortOrder="SoLuongDesc"
+                                asp-route-pageNumber="@Model.CurrentPage" asp-route-SearchTerm="@Model.SearchTerm"
+                                asp-route-Year="@Model.Year" asp-route-NhomHangHoaId="@Model.NhomHangHoaId"
+                                asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                                asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")" class="text-decoration-none">
+                                @(Model.SortOrder == "SoLuongDesc" ? "▼" : "▽")
+                            </a>
+                        </th>
+                        <th>
+                            Đơn giá (VNĐ)
+                            <a asp-page="./DanhSachHang" asp-route-sortOrder="DonGiaAsc"
+                                asp-route-pageNumber="@Model.CurrentPage" asp-route-SearchTerm="@Model.SearchTerm"
+                                asp-route-Year="@Model.Year" asp-route-NhomHangHoaId="@Model.NhomHangHoaId"
+                                asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                                asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")" class="text-decoration-none">
+                                @(Model.SortOrder == "DonGiaAsc" ? "▲" : "△")
+                            </a>
+                            |
+                            <a asp-page="./DanhSachHang" asp-route-sortOrder="DonGiaDesc"
+                                asp-route-pageNumber="@Model.CurrentPage" asp-route-SearchTerm="@Model.SearchTerm"
+                                asp-route-Year="@Model.Year" asp-route-NhomHangHoaId="@Model.NhomHangHoaId"
+                                asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                                asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")" class="text-decoration-none">
+                                @(Model.SortOrder == "DonGiaDesc" ? "▼" : "▽")
+                            </a>
+                        </th>
+                        <th>
+                            Thành tiền (VNĐ)
+                            <a asp-page="./DanhSachHang" asp-route-sortOrder="ThanhTienAsc"
+                                asp-route-pageNumber="@Model.CurrentPage" asp-route-SearchTerm="@Model.SearchTerm"
+                                asp-route-Year="@Model.Year" asp-route-NhomHangHoaId="@Model.NhomHangHoaId"
+                                asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                                asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")" class="text-decoration-none">
+                                @(Model.SortOrder == "ThanhTienAsc" ? "▲" : "△")
+                            </a>
+                            |
+                            <a asp-page="./DanhSachHang" asp-route-sortOrder="ThanhTienDesc"
+                                asp-route-pageNumber="@Model.CurrentPage" asp-route-SearchTerm="@Model.SearchTerm"
+                                asp-route-Year="@Model.Year" asp-route-NhomHangHoaId="@Model.NhomHangHoaId"
+                                asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                                asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")" class="text-decoration-none">
+                                @(Model.SortOrder == "ThanhTienDesc" ? "▼" : "▽")
+                            </a>
+                        </th>
+                        <th>Số lượng đã xuất</th>
+                        <th>Số lượng còn lại</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var hanghoa in Model.HangHoas)
+                    {
+                        <tr>
+                            <td>@hanghoa.TenHangHoa</td>
+                            <td>@hanghoa.NhomHang.Name</td>
+                            <td>@hanghoa.DonViTinh.Name</td>
+                            <td>@hanghoa.NgayNhap.ToString("dd/MM/yyyy")</td>
+                            <td>@hanghoa.SoLuong</td>
+                            <td>@hanghoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
+                            <td>@hanghoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
+                            <td>@hanghoa.SoLuongDaXuat</td>
+                            <td>@hanghoa.SoLuongConLai</td>
+                            <td>
+                                <a asp-page="./ChiTietHang" asp-route-id="@hanghoa.Id" class="btn btn-info btn-sm">
+                                    <i class="fas fa-info-circle"></i> Chi tiết
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+
 <nav>
     <ul class="pagination">
         @if (Model.CurrentPage > 1)
@@ -180,23 +191,4 @@
         }
     </ul>
 </nav>
-
-<script>
-    @* document.getElementById('clearSearch').addEventListener('click', function () {
-        document.getElementById('searchInput').value = '';
-        document.getElementById('startDate').value = '';
-        document.getElementById('endDate').value = '';
-        document.getElementById('searchForm').submit();
-    }); *@
-        document.getElementById('clearSearch').addEventListener('click', function () {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('yearInput').value = '';
-            document.getElementById('nhomHangHoaSelect').value = '';
-            document.getElementById('startDate').value = '';
-            document.getElementById('endDate').value = '';
-            document.getElementById('searchForm').submit();
-        });
-
-
-    //show pop up ChiTietHang
-</script>
+<script src="~/js/SuppliesManager/DanhSachHang.js"></script>

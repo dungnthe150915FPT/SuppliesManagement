@@ -3,8 +3,9 @@
 @{
     ViewData["Title"] = "Danh Sách Hóa Đơn Nhập";
 }
+<link rel="stylesheet" href="~/css/SuppliesManager/DanhSachHoaDonNhap.css">
 <div class="container-fluid">
-    <h2 class="mb-4">Danh Sách Hóa Đơn Nhập</h2>
+    <h1>Danh Sách Hóa Đơn Nhập</h1>
 
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">
@@ -130,45 +131,5 @@
     </div>
 }
 
-<script>
-    document.getElementById('searchInput').addEventListener('keyup', function () {
-        var searchTerm = this.value.toLowerCase();
-        filterTable(searchTerm);
-    });
-
-    document.getElementById('filterDateBtn').addEventListener('click', function () {
-        var startDate = document.getElementById('startDate').value;
-        var endDate = document.getElementById('endDate').value;
-
-        fetch(`?startDate=${startDate}&endDate=${endDate}`)
-            .then(response => response.text())
-            .then(html => {
-                var tableBody = document.getElementById('invoiceTableBody');
-                var parser = new DOMParser();
-                var doc = parser.parseFromString(html, 'text/html');
-                var newRows = doc.getElementById('invoiceTableBody').innerHTML;
-                tableBody.innerHTML = newRows;
-            });
-    });
-
-    document.getElementById('clearSearch').addEventListener('click', function () {
-        document.getElementById('searchInput').value = '';
-        document.getElementById('startDate').value = '';
-        document.getElementById('endDate').value = '';
-        document.getElementById('searchForm').submit();
-    });
-    @* function filterTable(searchTerm) {
-        var rows = document.querySelectorAll('tbody tr');
-        rows.forEach(function (row) {
-            var cells = row.getElementsByTagName('td');
-            var found = false;
-            for (var i = 0; i < cells.length; i++) {
-                if (cells[i].textContent.toLowerCase().indexOf(searchTerm) > -1) {
-                    found = true;
-                    break;
-                }
-            }
-            row.style.display = found ? '' : 'none';
-        });
-    } *@
+<script src="~/js/SuppliesManager/DanhSachHoaDonNhap.js">
 </script>

@@ -17,8 +17,6 @@ builder.Services.AddDbContext<SuppliesManagementProjectContext>(
         //    .WithEncryptionKey("YourSecureKey123");
 });*/
 
-
-
 builder.Services.AddRazorPages();
 builder.Services.AddHttpContextAccessor();
 

@@ -1,0 +1,11 @@
+.card-header h5 {
+    margin-bottom: 0;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+#searchForm .btn {
+    margin-right: 10px;
+}

@@ -106,7 +106,7 @@ namespace SuppliesManagement.Pages.Admin
                     + $"Mật khẩu: {password}\n\n"
                     + $"Quyền: Thủ Kho\n\n"
                     + $"Vui lòng đổi mật khẩu sau khi đăng nhập.\n"
-                    + $"Trân trọng,\nSupplies Management";
+                    + $"Trân trọng,\nPhần Mềm Quản Lý Kho";
             }
             else
             {
@@ -117,7 +117,7 @@ namespace SuppliesManagement.Pages.Admin
                     + $"Mật khẩu: {password}\n\n"
                     + $"Quyền: Người Nhận Hàng\n\n"
                     + $"Vui lòng đổi mật khẩu sau khi đăng nhập.\n"
-                    + $"Trân trọng,\nSupplies Management";
+                    + $"Trân trọng,\nPhần Mềm Quản Lý Kho";
             }
 
             SendPasswordEmail(receiver, subject, message);

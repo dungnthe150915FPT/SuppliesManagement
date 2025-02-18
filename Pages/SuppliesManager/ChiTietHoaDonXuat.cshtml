@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "HĐ xuất số " + @Model.HoaDonXuat.ID;
 }
-<h2>Chi Tiết Hóa Đơn Xuất</h2>
+<h1>Chi Tiết Hóa Đơn Xuất</h1>
 
 <form method="post" asp-page-handler="Export" asp-route-id="@Model.HoaDonXuat.ID">
     <button type="submit" class="btn btn-primary">Xuất Excel</button>
