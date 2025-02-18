@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SuppliesManagement.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SuppliesManagement.Pages.User
 {
@@ -20,28 +23,34 @@ namespace SuppliesManagement.Pages.User
         public int TotalPages { get; set; }
         public const int PageSize = 10;
 
-        public IActionResult OnGet(
-            string hanghoa,
-            string sortOrder,
-            int pageNumber = 1,
-            int? year = null
-        )
+        [BindProperty(SupportsGet = true)]
+        public string SearchTerm { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public DateTime? StartDate { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public DateTime? EndDate { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string SortOrder { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
         {
-            // Kiểm tra session để đảm bảo user đã đăng nhập
             var userIdString = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             {
                 return RedirectToPage("/Common/SignIn");
             }
 
-            // Kiểm tra user có phải RoleId = 3 (Người nhận hàng)
-            var user = _dbContext.Accounts.Include(u => u.Role).FirstOrDefault(a => a.Id == userId);
+            var user = await _dbContext.Accounts
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(a => a.Id == userId);
             if (user == null || user.RoleId != 3)
             {
                 return RedirectToPage("/Error/AccessDenied");
             }
 
-            // Lấy danh sách xuất kho liên quan đến người nhận
             var query = _dbContext.XuatKhos
                 .Include(x => x.HoaDonXuat)
                 .ThenInclude(h => h.NguoiNhan)
@@ -50,22 +59,24 @@ namespace SuppliesManagement.Pages.User
                 .Where(x => x.HoaDonXuat.NguoiNhanId == userId)
                 .AsQueryable();
 
-            // Lọc theo tên hàng hóa
-            if (!string.IsNullOrEmpty(hanghoa))
+            if (!string.IsNullOrEmpty(SearchTerm))
             {
                 query = query.Where(
-                    x => EF.Functions.Like(x.HangHoaHoaDon.TenHangHoa, $"%{hanghoa}%")
+                    x => EF.Functions.Like(x.HangHoaHoaDon.TenHangHoa, $"%{SearchTerm}%")
                 );
             }
 
-            // Lọc theo năm
-            if (year.HasValue)
+            if (StartDate.HasValue)
             {
-                query = query.Where(x => x.HoaDonXuat.NgayNhan.Year == year.Value);
+                query = query.Where(x => x.HoaDonXuat.NgayNhan >= StartDate.Value);
             }
 
-            // Sắp xếp
-            query = sortOrder switch
+            if (EndDate.HasValue)
+            {
+                query = query.Where(x => x.HoaDonXuat.NgayNhan <= EndDate.Value);
+            }
+
+            query = SortOrder switch
             {
                 "SoLuongAsc" => query.OrderBy(x => x.HangHoaHoaDon.SoLuong),
                 "SoLuongDesc" => query.OrderByDescending(x => x.HangHoaHoaDon.SoLuong),
@@ -73,13 +84,12 @@ namespace SuppliesManagement.Pages.User
                 "DonGiaDesc" => query.OrderByDescending(x => x.HangHoaHoaDon.DonGiaTruocThue),
                 "ThanhTienAsc" => query.OrderBy(x => x.HangHoaHoaDon.TongGiaTruocThue),
                 "ThanhTienDesc" => query.OrderByDescending(x => x.HangHoaHoaDon.TongGiaTruocThue),
-                _ => query.OrderBy(x => x.HoaDonXuat.NgayNhan) // Mặc định sắp xếp theo ngày nhận
+                _ => query.OrderByDescending(x => x.HoaDonXuat.NgayNhan)
             };
 
-            // Phân trang
             CurrentPage = pageNumber;
-            TotalPages = (int)Math.Ceiling(query.Count() / (double)PageSize);
-            XuatKhos = query.Skip((pageNumber - 1) * PageSize).Take(PageSize).ToList();
+            TotalPages = (int)Math.Ceiling(await query.CountAsync() / (double)PageSize);
+            XuatKhos = await query.Skip((pageNumber - 1) * PageSize).Take(PageSize).ToListAsync();
 
             return Page();
         }

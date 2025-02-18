@@ -26,7 +26,7 @@ namespace SuppliesManagement.Pages.Common
                 return RedirectToPage("/Common/SignIn");
             }
 
-/*            User = _dbContext.Accounts.FirstOrDefault(a => a.Id == userId);*/
+            /*            User = _dbContext.Accounts.FirstOrDefault(a => a.Id == userId);*/
             User = _dbContext.Accounts.Include(u => u.Role).FirstOrDefault(a => a.Id == userId);
             if (User == null)
             {
@@ -36,7 +36,14 @@ namespace SuppliesManagement.Pages.Common
             return Page();
         }
 
-        public IActionResult OnPost(string Fullname, bool? Gender, DateTime? DateOfBirth, string? Phone, string? Address, string? Email)
+        public IActionResult OnPost(
+            string Fullname,
+            bool? Gender,
+            DateTime? DateOfBirth,
+            string? Phone,
+            string? Address,
+            string? Email
+        )
         {
             var userIdString = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))

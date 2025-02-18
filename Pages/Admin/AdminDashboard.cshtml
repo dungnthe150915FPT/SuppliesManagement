@@ -4,35 +4,6 @@
     ViewData["Title"] = "Số Liệu Thống Kê";
 }
 @*<h2>Dashboard</h2>*@
-<style>
-/* Container tổng */
-.media-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-/* Hình ảnh */
-.image-container img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Video */
-.video-container iframe {
-    width: 100%; /* Toàn bộ chiều rộng container */
-    aspect-ratio: 16 / 9; /* Tỷ lệ chuẩn */
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-</style>
 <div class="row">
     <!-- Biểu đồ Tài khoản -->
     <div class="col-md-3">
@@ -125,113 +96,51 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Dữ liệu cho biểu đồ tài khoản
     const accountData = {
         labels: ['Admin', 'Thủ Kho', 'Người Nhận Hàng'],
         datasets: [{
             data: [
-    @Model.AccountDistribution["Admin"].ToString("F2"),
-    @Model.AccountDistribution["Supplies Manager"].ToString("F2"),
-    @Model.AccountDistribution["User"].ToString("F2")
+                @Model.AccountDistribution["Admin"].ToString("F2"),
+                @Model.AccountDistribution["Supplies Manager"].ToString("F2"),
+                @Model.AccountDistribution["User"].ToString("F2")
             ],
             backgroundColor: ['#dc3545', '#ffc107', '#17a2b8'],
         }]
     };
 
-    // Vẽ biểu đồ tài khoản
-    const accountCtx = document.getElementById('accountChart').getContext('2d');
-    new Chart(accountCtx, {
-        type: 'pie',
-        data: accountData,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' },
-                tooltip: {
-                    callbacks: { label: (context) => `${context.label}: ${context.raw}%` }
-                }
-            }
-        }
-    });
-
-    // Dữ liệu cho biểu đồ hàng hóa
     const hangHoaData = {
         labels: ['Công cụ dụng cụ', 'Vật tư', 'Phụ tùng thay thế', 'Tài sản cố định'],
         datasets: [{
             data: [
-    @Model.HangHoaDistribution["Công cụ dụng cụ"].ToString("F2"),
-    @Model.HangHoaDistribution["Vật tư"].ToString("F2"),
-    @Model.HangHoaDistribution["Phụ tùng thay thế"].ToString("F2"),
-    @Model.HangHoaDistribution["Tài sản cố định"].ToString("F2")
+                @Model.HangHoaDistribution["Công cụ dụng cụ"].ToString("F2"),
+                @Model.HangHoaDistribution["Vật tư"].ToString("F2"),
+                @Model.HangHoaDistribution["Phụ tùng thay thế"].ToString("F2"),
+                @Model.HangHoaDistribution["Tài sản cố định"].ToString("F2")
             ],
             backgroundColor: ['#dc3545', '#ffc107', '#17a2b8', '#6f42c1'],
         }]
     };
 
-    // Vẽ biểu đồ hàng hóa
-    const hangHoaCtx = document.getElementById('hangHoaChart').getContext('2d');
-    new Chart(hangHoaCtx, {
-        type: 'pie',
-        data: hangHoaData,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' },
-                tooltip: {
-                    callbacks: { label: (context) => `${context.label}: ${context.raw}%` }
-                }
-            }
-        }
-    });
-
-    // Dữ liệu cho biểu đồ hóa đơn
     const hoaDonData = {
         labels: ['Hóa đơn nhập', 'Hóa đơn xuất'],
         datasets: [{
-            data: [@Model.HoaDonDistribution["Hóa đơn nhập"].ToString("F2"),
-    @Model.HoaDonDistribution["Hóa đơn xuất"].ToString("F2")],
+            data: [
+                @Model.HoaDonDistribution["Hóa đơn nhập"].ToString("F2"),
+                @Model.HoaDonDistribution["Hóa đơn xuất"].ToString("F2")
+            ],
             backgroundColor: ['#007bff', '#28a745'],
         }]
     };
 
-    // Vẽ biểu đồ hóa đơn
-    const hoaDonCtx = document.getElementById('hoaDonChart').getContext('2d');
-    new Chart(hoaDonCtx, {
-        type: 'pie',
-        data: hoaDonData,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' },
-                tooltip: {
-                    callbacks: { label: (context) => `${context.label}: ${context.raw}%` }
-                }
-            }
-        }
-    });
-
-    // Dữ liệu cho biểu đồ số lượng hàng hóa
     const soLuongData = {
         labels: ['Đã xuất', 'Còn lại'],
         datasets: [{
-            data: [@Model.SoLuongDaXuatPercentage, @Model.SoLuongConLaiPercentage ],
+            data: [
+                @Model.SoLuongDaXuatPercentage,
+                @Model.SoLuongConLaiPercentage
+            ],
             backgroundColor: ['#ffc107', '#17a2b8'],
         }]
     };
-
-    // Vẽ biểu đồ số lượng hàng hóa
-    const soLuongCtx = document.getElementById('soLuongChart').getContext('2d');
-    new Chart(soLuongCtx, {
-        type: 'pie',
-        data: soLuongData,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' },
-                tooltip: {
-                    callbacks: { label: (context) => `${context.label}: ${context.raw}%` }
-                }
-            }
-        }
-    });
 </script>
+<script src="~/js/Admin/AdminDashboard.js"></script>

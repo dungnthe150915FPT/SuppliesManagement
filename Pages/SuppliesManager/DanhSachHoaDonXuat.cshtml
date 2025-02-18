@@ -3,41 +3,41 @@
 @{
     ViewData["Title"] = "Danh Sách Hóa Đơn Xuất";
 }
-<h2>Danh Sách Hóa Đơn Xuất</h2>
-@* <div class="form-group">
-    <label for="searchInput">Tìm kiếm:</label>
-    <input type="text" class="form-control" id="searchInput" placeholder="Nhập tên nhà cung cấp hoặc số hóa đơn...">
-</div>
+<link rel="stylesheet" href="~/css/SuppliesManager/DanhSachHoaDonXuat.css">
+<div class="container-fluid">
+    <h2 class="mb-4">Danh Sách Hóa Đơn Xuất</h2>
 
-<div class="form-group">
-    <label for="startDate">Từ ngày:</label>
-    <input type="date" class="form-control" id="startDate" />
-</div>
-<div class="form-group">
-    <label for="endDate">Đến ngày:</label>
-    <input type="date" class="form-control" id="endDate" />
-</div>
-<button type="button" class="btn btn-primary" id="filterDateBtn">Lọc</button> *@
-<form method="get">
-    <div class="form-group">
-        <label for="searchInput">Tìm kiếm:</label>
-        <input type="text" class="form-control" id="searchInput" name="SearchTerm" value="@Model.SearchTerm"
-            placeholder="Nhập tên người nhận hoặc mã hóa đơn...">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-search"></i> Tìm kiếm hóa đơn xuất</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" id="searchForm">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="searchInput" class="form-label">Tìm kiếm</label>
+                        <input type="text" class="form-control" id="searchInput" name="SearchTerm" value="@Model.SearchTerm"
+                            placeholder="Nhập tên người nhận hoặc mã hóa đơn...">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="startDate" class="form-label">Từ ngày</label>
+                        <input type="date" class="form-control" id="startDate" name="StartDate"
+                            value="@(Model.StartDate?.ToString("yyyy-MM-dd"))" />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="endDate" class="form-label">Đến ngày</label>
+                        <input type="date" class="form-control" id="endDate" name="EndDate"
+                            value="@(Model.EndDate?.ToString("yyyy-MM-dd"))" />
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search"></i> Tìm kiếm
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label for="startDate">Từ ngày:</label>
-        <input type="date" class="form-control" id="startDate" name="StartDate"
-            value="@(Model.StartDate?.ToString("yyyy-MM-dd"))" />
-    </div>
-    <div class="form-group">
-        <label for="endDate">Đến ngày:</label>
-        <input type="date" class="form-control" id="endDate" name="EndDate"
-            value="@(Model.EndDate?.ToString("yyyy-MM-dd"))" />
-    </div>
-    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-</form>
-
 <table class="table table-striped table-bordered">
     <thead class="thead-dark">
         <tr>
@@ -104,6 +104,7 @@
         }
     </ul>
 </nav>
+</div>
 
 
 
@@ -114,39 +115,6 @@
     </div>
 }
 
-<script>
-    document.getElementById('searchInput').addEventListener('keyup', function () {
-        var searchTerm = this.value.toLowerCase();
-        filterTable(searchTerm);
-    });
+<script src="~/js/SuppliesManager/DanhSachHoaDonXuat.js"></script>
 
-    document.getElementById('filterDateBtn').addEventListener('click', function () {
-        var startDate = document.getElementById('startDate').value;
-        var endDate = document.getElementById('endDate').value;
-
-        fetch(`?startDate=${startDate}&endDate=${endDate}`)
-            .then(response => response.text())
-            .then(html => {
-                var tableBody = document.getElementById('invoiceTableBody');
-                var parser = new DOMParser();
-                var doc = parser.parseFromString(html, 'text/html');
-                var newRows = doc.getElementById('invoiceTableBody').innerHTML;
-                tableBody.innerHTML = newRows;
-            });
-    });
-
-    @* function filterTable(searchTerm) {
-        var rows = document.querySelectorAll('tbody tr');
-        rows.forEach(function (row) {
-            var cells = row.getElementsByTagName('td');
-            var found = false;
-            for (var i = 0; i < cells.length; i++) {
-                if (cells[i].textContent.toLowerCase().indexOf(searchTerm) > -1) {
-                    found = true;
-                    break;
-                }
-            }
-            row.style.display = found ? '' : 'none';
-        });
-    } *@
 </script>

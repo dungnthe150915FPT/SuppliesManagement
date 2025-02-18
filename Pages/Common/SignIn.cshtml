@@ -1,12 +1,11 @@
 ﻿@page
-@using DNTCaptcha.Core
 @model SuppliesManagement.Pages.SignInModel
 @{
-    ViewData["Title"] = "Đăng Nhập";
     Layout = null;
     var error = ViewData["Error"]?.ToString();
 }
-<title>Sign In</title>
+@using DNTCaptcha.Core
+<title>Đăng nhập</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -55,7 +54,7 @@
         </div>
     </div>
 </div>
-<script src="~/js/SignIn.js"></script>
+<script src="~/js/Common/SignIn.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>

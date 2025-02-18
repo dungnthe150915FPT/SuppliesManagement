@@ -1,22 +1,25 @@
 ﻿@page "{id:guid}"
 @model SuppliesManagement.Pages.Admin.UserDetailModel
 @{
-    ViewData["Title"] = @Model.Account.Fullname;
+    ViewData["Title"] = "Thông tin người dùng";
 }
-<h2>Thông tin User</h2>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+<h2>Thông tin người dùng</h2>
 <form method="post">
     <div class="card">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label for="Username" class="form-label"><strong>Tài Khoản:</strong></label>
-                        <input type="text" id="Username" class="form-control" value="@Model.Account.Username" readonly>
+                        <label for="UserId" class="form-label"><strong>Mã Tài Khoản:</strong></label>
+                        <input type="text" id="UserId" class="form-control" value="@Model.Account.Id" readonly>
                     </div>
-                    @*                    <div class="mb-3">
-                    <label for="UserId" class="form-label"><strong>Mã Tài Khoản:</strong></label>
-                    <input type="text" id="UserId" class="form-control" value="@Model.User.Id" readonly>
-                    </div>*@
+                    <div class="mb-3">
+                        <label for="Username" class="form-label"><strong>Tài Khoản:</strong></label>
+                        <input type="text" id="Username" class="form-control" name="Username" value="@Model.Account.Username" readonly>
+                    </div>
                     <div class="mb-3">
                         <label for="Fullname" class="form-label"><strong>Họ tên:</strong></label>
                         <input type="text" id="Fullname" name="Fullname" class="form-control"
@@ -42,7 +45,16 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-
+                    <div class="mb-3">
+                        <label for="password" class="form-label"><strong>Mật khẩu:</strong></label>
+                        <div class="input-group">
+                            <input type="password" id="password" class="form-control" name="Password"
+                                value="@Model.Account.Password">
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                            </button>
+                        </div>
+                    </div>
                     <div class="mb-3">
                         <label for="Phone" class="form-label"><strong>Số điện thoại:</strong></label>
                         <input type="text" id="Phone" name="Phone" class="form-control" value="@Model.Account.Phone"
@@ -59,22 +71,29 @@
                         <input type="email" id="Email" name="Email" class="form-control" value="@Model.Account.Email"
                             required>
                     </div>
-                    <div class="mb-3">
+                    @* <div class="mb-3">
                         <label for="Role" class="form-label"><strong>Quyền của bạn:</strong></label>
-                        @* <select id="Role" class="form-control" name="Role">
+                        <select id="Role" class="form-control" name="Role">
                             @foreach (var role in Model.Roles)
                             {
                                 var isSelected = Request.Query["RoleId"] == role.Id.ToString() ? "selected" : null;
                                 <option value="@role.Id" selected="@isSelected">@role.Name</option>
                                 <option value="@role.Id">@role.Name</option>
                             }
-                        </select> *@
-                        @if(Model.Account.RoleId == 2){
+                        </select>
+                        @if (Model.Account.RoleId == 2)
+                        {
                             <input type="text" id="Role" class="form-control" value="Thủ kho" readonly>
-                        }else{
+                        }
+                        else
+                        {
                             <input type="text" id="Role" class="form-control" value="Người nhận hàng" readonly>
                         }
-                        
+
+                    </div> *@
+                    <div class="mb-3">
+                        <label asp-for="Account.RoleId" class="form-label"><strong>Quyền của bạn:</strong></label>
+                        <select asp-for="Account.RoleId" name="RoleId" asp-items="Model.RoleList" class="form-control"></select>
                     </div>
                 </div>
             </div>
@@ -91,5 +110,5 @@
         @TempData["SuccessMessage"]
     </div>
 }
-<script src="~/js/Profile.js"></script>
-<link href="~/css/profile.css" rel="stylesheet" />
+<script src="~/js/Admin/UserDetail.js"></script>
+<link href="~/css/Admin/UserDetail.css" rel="stylesheet" />

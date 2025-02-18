@@ -4,43 +4,44 @@
     ViewData["Title"] = "Danh Sách Hàng Nhận";
 }
 <style>
-/* Container tổng */
-.media-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-/* Hình ảnh */
-.image-container img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Video */
-.video-container iframe {
-    width: 100%; /* Toàn bộ chiều rộng container */
-    aspect-ratio: 16 / 9; /* Tỷ lệ chuẩn */
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
 
 </style>
 <h2>Danh Sách Hàng Nhận</h2>
 
-<form method="get" class="form-group">
-    <label for="hanghoa">Tên hàng hóa:</label>
-    <input class="form-control mb-3" type="text" name="hanghoa" value="@Request.Query["hanghoa"]" placeholder="Tên hàng hóa cần tìm kiếm" />
-    <label for="year">Năm nhận:</label>
-    <input class="form-control mb-3" type="number" name="year" value="@Request.Query["year"]" placeholder="Năm cần tìm kiếm" />
-    <input type="submit" value="Tìm kiếm" class="btn btn-success mb-3" />
-</form>
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-search"></i> Tìm kiếm hàng hóa</h5>
+    </div>
+    <div class="card-body">
+        <form method="get" id="searchForm">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="searchInput" class="form-label">Tên hàng hóa</label>
+                    <input id="searchInput" class="form-control" type="text" name="SearchTerm" value="@Model.SearchTerm"
+                        placeholder="Nhập tên hàng hóa" />
+                </div>
+                <div class="col-md-3">
+                    <label for="startDate" class="form-label">Từ ngày</label>
+                    <input id="startDate" class="form-control" type="date" name="StartDate"
+                        value="@Model.StartDate?.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-md-3">
+                    <label for="endDate" class="form-label">Đến ngày</label>
+                    <input id="endDate" class="form-control" type="date" name="EndDate"
+                        value="@Model.EndDate?.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="fas fa-search"></i> Tìm kiếm
+                    </button>
+                    <button type="button" id="clearSearch" class="btn btn-secondary">
+                        <i class="fas fa-eraser"></i> Xóa tìm kiếm
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 <div class="table-responsive">
     <table class="table table-bordered table-striped">
@@ -50,16 +51,22 @@
                 <th>Đơn vị tính</th>
                 <th>Ngày nhận</th>
                 <th>
-                    <a asp-page="./DanhSachHangNhan" asp-route-sortOrder="SoLuongAsc" asp-route-pageNumber="@Model.CurrentPage">Số lượng ↑</a> |
-                    <a asp-page="./DanhSachHangNhan" asp-route-sortOrder="SoLuongDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                    <a asp-page="./DanhSachHangNhan" asp-route-sortOrder="SoLuongAsc"
+                        asp-route-pageNumber="@Model.CurrentPage">Số lượng ↑</a> |
+                    <a asp-page="./DanhSachHangNhan" asp-route-sortOrder="SoLuongDesc"
+                        asp-route-pageNumber="@Model.CurrentPage">↓</a>
                 </th>
                 <th>
-                    <a asp-page="./DanhSachHangNhan" asp-route-sortOrder="DonGiaAsc" asp-route-pageNumber="@Model.CurrentPage">Đơn giá ↑</a> |
-                    <a asp-page="./DanhSachHangNhan" asp-route-sortOrder="DonGiaDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                    <a asp-page="./DanhSachHangNhan" asp-route-sortOrder="DonGiaAsc"
+                        asp-route-pageNumber="@Model.CurrentPage">Đơn giá ↑</a> |
+                    <a asp-page="./DanhSachHangNhan" asp-route-sortOrder="DonGiaDesc"
+                        asp-route-pageNumber="@Model.CurrentPage">↓</a>
                 </th>
                 <th>
-                    <a asp-page="./DanhSachHangNhan" asp-route-sortOrder="ThanhTienAsc" asp-route-pageNumber="@Model.CurrentPage">Thành tiền ↑</a> |
-                    <a asp-page="./DanhSachHangNhan" asp-route-sortOrder="ThanhTienDesc" asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                    <a asp-page="./DanhSachHangNhan" asp-route-sortOrder="ThanhTienAsc"
+                        asp-route-pageNumber="@Model.CurrentPage">Thành tiền ↑</a> |
+                    <a asp-page="./DanhSachHangNhan" asp-route-sortOrder="ThanhTienDesc"
+                        asp-route-pageNumber="@Model.CurrentPage">↓</a>
                 </th>
             </tr>
         </thead>
@@ -84,7 +91,8 @@
         @if (Model.CurrentPage > 1)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)" asp-route-sortOrder="@Request.Query["sortOrder"]">Trước</a>
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)"
+                    asp-route-sortOrder="@Request.Query["sortOrder"]">Trước</a>
             </li>
         }
         @for (int i = 1; i <= Model.TotalPages; i++)
@@ -96,7 +104,8 @@
         @if (Model.CurrentPage < Model.TotalPages)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)" asp-route-sortOrder="@Request.Query["sortOrder"]">Sau</a>
+                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)"
+                    asp-route-sortOrder="@Request.Query["sortOrder"]">Sau</a>
             </li>
         }
     </ul>
