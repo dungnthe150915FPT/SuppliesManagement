@@ -32,7 +32,7 @@
                                 @if (HttpContextAccessor.HttpContext.Session.GetString("Username") != null)
                                 {
                                     <a class="nav-link text-dark" asp-page="/Common/Profile">
-                                        ✨ Xin chào @HttpContextAccessor.HttpContext.Session.GetString("Username") ⭐ |
+                                        ✨ Xin chào @HttpContextAccessor.HttpContext.Session.GetString("Fullname") ⭐ |
                                     </a>
                                 }
                             </li>
@@ -99,12 +99,12 @@
                                 @if (HttpContextAccessor.HttpContext.Session.GetString("Username") != null)
                                 {
                                     <a class="nav-link text-dark" asp-page="/Common/Profile">
-                                        Xin chào @HttpContextAccessor.HttpContext.Session.GetString("Username")  |
+                                        ✨ Xin chào @HttpContextAccessor.HttpContext.Session.GetString("Fullname") ⭐
                                     </a>
                                 }
                             </li>
                             <li class="nav-item">
-                                <a href="javascript:void(0);" class="nav-link text-dark" onclick="confirmLogout()">Đăng xuất</a>
+                                <a type="submit" class="btn btn-primary" href="javascript:void(0);" class="nav-link text-dark" onclick="confirmLogout()">Đăng xuất</a>
                             </li>
                         </ul>
                     </div>

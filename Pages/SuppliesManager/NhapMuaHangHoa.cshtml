@@ -8,179 +8,211 @@
     ? System.Text.Json.JsonSerializer.Deserialize<List<HangHoaInputModel>>(hangHoaListJson)
     : new List<HangHoaInputModel>();
 }
-<link href="~/css/nhapmuahanghoa.css" rel="stylesheet" />
+<link href="~/css/SuppliesManager/NhapMuaHangHoa.css" rel="stylesheet" />
 <h1>Nhập Hàng Hóa</h1>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successAlert" class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div id="errorAlert" class="alert alert-danger" role="alert">
+        @TempData["Error"]
+    </div>
+}
 <form asp-page-handler="ImportHoaDon" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="fileXml">Chọn file hóa đơn (XML):</label>
-        <input type="file" class="form-control" id="fileXml" name="fileXml" accept=".xml" required>
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-file-import"></i> Import Hóa Đơn</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="fileXml" class="form-label">Chọn file hóa đơn (XML):</label>
+                <input type="file" class="form-control" id="fileXml" name="fileXml" accept=".xml" required>
+            </div>
+            <button type="submit" class="btn btn-secondary">Import</button>
+        </div>
     </div>
-    <button type="submit" class="btn btn-secondary">Import</button>
 </form>
+
 <form method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="PDFFile">Hóa đơn PDF:</label>
-        <input type="file" class="form-control" id="PDFFile" name="PDFFile" accept=".pdf">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-file-import"></i> Thông Tin Nhập Hàng</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="PDFFile" class="form-label">Hóa đơn PDF:</label>
+                    <input type="file" class="form-control" id="PDFFile" name="PDFFile" accept=".pdf">
+                </div>
+                <div class="col-md-6">
+                    <label for="NhaCungCap" class="form-label">Nhà cung cấp:</label>
+                    <input type="text" class="form-control" id="NhaCungCap" name="NhaCungCap"
+                        value="@TempData["NhaCungCap"]" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="NgayNhap" class="form-label">Ngày nhập:</label>
+                    <input type="date" class="form-control" id="NgayNhap" name="NgayNhap"
+                        value="@(TempData["NgayNhap"] != null ? DateTime.Parse(TempData["NgayNhap"].ToString()).ToString("yyyy-MM-dd") : "")"
+                        required>
+                </div>
+                <div class="col-md-6">
+                    <label for="KhoHangID" class="form-label">Nhập vào đơn vị:</label>
+                    <select class="form-select" name="khoHangID" required>
+                        @if (Model.KhoHangs != null && Model.KhoHangs.Any())
+                        {
+                            foreach (var kho in Model.KhoHangs)
+                            {
+                                <option value="@kho.Id">@kho.Ten - @kho.DiaChi</option>
+                            }
+                        }
+                        else
+                        {
+                            <option disabled>Không có dữ liệu kho hàng</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="SoSerial" class="form-label">Số Serial:</label>
+                    <input type="text" class="form-control" id="SoSerial" name="SoSerial" value="@TempData["SoSerial"]">
+                </div>
+                <div class="col-md-6">
+                    <label for="SoHoaDon" class="form-label">Số hóa đơn:</label>
+                    <input type="text" class="form-control" id="SoHoaDon" name="SoHoaDon" value="@TempData["SoHoaDon"]">
+                </div>
+                <div class="col-md-6">
+                    <label for="ThanhTien" class="form-label">Tổng số tiền (Chưa tính VAT):</label>
+                    <input type="text" class="form-control" id="ThanhTien" name="ThanhTien" readonly
+                        value="@TempData["ThanhTien"]">
+                </div>
+                <div class="col-md-6">
+                    <label for="TongTien" class="form-label">Tổng số tiền (Đã tính VAT):</label>
+                    <input type="text" class="form-control" id="TongTien" name="TongTien" readonly
+                        value="@TempData["TongTien"]">
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="NhaCungCap">Nhà cung cấp:</label>
-        <input type="text" class="form-control" id="NhaCungCap" name="NhaCungCap" value="@TempData["NhaCungCap"]"
-            required>
-    </div>
-    <div class="form-group">
-        <label for="NgayNhap">Ngày nhập:</label>
-        <input type="date" class="form-control" id="NgayNhap" name="NgayNhap"
-            value="@(TempData["NgayNhap"] != null ? DateTime.Parse(TempData["NgayNhap"].ToString()).ToString("yyyy-MM-dd") : "")"
-            required>
-    </div>
-    <div class="form-group">
-        <label for="KhoHangID">Nhập vào đơn vị:</label>
-        <select class="form-control" name="khoHangID" required>
-            @if (Model.KhoHangs != null && Model.KhoHangs.Any())
-            {
-                foreach (var kho in Model.KhoHangs)
-                {
-                    <option value="@kho.Id">@kho.Ten - @kho.DiaChi</option>
-                }
-            }
-            else
-            {
-                <option disabled>Không có dữ liệu kho hàng</option>
-            }
-        </select>
 
-    </div>
-    <div class="form-group">
-        <label for="SoSerial">Số Serial:</label>
-        <input type="text" class="form-control" id="SoSerial" name="SoSerial" value="@TempData["SoSerial"]">
-    </div>
-    <div class="form-group">
-        <label for="SoHoaDon">Số hóa đơn:</label>
-        <input type="text" class="form-control" id="SoHoaDon" name="SoHoaDon" value="@TempData["SoHoaDon"]">
-    </div>
-    <div class="form-group">
-        <label for="ThanhTien">Tổng số tiền (Chưa tính VAT):</label>
-        <input type="text" class="form-control" id="ThanhTien" name="ThanhTien" readonly value="@TempData["ThanhTien"]">
-    </div>
-    <div class="form-group">
-        <label for="TongTien">Tổng số tiền (Đã tính VAT):</label>
-        <input type="text" class="form-control" id="TongTien" name="TongTien" readonly value="@TempData["TongTien"]">
-    </div>
-    <br>
-
-    <div class="table-responsive">
-        <table class="table custom-table">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Hàng hóa</th>
-                    <th>Nhóm hàng hóa</th>
-                    <th>Số lượng</th>
-                    <th>Đ.vị tính</th>
-                    <th>Hình ảnh</th>
-                    @* <th>Hình ảnh 2</th>
-                    <th>Hình ảnh 3</th> *@
-                    <th>Giá tr.thuế</th>
-                    <th>VAT%</th>
-                    <th>Giá s.thuế</th>
-                    <th>Tiền hàng</th>
-                    <th>Tổng tiền</th>
-                    <th>Đóng</th>
-                </tr>
-            </thead>
-            <tbody id="hangHoaTableBody">
-                @for (int i = 0; i < hangHoaList.Count; i++)
-                {
-                    var hangHoa = hangHoaList[i];
-                    <tr>
-                        <td>
-                            <input type="text" class="form-control" name="hangHoaModels[@i].TenHangHoa"
-                                value="@hangHoa.TenHangHoa" required>
-                        </td>
-                        <td>
-                            <select class="form-control" name="hangHoaModels[@i].NhomHangID" required>
-                                @if (Model.NhomHangs != null && Model.NhomHangs.Any())
-                                {
-                                    @foreach (var nhomHang in Model.NhomHangs)
-                                    {
-                                        <option value="@nhomHang.Id">@nhomHang.Name</option>
-                                    }
-                                }
-                                else
-                                {
-                                    <option disabled>Không có dữ liệu nhóm hàng</option>
-                                }
-                            </select>
-                        </td>
-                        <td>
-                            <input type="number" class="form-control" name="hangHoaModels[@i].SoLuong" min="1"
-                                value="@hangHoa.SoLuong" required oninput="calculateTotals(this.closest('tr'))">
-                        </td>
-                        <td>
-                            <select class="form-control" name="hangHoaModels[@i].DonViTinhID" required>
-                                @if (Model.DonViTinhs != null && Model.DonViTinhs.Any())
-                                {
-                                    foreach (var donViTinh in Model.DonViTinhs)
-                                    {
-                                        if (hangHoa.DonViTinhID == donViTinh.Id)
+    <div class="card mt-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0"><i class="fas fa-list"></i> Danh sách hàng hóa</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Hàng hóa</th>
+                            <th>Nhóm hàng hóa</th>
+                            <th>Số lượng</th>
+                            <th>Đ.vị tính</th>
+                            <th>Hình ảnh</th>
+                            <th>Giá tr.thuế</th>
+                            <th>VAT%</th>
+                            <th>Giá s.thuế</th>
+                            <th>Tiền hàng</th>
+                            <th>Tổng tiền</th>
+                            <th>Đóng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hangHoaTableBody">
+                        @for (int i = 0; i < hangHoaList.Count; i++)
+                        {
+                            var hangHoa = hangHoaList[i];
+                            <tr>
+                                <td>
+                                    <input type="text" class="form-control" name="hangHoaModels[@i].TenHangHoa"
+                                        value="@hangHoa.TenHangHoa" required>
+                                </td>
+                                <td>
+                                    <select class="form-select" name="hangHoaModels[@i].NhomHangID" required>
+                                        @if (Model.NhomHangs != null && Model.NhomHangs.Any())
                                         {
-                                            <option value="@donViTinh.Id" selected>@donViTinh.Name</option>
-                                        }
-                                        else if (hangHoa.DonViTinhID != donViTinh.Id)
-                                        {
-                                            <option value="@donViTinh.Id">@donViTinh.Name</option>
+                                            @foreach (var nhomHang in Model.NhomHangs)
+                                            {
+                                                <option value="@nhomHang.Id">@nhomHang.Name</option>
+                                            }
                                         }
                                         else
                                         {
-                                            <option value="@donViTinh.Id">@donViTinh.Name</option>
+                                            <option disabled>Không có dữ liệu nhóm hàng</option>
                                         }
-                                    }
-                                }
-                                else
-                                {
-                                    <option disabled>Không có dữ liệu đơn vị tính</option>
-                                }
-                            </select>
-                        </td>
-                        @* <td>
-                            <input type="file" class="form-control" name="hangHoaModels[@i].Images" accept="image/*"
-                                multiple onchange="validateImages(this, @i)">
-                            <div id="imagePreviews_@(i)" class="image-previews">
-                            </div>
-                        </td> *@
-                        <td>
-                            <input type="file" class="form-control" name="hangHoaModels[@i].Images" accept="image/*"
-                                multiple onchange="validateAndPreviewImages(this, @i)">
-                            <div id="imagePreviews_@(i)" class="image-previews"
-                                style="display: flex; gap: 5px; margin-top: 10px;">
-                            </div>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" name="hangHoaModels[@i].DonGiaTruocThue"
-                                value="@hangHoa.DonGiaTruocThue" min="0" required
-                                oninput="calculateTotals(this.closest('tr'))">
-                        </td>
-                        <td>
-                            <input type="number" class="form-control" name="hangHoaModels[@i].VAT" min="0" max="10"
-                                value="@hangHoa.VAT" required oninput="calculateTotals(this.closest('tr'))">
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" name="hangHoaModels[@i].DonGiaSauThue"
-                                value="@(hangHoa.DonGiaTruocThue + (hangHoa.DonGiaTruocThue * hangHoa.VAT / 100))" readonly>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" name="hangHoaModels[@i].TongGiaTruocThue"
-                                value="@(hangHoa.DonGiaTruocThue* hangHoa.SoLuong)" readonly>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" name="hangHoaModels[@i].TongGiaSauThue" value="@((hangHoa.DonGiaTruocThue * hangHoa.SoLuong)
-    +(hangHoa.DonGiaTruocThue * hangHoa.SoLuong * hangHoa.VAT / 100))" readonly>
-                    </td>
-                </tr>
-                                }
-            </tbody>
-        </table>
-        <button type="button" class="btn btn-secondary" id="addRow">Thêm Hàng Hóa</button>
-        <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" name="hangHoaModels[@i].SoLuong" min="1"
+                                        value="@hangHoa.SoLuong" required oninput="calculateTotals(this.closest('tr'))">
+                                </td>
+                                <td>
+                                    <select class="form-select" name="hangHoaModels[@i].DonViTinhID" required>
+                                        @if (Model.DonViTinhs != null && Model.DonViTinhs.Any())
+                                        {
+                                            foreach (var donViTinh in Model.DonViTinhs)
+                                            {
+                                                if (hangHoa.DonViTinhID == donViTinh.Id)
+                                                {
+                                                    <option value="@donViTinh.Id" selected>@donViTinh.Name</option>
+                                                }
+                                                else if (hangHoa.DonViTinhID != donViTinh.Id)
+                                                {
+                                                    <option value="@donViTinh.Id">@donViTinh.Name</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@donViTinh.Id">@donViTinh.Name</option>
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option disabled>Không có dữ liệu đơn vị tính</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="file" class="form-control" name="hangHoaModels[@i].Images" accept="image/*"
+                                        multiple onchange="validateAndPreviewImages(this, @i)">
+                                    <div id="imagePreviews_@(i)" class="image-previews"
+                                        style="display: flex; gap: 5px; margin-top: 10px;"></div>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="hangHoaModels[@i].DonGiaTruocThue"
+                                        value="@hangHoa.DonGiaTruocThue" min="0" required
+                                        oninput="calculateTotals(this.closest('tr'))">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" name="hangHoaModels[@i].VAT" min="0" max="10"
+                                        value="@hangHoa.VAT" required oninput="calculateTotals(this.closest('tr'))">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="hangHoaModels[@i].DonGiaSauThue"
+                                        value="@(hangHoa.DonGiaTruocThue + (hangHoa.DonGiaTruocThue * hangHoa.VAT / 100))"
+                                        readonly>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="hangHoaModels[@i].TongGiaTruocThue"
+                                        value="@(hangHoa.DonGiaTruocThue* hangHoa.SoLuong)" readonly>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="hangHoaModels[@i].TongGiaSauThue"
+                                        value="@((hangHoa.DonGiaTruocThue * hangHoa.SoLuong) + (hangHoa.DonGiaTruocThue * hangHoa.SoLuong * hangHoa.VAT / 100))"
+                                        readonly>
+                                </td>
+                                @* <td>
+                                    <button type="button" class="btn btn-danger btn-sm remove-row">X</button>
+                                </td> *@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-secondary" id="addRow">Thêm Hàng Hóa</button>
+                <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+            </div>
+        </div>
     </div>
 </form>
 @if (TempData["SuccessMessage"] != null)
@@ -210,7 +242,7 @@
             <select class="form-control" name="hangHoaModels[${hangHoaCount}].NhomHangID" required>
 @foreach (var nhomHang in Model.NhomHangs)
 {
-                                                                                                                                        <option value="@nhomHang.Id">@nhomHang.Name</option>
+                                                                                                                                                    <option value="@nhomHang.Id">@nhomHang.Name</option>
 }
             </select>
         </td>
@@ -219,7 +251,7 @@
             <select class="form-control" name="hangHoaModels[${hangHoaCount}].DonViTinhID" required>
 @foreach (var donViTinh in Model.DonViTinhs)
 {
-                                                                                                                                        <option value="@donViTinh.Id">@donViTinh.Name</option>
+                                                                                                                                                    <option value="@donViTinh.Id">@donViTinh.Name</option>
 }
             </select>
         </td>
@@ -305,11 +337,12 @@
         row.querySelector('input[name*="TongGiaTruocThue"]').value = totalBeforeTax.toFixed(0);
         row.querySelector('input[name*="TongGiaSauThue"]').value = totalAfterTax.toFixed(0);
 
-        updateTotalAmount();
-        updateTotal();
+        @* updateTotalAmount();
+        updateTotal(); *@
+            updateGrandTotal();
     }
 
-    function updateTotalAmount() {
+    @* function updateTotalAmount() {
         let totalAmount = 0;
         document.querySelectorAll('.custom-table tbody tr').forEach(row => {
             const totalRow = parseFloat(row.querySelector('input[name*="TongGiaTruocThue"]').value) || 0;
@@ -325,7 +358,20 @@
             totalAmount += totalRow;
         });
         document.getElementById('TongTien').value = totalAmount.toFixed(0);
-    }
+    } *@
+        function updateGrandTotal() {
+            const rows = document.querySelectorAll('#hangHoaTableBody tr');
+            let grandTotalBeforeTax = 0;
+            let grandTotalAfterTax = 0;
+
+            rows.forEach(row => {
+                grandTotalBeforeTax += parseFloat(row.querySelector('input[name*="TongGiaTruocThue"]').value) || 0;
+                grandTotalAfterTax += parseFloat(row.querySelector('input[name*="TongGiaSauThue"]').value) || 0;
+            });
+
+            document.getElementById('ThanhTien').value = grandTotalBeforeTax.toFixed(0);
+            document.getElementById('TongTien').value = grandTotalAfterTax.toFixed(0);
+        }
 
     function previewImage(input, index, imageNumber) {
         const preview = document.getElementById(`imagePreview_${index}_${imageNumber}`);
@@ -403,4 +449,22 @@
         });
     }
     console.log(`File read successfully: ${e.target.result}`);
+    document.addEventListener("DOMContentLoaded", function () {
+        const successAlert = document.getElementById("successAlert");
+        if (successAlert) {
+            setTimeout(() => {
+                successAlert.style.display = "none";
+            }, 5000);
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const errorAlert = document.getElementById("errorAlert");
+        if (errorAlert) {
+            setTimeout(() => {
+                errorAlert.style.display = "none";
+            }, 5000);
+        }
+    });
 </script>
+<script src="~/js/SuppliesManager/NhapMuaHangHoa.js"></script>

@@ -133,6 +133,7 @@ namespace SuppliesManagement.Pages
                 /*                HttpContext.Session.SetString("Username", user.Username);
                                 HttpContext.Session.SetInt32("RoleId", user.RoleId);*/
                 HttpContext.Session.SetString("Username", user.Username);
+                HttpContext.Session.SetString("Fullname", user.Fullname);
                 HttpContext.Session.SetString("UserId", user.Id.ToString());
                 HttpContext.Session.SetInt32("RoleId", user.RoleId);
                 HttpContext.Session.SetInt32("FailedAttempts", 0); // Reset số lần thất bại
