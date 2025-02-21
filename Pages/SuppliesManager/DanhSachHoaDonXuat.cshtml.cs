@@ -14,6 +14,9 @@ namespace SuppliesManagement.Pages.SuppliesManager
         public DanhSachHoaDonXuatModel(SuppliesManagementProjectContext context)
         {
             this.context = context;
+            HoaDonXuats = new List<HoaDonXuatViewModel>();
+            SearchTerm = string.Empty;
+            SortOrder = "NgayNhanDesc";
         }
 
         public List<HoaDonXuatViewModel> HoaDonXuats { get; set; }
@@ -30,6 +33,9 @@ namespace SuppliesManagement.Pages.SuppliesManager
         [BindProperty(SupportsGet = true)]
         public DateTime? EndDate { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string SortOrder { get; set; }
+
         public IActionResult OnGet(DateTime? startDate, DateTime? endDate, int pageNumber = 1)
         {
             var role = HttpContext.Session.GetInt32("RoleId");
@@ -37,6 +43,9 @@ namespace SuppliesManagement.Pages.SuppliesManager
             {
                 return RedirectToPage("/Error/AccessDenied");
             }
+
+            // Đảm bảo SortOrder luôn có giá trị mặc định
+            SortOrder = string.IsNullOrEmpty(SortOrder) ? "NgayNhanDesc" : SortOrder;
 
             var query = context.HoaDonXuats
                 .Include(x => x.KhoHang)
@@ -70,9 +79,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
             CurrentPage = pageNumber;
 
             // Lấy hóa đơn cho trang hiện tại
-            HoaDonXuats = query
-                .Skip((pageNumber - 1) * PageSize)
-                .Take(PageSize)
+            var hoaDonList = query
                 .Select(
                     h =>
                         new HoaDonXuatViewModel
@@ -103,7 +110,27 @@ namespace SuppliesManagement.Pages.SuppliesManager
                         }
                 )
                 .ToList();
+
+            hoaDonList = SortHoaDonList(hoaDonList, SortOrder);
+            HoaDonXuats = hoaDonList.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+
             return Page();
+        }
+
+        // Hàm sắp xếp danh sách hóa đơn theo SortOrder
+        private List<HoaDonXuatViewModel> SortHoaDonList(
+            List<HoaDonXuatViewModel> hoaDonList,
+            string sortOrder
+        )
+        {
+            return sortOrder switch
+            {
+                "NgayNhanAsc" => hoaDonList.OrderBy(h => h.NgayNhan).ToList(),
+                "NgayNhanDesc" => hoaDonList.OrderByDescending(h => h.NgayNhan).ToList(),
+                "TongTienAsc" => hoaDonList.OrderBy(h => h.ThanhTien).ToList(),
+                "TongTienDesc" => hoaDonList.OrderByDescending(h => h.ThanhTien).ToList(),
+                _ => hoaDonList.OrderByDescending(h => h.NgayNhan).ToList(), // Mặc định sắp xếp theo NgayNhan giảm dần
+            };
         }
     }
 }

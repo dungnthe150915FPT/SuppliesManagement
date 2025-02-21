@@ -6,7 +6,6 @@
 <link rel="stylesheet" href="~/css/SuppliesManager/DanhSachHoaDonNhap.css">
 <div class="container-fluid">
     <h1>Danh Sách Hóa Đơn Nhập</h1>
-
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">
             <h5 class="mb-0"><i class="fas fa-search"></i> Tìm kiếm hóa đơn nhập</h5>
@@ -39,59 +38,103 @@
         </div>
     </div>
 
-<table class="table table-striped table-bordered">
-    <thead class="thead-dark">
-        <tr>
-            <th>Số Hóa Đơn</th>
-            <th>Serial</th>
-            <th>Nhà Cung Cấp</th>
-            <th>Nhập vào kho</th>
-            <th>
-                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="NgayNhapAsc"
-                    asp-route-pageNumber="@Model.CurrentPage">Ngày Nhập ↑</a> |
-                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="NgayNhapDesc"
-                    asp-route-pageNumber="@Model.CurrentPage">↓</a>
-            </th>
-            <th>
-                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="TongTienAsc"
-                    asp-route-pageNumber="@Model.CurrentPage">Tổng Tiền (VNĐ) ↑</a> |
-                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="TongTienDesc"
-                    asp-route-pageNumber="@Model.CurrentPage">↓</a>
-            </th>
-            <th>
-                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="SoLuongMatHangAsc"
-                    asp-route-pageNumber="@Model.CurrentPage">Số Lượng Mặt hàng ↑</a> |
-                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="SoLuongMatHangDesc"
-                    asp-route-pageNumber="@Model.CurrentPage">↓</a>
-            </th>
-        </tr>
-    </thead>
-    <tbody id="invoiceTableBody">
-        @if (Model.HoaDonNhaps.Count == 0)
-        {
-            <tr>
-                <td colspan="7" class="text-center">Không có hóa đơn nào.</td>
-            </tr>
-        }
-        else
-        {
-            for (int i = 0; i < Model.HoaDonNhaps.Count; i++)
-            {
-                <tr>
-                    <td><a asp-page="/SuppliesManager/ChiTietHoaDonNhap"
-                            asp-route-id="@Model.HoaDonNhaps[i].ID">@Model.HoaDonNhaps[i].SoHoaDon</a></td>
-                    <td>@Model.HoaDonNhaps[i].Serial</td>
-                    <td>@Model.HoaDonNhaps[i].NhaCungCap</td>
-                    <td>@Model.HoaDonNhaps[i].KhoNhap</td>
-                    <td>@Model.HoaDonNhaps[i].NgayNhap.ToString("dd/MM/yyyy")</td>
-                    <td>@Model.HoaDonNhaps[i].ThanhTien.ToString("#,##0").Replace(',', '.')</td>
-                    <td>@Model.HoaDonNhaps[i].SoLuongMatHang</td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
-
+    <div class="card mt-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0"><i class="fas fa-list"></i> Danh sách hóa đơn nhập</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Số Hóa Đơn</th>
+                            <th>Serial</th>
+                            <th>Nhà Cung Cấp</th>
+                            <th>Nhập vào kho</th>
+                            <th>
+                                Ngày Nhập
+                                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="NgayNhapAsc"
+                                    asp-route-pageNumber="@Model.CurrentPage" 
+                                    asp-route-SearchTerm="@Model.SearchTerm"
+                                    asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                                    asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")" class="text-decoration-none">
+                                    @(Model.SortOrder == "NgayNhapAsc" ? "▲" : "△")
+                                </a>
+                                |
+                                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="NgayNhapDesc"
+                                    asp-route-pageNumber="@Model.CurrentPage" 
+                                    asp-route-SearchTerm="@Model.SearchTerm"
+                                    asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                                    asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")" class="text-decoration-none">
+                                    @(Model.SortOrder == "NgayNhapDesc" ? "▼" : "▽")
+                                </a>
+                            </th>
+                            <th>
+                                Tổng Tiền (VNĐ)
+                                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="TongTienAsc"
+                                    asp-route-pageNumber="@Model.CurrentPage"
+                                    asp-route-SearchTerm="@Model.SearchTerm"
+                                    asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                                    asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")" class="text-decoration-none">
+                                    @(Model.SortOrder == "TongTienAsc" ? "▲" : "△")
+                                </a>
+                                |
+                                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="TongTienDesc"
+                                    asp-route-pageNumber="@Model.CurrentPage"
+                                    asp-route-SearchTerm="@Model.SearchTerm"
+                                    asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                                    asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")" class="text-decoration-none">
+                                    @(Model.SortOrder == "TongTienDesc" ? "▼" : "▽")
+                                </a>
+                            </th>
+                            <th>
+                                Số Lượng Mặt hàng
+                                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="SoLuongMatHangAsc"
+                                    asp-route-pageNumber="@Model.CurrentPage"
+                                    asp-route-SearchTerm="@Model.SearchTerm"
+                                    asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                                    asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")" class="text-decoration-none">
+                                    @(Model.SortOrder == "SoLuongMatHangAsc" ? "▲" : "△")
+                                </a>
+                                |
+                                <a asp-page="./DanhSachHoaDonNhap" asp-route-sortOrder="SoLuongMatHangDesc"
+                                    asp-route-pageNumber="@Model.CurrentPage"
+                                    asp-route-SearchTerm="@Model.SearchTerm"
+                                    asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
+                                    asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")" class="text-decoration-none">
+                                    @(Model.SortOrder == "SoLuongMatHangDesc" ? "▼" : "▽")
+                                </a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoiceTableBody">
+                        @if (Model.HoaDonNhaps.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center">Không có hóa đơn nào.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            for (int i = 0; i < Model.HoaDonNhaps.Count; i++)
+                            {
+                                <tr>
+                                    <td><a asp-page="/SuppliesManager/ChiTietHoaDonNhap"
+                                            asp-route-id="@Model.HoaDonNhaps[i].ID">@Model.HoaDonNhaps[i].SoHoaDon</a></td>
+                                    <td>@Model.HoaDonNhaps[i].Serial</td>
+                                    <td>@Model.HoaDonNhaps[i].NhaCungCap</td>
+                                    <td>@Model.HoaDonNhaps[i].KhoNhap</td>
+                                    <td>@Model.HoaDonNhaps[i].NgayNhap.ToString("dd/MM/yyyy")</td>
+                                    <td>@Model.HoaDonNhaps[i].ThanhTien.ToString("#,##0").Replace(',', '.')</td>
+                                    <td>@Model.HoaDonNhaps[i].SoLuongMatHang</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 <nav>
     <ul class="pagination">
         @if (Model.CurrentPage > 1)
@@ -99,7 +142,8 @@
             <li class="page-item">
                 <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)"
                     asp-route-SearchTerm="@Model.SearchTerm" asp-route-startDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
-                    asp-route-endDate="@Model.EndDate?.ToString("yyyy-MM-dd")">Trước</a>
+                    asp-route-endDate="@Model.EndDate?.ToString("yyyy-MM-dd")"
+                    asp-route-SortOrder="@Model.SortOrder">Trước</a>
             </li>
         }
 
@@ -108,7 +152,8 @@
             <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
                 <a class="page-link" asp-route-pageNumber="@i" asp-route-SearchTerm="@Model.SearchTerm"
                     asp-route-startDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
-                    asp-route-endDate="@Model.EndDate?.ToString("yyyy-MM-dd")">@i</a>
+                    asp-route-endDate="@Model.EndDate?.ToString("yyyy-MM-dd")"
+                    asp-route-SortOrder="@Model.SortOrder">@i</a>
             </li>
         }
 
@@ -117,19 +162,12 @@
             <li class="page-item">
                 <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)"
                     asp-route-SearchTerm="@Model.SearchTerm" asp-route-startDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
-                    asp-route-endDate="@Model.EndDate?.ToString("yyyy-MM-dd")">Sau</a>
+                    asp-route-endDate="@Model.EndDate?.ToString("yyyy-MM-dd")"
+                    asp-route-SortOrder="@Model.SortOrder">Sau</a>
             </li>
         }
     </ul>
 </nav>
 </div>
-
-@if (!string.IsNullOrWhiteSpace(ViewData["Success"]?.ToString()))
-{
-    <div class="alert alert-success" role="alert">
-        @ViewData["Success"]
-    </div>
-}
-
 <script src="~/js/SuppliesManager/DanhSachHoaDonNhap.js">
 </script>

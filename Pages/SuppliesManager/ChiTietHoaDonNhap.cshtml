@@ -49,12 +49,8 @@
                     </a>
                     <a asp-page-handler="DownloadPDF" asp-route-id="@Model.HoaDonNhap.ID" class="btn btn-primary ml-2">Tải
                         xuống PDF</a>
-                    @* <button type="button" class="btn btn-primary ml-2" onclick="viewExcelFile('@Model.HoaDonNhap.ID')">Xem
-                        file Excel</button> *@
                     <button class="btn btn-primary" onclick="viewExcelFile('@Model.HoaDonNhap.ID')">Xem phiếu nhập kho
                     </button>
-                    @* <button type="button" class="btn btn-primary ml-2" onclick="viewPdfFile('@Model.HoaDonNhap.ID')">Xem
-                        phiếu xuất kho PDF</button> *@
                 </div>
             </div>
             <div id="pdf-container" style="width: 100%; height: 400px; overflow: auto; border: 1px solid #ddd;">
@@ -70,15 +66,11 @@
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <h4>Hóa Đơn PDF</h4>
                 <div>
-                    @* <form method="post" asp-page-handler="Export" asp-route-id="@Model.HoaDonNhap.ID" class="d-inline">
-                        <button type="submit" class="btn btn-primary">Xuất Excel</button>
-                    </form> *@
-                    @* <button type="button" class="btn btn-primary ml-2" onclick="viewExcelFile('@Model.HoaDonNhap.ID')">Xem
-                        file Excel</button> *@
-                    <button class="btn btn-primary" onclick="viewExcelFile('@Model.HoaDonNhap.ID')">Xem phiếu nhập
-                        kho</button>
-                    @* <button type="button" class="btn btn-primary ml-2" onclick="viewPdfFile('@Model.HoaDonNhap.ID')">Xem
-                        phiếu xuất kho PDF</button> *@
+                    <a onclick="goBack()" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Quay Lại
+                    </a>
+                    <button class="btn btn-primary" onclick="viewExcelFile('@Model.HoaDonNhap.ID')">Xem phiếu nhập kho
+                    </button>
                 </div>
             </div>
             <p>Không có file PDF cho hóa đơn này.</p>
@@ -88,8 +80,8 @@
 
 <h4 class="mt-5">Danh Sách Hàng Hóa</h4>
 <div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
             <tr>
                 <th>Hàng Hóa</th>
                 <th>Nhóm hàng</th>
@@ -113,35 +105,28 @@
                 @foreach (var hangHoa in Model.HoaDonNhap.HangHoas)
                 {
                     <tr>
-                        <td><input class="form-control" type="text" name="TenHangHoa" value="@hangHoa.TenHangHoa" readonly />
-                        </td>
-                        <td>@hangHoa.NhomHangName</td>
-                        <td>@hangHoa.DonViTinh</td>
-                        <td><input class="form-control" type="number" name="SoLuong" value="@hangHoa.SoLuong" min="0"
-                                readonly /></td>
-                        <td><input class="form-control" type="number" name="DonGiaTruocThue" value="@hangHoa.DonGiaTruocThue"
-                                readonly min="0" /></td>
-                        <td><input class="form-control" type="number" name="DonGiaSauThue" value="@hangHoa.DonGiaSauThue"
-                                readonly min="0" /></td>
-                        <td><input class="form-control" type="number" name="TongGiaTruocThue" value="@hangHoa.TongGiaTruocThue"
-                                min="0" readonly /></td>
-                        <td><input class="form-control" type="number" name="TongGiaSauThue" value="@hangHoa.TongGiaSauThue"
-                                min="0" readonly /></td>
+                        <td><input class="form-control" type="text" name="TenHangHoa" value="@hangHoa.TenHangHoa" readonly /></td>
+                        <td><input class="form-control" type="text" name="NhomHangName" value="@hangHoa.NhomHangName" readonly /></td>
+                        <td><input class="form-control" type="text" name="DonViTinh" value="@hangHoa.DonViTinh" readonly /></td>
+                        <td><input class="form-control" type="number" name="SoLuong" value="@hangHoa.SoLuong" min="0" readonly /></td>
+                        <td><input class="form-control" type="number" name="DonGiaTruocThue" value="@hangHoa.DonGiaTruocThue" readonly min="0" /></td>
+                        <td><input class="form-control" type="number" name="DonGiaSauThue" value="@hangHoa.DonGiaSauThue" readonly min="0" /></td>
+                        <td><input class="form-control" type="number" name="TongGiaTruocThue" value="@hangHoa.TongGiaTruocThue" min="0" readonly /></td>
+                        <td><input class="form-control" type="number" name="TongGiaSauThue" value="@hangHoa.TongGiaSauThue" min="0" readonly /></td>
                     </tr>
                 }
             }
         </tbody>
     </table>
 </div>
+
 <!-- Modal -->
-<div class="modal fade" id="excelPreviewModal" tabindex="-1" role="dialog" aria-labelledby="excelPreviewModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="excelPreviewModal" tabindex="-1" role="dialog" aria-labelledby="excelPreviewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="excelPreviewModalLabel">Phiếu nhập kho</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                    onclick="closeModal()"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal()"></button>
             </div>
             <div class="modal-body" id="excelPreviewContent">
             </div>
@@ -198,7 +183,6 @@
             });
         </script>
     }
-    @* Embed excel *@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
         function viewExcelFile(id) {
@@ -212,25 +196,42 @@
 
                     const modalContent = document.getElementById('excelPreviewContent');
                     modalContent.innerHTML = `
-                                                        <style>
-                                                        table { border-collapse: collapse; width: 100%; }
-                                                        th, td { 
-                                                        border: 1px solid #ddd; 
-                                                        padding: 8px; 
-                                                        text-align: center; 
-                                                        vertical-align: middle;
-                                                        }
-                                                        th { 
-                                                        background-color: #f2f2f2; 
-                                                        font-weight: bold;
-                                                        }
-                                                        .role { font-weight: bold; }
-                                                        .left-align { text-align: left; }
-                                                        .center-align { text-align: center; }
-                                                        .bold { font-weight: bold; }
-                                                        </style>
-                                                        ${html}
-                                                        `;
+                        <style>
+                            table { border-collapse: collapse; width: 100%; }
+                            th, td { 
+                                border: 1px solid #ddd; 
+                                padding: 8px; 
+    <script>
+        function viewExcelFile(id) {
+            fetch(`?handler=ViewExcel&id=${id}`)
+                .then(response => response.arrayBuffer())
+                .then(data => {
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const html = XLSX.utils.sheet_to_html(worksheet);
+
+                    const modalContent = document.getElementById('excelPreviewContent');
+                    modalContent.innerHTML = `
+                                                            <style>
+                                                            table { border-collapse: collapse; width: 100%; }
+                                                            th, td { 
+                                                            border: 1px solid #ddd; 
+                                                            padding: 8px; 
+                                                            text-align: center; 
+                                                            vertical-align: middle;
+                                                            }
+                                                            th { 
+                                                            background-color: #f2f2f2; 
+                                                            font-weight: bold;
+                                                            }
+                                                            .role { font-weight: bold; }
+                                                            .left-align { text-align: left; }
+                                                            .center-align { text-align: center; }
+                                                            .bold { font-weight: bold; }
+                                                            </style>
+                                                            ${html}
+                                                            `;
 
                     modalContent.querySelectorAll('td, th').forEach(cell => {
                         if (['Người lập phiếu', 'Người nhận hàng', 'Thủ kho', 'Kế toán', 'Giám đốc'].includes(cell.textContent.trim())) {

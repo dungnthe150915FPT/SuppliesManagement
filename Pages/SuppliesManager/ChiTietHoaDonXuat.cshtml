@@ -9,58 +9,85 @@
     <button type="submit" class="btn btn-primary">Xuất Excel</button>
 </form>
 
-<div>
-    <h4>Thông Tin Hóa Đơn</h4>
-    <dl class="row">
-        <dt class="col-sm-3">Người Nhận:</dt>
-        <dd class="col-sm-9">@Model.HoaDonXuat.NguoiNhan</dd>
+<div class="card mt-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-info-circle"></i> Thông Tin Hóa Đơn</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Người Nhận:</dt>
+            <dd class="col-sm-9">
+                <input type="text" class="form-control" value="@Model.HoaDonXuat.NguoiNhan" readonly />
+            </dd>
 
-        <dt class="col-sm-3">Lý Do Xuất:</dt>
-        <dd class="col-sm-9">@Model.HoaDonXuat.LyDoNhan</dd>
+            <dt class="col-sm-3">Lý Do Xuất:</dt>
+            <dd class="col-sm-9">
+                <input type="text" class="form-control" value="@Model.HoaDonXuat.LyDoNhan" readonly />
+            </dd>
 
-        <dt class="col-sm-3">Kho Xuất:</dt>
-        <dd class="col-sm-9">@Model.HoaDonXuat.KhoHang</dd>
+            <dt class="col-sm-3">Kho Xuất:</dt>
+            <dd class="col-sm-9">
+                <input type="text" class="form-control" value="@Model.HoaDonXuat.KhoHang" readonly />
+            </dd>
 
-        <dt class="col-sm-3">Ngày Xuất:</dt>
-        <dd class="col-sm-9">@Model.HoaDonXuat.NgayNhan.ToString("dd/MM/yyyy")</dd>
+            <dt class="col-sm-3">Ngày Xuất:</dt>
+            <dd class="col-sm-9">
+                <input type="text" class="form-control" value="@Model.HoaDonXuat.NgayNhan.ToString("dd/MM/yyyy")"
+                    readonly />
+            </dd>
 
-        <dt class="col-sm-3">Tổng Tiền chưa tính thuế (VNĐ):</dt>
-        <dd class="col-sm-9">@Model.HoaDonXuat.ThanhTien.ToString("#,##0").Replace(',', '.')</dd>
-    </dl>
+            <dt class="col-sm-3">Tổng Tiền chưa tính thuế (VNĐ):</dt>
+            <dd class="col-sm-9">
+                <input type="text" class="form-control"
+                    value="@Model.HoaDonXuat.ThanhTien.ToString("#,##0").Replace(',', '.')" readonly />
+            </dd>
+        </dl>
+    </div>
 </div>
 
 <h4>Danh Sách Hàng Hóa</h4>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Hàng Hóa</th>
-            <th>Nhóm Hàng</th>
-            <th>Đơn Vị Tính</th>
-            <th>Số Lượng</th>
-            <th>Đơn Giá</th>
-            <th>Thành Tiền</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.HoaDonXuat.HangHoas.Count == 0)
-        {
-            <tr>
-                <td colspan="8" class="text-center">Không có hàng hóa nào trong hóa đơn này.</td>
-            </tr>
-        }
-        else
-        {
-            foreach (var hangHoa in Model.HoaDonXuat.HangHoas)
-            {
-                <tr>
-                    <td>@hangHoa.TenHangHoa</td>
-                    <td>@hangHoa.NhomHangName</td>
-                    <td>@hangHoa.DonViTinh</td>
-                    <td>@hangHoa.SoLuong</td>
-                    <td>@hangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
-                    <td>@hangHoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
+<div class="card mt-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-list"></i> Danh sách hàng hóa</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Hàng Hóa</th>
+                        <th>Nhóm Hàng</th>
+                        <th>Đơn Vị Tính</th>
+                        <th>Số Lượng</th>
+                        <th>Đơn Giá</th>
+                        <th>Thành Tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.HoaDonXuat.HangHoas.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center">Không có hàng hóa nào trong hóa đơn này.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var hangHoa in Model.HoaDonXuat.HangHoas)
+                        {
+                            <tr>
+                                <td><input type="text" class="form-control" readonly value="@hangHoa.TenHangHoa" /></td>
+                                <td><input type="text" class="form-control" readonly value="@hangHoa.NhomHangName" /></td>
+                                <td><input type="text" class="form-control" readonly value="@hangHoa.DonViTinh" /></td>
+                                <td><input type="text" class="form-control" readonly value="@hangHoa.SoLuong" /></td>
+                                <td><input type="text" class="form-control" readonly
+                                        value="@hangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')" /></td>
+                                <td><input type="text" class="form-control" readonly
+                                        value="@hangHoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')" /></td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

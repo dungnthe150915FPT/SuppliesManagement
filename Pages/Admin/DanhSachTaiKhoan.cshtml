@@ -83,42 +83,49 @@
         </form>
     </div>
 </div>
-<div class="table-responsive">
-    <table class="table table-striped table-bordered">
-        <thead class="thead-dark">
-            <tr>
-                <th>Tài khoản</th>
-                <th>Họ và tên</th>
-                <th>Giới tính</th>
-                <th>Số điện thoại</th>
-                <th>Gmail</th>
-                <th>Quyền</th>
-                <th>Xem</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var taikhoan in Model.Accounts)
-            {
-                <tr>
-                    <td>@taikhoan.Username</td>
-                    <td>@taikhoan.Fullname</td>
-                    <td>@(taikhoan.Gender == true ? "Nam" : "Nữ")</td>
-                    <td>@taikhoan.Phone</td>
-                    <td>@taikhoan.Email</td>
-                    @if (taikhoan.RoleId == 2)
+<div class="card mt-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-list"></i> Danh sách tài khoản</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Tài khoản</th>
+                        <th>Họ và tên</th>
+                        <th>Giới tính</th>
+                        <th>Số điện thoại</th>
+                        <th>Gmail</th>
+                        <th>Quyền</th>
+                        <th>Xem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var taikhoan in Model.Accounts)
                     {
-                        <td style="color: red">Thủ kho</td>
+                        <tr>
+                            <td>@taikhoan.Username</td>
+                            <td>@taikhoan.Fullname</td>
+                            <td>@(taikhoan.Gender == true ? "Nam" : "Nữ")</td>
+                            <td>@taikhoan.Phone</td>
+                            <td>@taikhoan.Email</td>
+                            @if (taikhoan.RoleId == 2)
+                            {
+                                <td style="color: red">Thủ kho</td>
+                            }
+                            else
+                            {
+                                <td style="color: purple">Người nhận hàng</td>
+                            }
+                            <td><a asp-page="/Admin/UserDetail" asp-route-id="@taikhoan.Id" class="btn btn-primary">Chi tiết</a>
+                            </td>
+                        </tr>
                     }
-                    else
-                    {
-                        <td style="color: purple">Người nhận hàng</td>
-                    }
-                    <td><a asp-page="/Admin/UserDetail" asp-route-id="@taikhoan.Id" class="btn btn-primary">Chi tiết</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 <nav>
     <ul class="pagination">
@@ -127,6 +134,7 @@
             <li class="page-item">
                 <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)"
                     asp-route-SearchTerm="@Model.SearchTerm" asp-route-Phone="@Model.Phone" asp-route-Gender="@Model.Gender"
+                    asp-route-Fullname="@Model.Fullname" asp-route-Email="@Model.Email"
                     asp-route-RoleId="@Model.RoleId" asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
                     asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")">Trước</a>
             </li>
@@ -137,6 +145,7 @@
             <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
                 <a class="page-link" asp-route-pageNumber="@i" asp-route-SearchTerm="@Model.SearchTerm"
                     asp-route-Phone="@Model.Phone" asp-route-Gender="@Model.Gender" asp-route-RoleId="@Model.RoleId"
+                    asp-route-Fullname="@Model.Fullname" asp-route-Email="@Model.Email"
                     asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
                     asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")">@i</a>
             </li>
@@ -147,6 +156,7 @@
             <li class="page-item">
                 <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)"
                     asp-route-SearchTerm="@Model.SearchTerm" asp-route-Phone="@Model.Phone" asp-route-Gender="@Model.Gender"
+                    asp-route-Fullname="@Model.Fullname" asp-route-Email="@Model.Email" 
                     asp-route-RoleId="@Model.RoleId" asp-route-StartDate="@Model.StartDate?.ToString("yyyy-MM-dd")"
                     asp-route-EndDate="@Model.EndDate?.ToString("yyyy-MM-dd")">Sau</a>
             </li>
