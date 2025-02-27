@@ -17,8 +17,8 @@
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area=""
                     asp-page="/@(HttpContextAccessor.HttpContext.Session.GetInt32("RoleId") == 1 ? "Admin/AdminDashboard" : HttpContextAccessor.HttpContext.Session.GetInt32("RoleId") == 2 ? "SuppliesManager/SuppliesDashboard" : "User/DanhSachHangNhan")">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRBeTHMY_NPPayr4I8txjPRXuIIrdvk7UlEw&s" alt="Quản Lý Kho"
-                        height="30">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRBeTHMY_NPPayr4I8txjPRXuIIrdvk7UlEw&s"
+                        alt="Quản Lý Kho" height="30">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,6 +26,31 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32("RoleId") == 3)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold" asp-area="" asp-page="/User/DanhSachHangNhan">PHẦN MỀM QUẢN LÝ KHO VISHIPEL</a>
+                                <a class="nav-link fw-bold" asp-area="" asp-page="/User/DanhSachHangNhan">CÔNG TY TNHH MTV
+                                    THÔNG TIN ĐIỆN TỬ HÀNG HẢI VIỆT NAM</a>
+                            </li>
+                        }
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32("RoleId") == 1)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold" asp-area="" asp-page="/Admin/AdminDashboard">PHẦN MỀM QUẢN LÝ KHO VISHIPEL</a>
+                                <a class="nav-link fw-bold" asp-area="" asp-page="/Admin/AdminDashboard">CÔNG TY TNHH MTV
+                                    THÔNG TIN ĐIỆN TỬ HÀNG HẢI VIỆT NAM</a>
+                            </li>
+                        }
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32("RoleId") == 2)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold" asp-area="" asp-page="/SuppliesManager/SuppliesDashboard">PHẦN MỀM QUẢN LÝ KHO VISHIPEL</a>
+                                <a class="nav-link fw-bold" asp-area="" asp-page="/SuppliesManager/SuppliesDashboard">CÔNG TY TNHH MTV
+                                    THÔNG TIN ĐIỆN TỬ HÀNG HẢI VIỆT NAM</a>
+                            </li>
+                        }
+                        @* <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         @if (HttpContextAccessor.HttpContext.Session.GetInt32("RoleId") == 1 ||
                                                 HttpContextAccessor.HttpContext.Session.GetInt32("RoleId") == 2)
                         {
@@ -80,17 +105,19 @@
                                     Nhận</a>
                             </li>
                         }
+                    </ul> *@
                     </ul>
                     <ul class="navbar-nav">
                         @if (HttpContextAccessor.HttpContext.Session.GetString("Username") != null)
                         {
                             <li class="nav-item">
                                 <a class="nav-link fw-bold" asp-page="/Common/Profile">
-                                    ✨ Xin chào @HttpContextAccessor.HttpContext.Session.GetString("Fullname") ⭐
+                                    Xin chào @HttpContextAccessor.HttpContext.Session.GetString("Fullname")
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="btn btn-primary nav-link fw-bold" href="javascript:void(0);" onclick="confirmLogout()">Đăng
+                                <a class="btn btn-primary nav-link fw-bold" href="javascript:void(0);"
+                                    onclick="confirmLogout()">Đăng
                                     xuất</a>
                             </li>
                         }
@@ -114,7 +141,7 @@
                                     liệu thống kê</a>
                             </li>
                         }
-                                                @if (HttpContextAccessor.HttpContext.Session.GetInt32("RoleId") == 1)
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32("RoleId") == 1)
                         {
                             <li class="nav-item">
                                 <a class="nav-link fw-bold" asp-area="" asp-page="/Admin/DanhSachTaiKhoan">Quản lý tài
@@ -135,7 +162,8 @@
                                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                                         <li><a class="nav-link" asp-page="/SuppliesManager/NhapMuaHangHoa">Nhập hóa đơn</a>
                                         </li>
-                                        <li><a class="nav-link" asp-page="/SuppliesManager/DanhSachHoaDonNhap">DS phiếu nhập kho</a></li>
+                                        <li><a class="nav-link" asp-page="/SuppliesManager/DanhSachHoaDonNhap">DS phiếu nhập
+                                                kho</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -150,7 +178,8 @@
                                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                                         <li><a class="nav-link" asp-page="/SuppliesManager/XuatHangHoa">Xuất hóa đơn</a>
                                         </li>
-                                        <li><a class="nav-link" asp-page="/SuppliesManager/DanhSachHoaDonXuat">DS phiếu xuất kho</a></li>
+                                        <li><a class="nav-link" asp-page="/SuppliesManager/DanhSachHoaDonXuat">DS phiếu xuất
+                                                kho</a></li>
                                     </ul>
                                 </div>
                             </li>

@@ -44,10 +44,16 @@
                                 <!-- Information Columns -->
                                 <div class="col-md-4">
                                     <div class="mb-3">
+                                        <label asp-for="HangHoa.Id" class="form-label">
+                                            <i class="bi bi-box-seam"></i> Mã Hàng Hóa:
+                                        </label>
+                                        <input asp-for="HangHoa.Id" class="form-control" readonly id="Id"/>
+                                    </div>
+                                    <div class="mb-3">
                                         <label asp-for="HangHoa.TenHangHoa" class="form-label">
                                             <i class="bi bi-box-seam"></i> Tên Hàng Hóa:
                                         </label>
-                                        <input asp-for="HangHoa.TenHangHoa" class="form-control" readonly />
+                                        <input asp-for="HangHoa.TenHangHoa" class="form-control" readonly required/>
                                     </div>
                                     <div class="mb-3">
                                         <label asp-for="HangHoa.NhomHangId" class="form-label">
@@ -73,21 +79,19 @@
                                         <label asp-for="HangHoa.DonGiaTruocThue" class="form-label">
                                             <i class="bi bi-cash"></i> Đơn Giá Trước Thuế:
                                         </label>
-                                        <input asp-for="HangHoa.DonGiaTruocThue" class="form-control" readonly
-                                            id="DonGiaTruocThue" />
+                                        <input type="text" asp-for="HangHoa.DonGiaTruocThue" required readonly class="form-control" id="DonGiaTruocThue" oninput="calculateTotals()" />
                                     </div>
                                     <div class="mb-3">
                                         <label asp-for="HangHoa.DonGiaSauThue" class="form-label">
                                             <i class="bi bi-cash"></i> Đơn Giá Sau Thuế:
                                         </label>
-                                        <input asp-for="HangHoa.DonGiaSauThue" class="form-control" readonly
-                                            id="DonGiaSauThue" />
+                                        <input type="text" asp-for="HangHoa.DonGiaSauThue" class="form-control" readonly id="DonGiaSauThue" />
                                     </div>
                                     <div class="mb-3">
                                         <label asp-for="HangHoa.Vat" class="form-label">
                                             <i class="bi bi-currency-exchange"></i> Thuế (%):
                                         </label>
-                                        <input asp-for="HangHoa.Vat" class="form-control" readonly />
+                                        <input asp-for="HangHoa.Vat" class="form-control" id="Vat" oninput="calculateTotals()" readonly required/>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -101,6 +105,8 @@
                                         </select>
                                     </div>
                                     <div class="mb-3">
+                                    </div>
+                                    <div class="mb-3">
                                         <label asp-for="HangHoa.NgayNhap" class="form-label">
                                             <i class="bi bi-calendar"></i>
                                             Ngày Nhập:
@@ -109,29 +115,36 @@
                                     </div>
                                     <div class="mb-3">
                                         <label asp-for="HangHoa.TongGiaTruocThue" class="form-label">
-                                            <i class="bi bi-cash"></i>Tổng Giá Trước Thuế:
+                                            <i class="bi bi-cash"></i> Tổng Giá Trước Thuế:
                                         </label>
-                                        <input asp-for="HangHoa.TongGiaTruocThue" class="form-control" readonly
+                                        <input type="text" asp-for="HangHoa.TongGiaTruocThue" class="form-control" readonly
                                             id="TongGiaTruocThue" />
                                     </div>
                                     <div class="mb-3">
                                         <label asp-for="HangHoa.TongGiaSauThue" class="form-label">
-                                            <i class="bi bi-cash"></i>Tổng Giá Trước Thuế:
+                                            <i class="bi bi-cash"></i> Tổng Giá Trước Thuế:
                                         </label>
-                                        <input asp-for="HangHoa.TongGiaSauThue" class="form-control" readonly
+                                        <input type="text" asp-for="HangHoa.TongGiaSauThue" class="form-control" readonly
                                             id="TongGiaSauThue" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="HangHoa.SoLuong" class="form-label">
+                                            <i class="bi bi-box-arrow-in-down"></i> Số Lượng Đã Nhập:
+                                        </label>
+                                        @* <input asp-for="HangHoa.SoLuong" class="form-control" readonly required/> *@
+                                        <input asp-for="HangHoa.SoLuong" class="form-control" id="SoLuong" oninput="calculateTotals()" required readonly/>
                                     </div>
                                     <div class="mb-3">
                                         <label asp-for="HangHoa.SoLuongConLai" class="form-label">
                                             <i class="bi bi-box-arrow-in-down"></i> Số Lượng Còn Lại:
                                         </label>
-                                        <input asp-for="HangHoa.SoLuongConLai" class="form-control" readonly />
+                                        <input asp-for="HangHoa.SoLuongConLai" class="form-control" readonly id="SoLuongConLai"/>
                                     </div>
                                     <div class="mb-3">
                                         <label asp-for="HangHoa.SoLuongDaXuat" class="form-label">
                                             <i class="bi bi-box-arrow-in-up"></i> Số Lượng Đã Xuất:
                                         </label>
-                                        <input asp-for="HangHoa.SoLuongDaXuat" class="form-control" readonly />
+                                        <input asp-for="HangHoa.SoLuongDaXuat" class="form-control" readonly id="SoLuongDaXuat"/>
                                     </div>
                                 </div>
                                 <!-- Image Column -->
@@ -236,52 +249,4 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    function toggleEdit() {
-        const inputs = document.querySelectorAll('input.form-control, select.form-select');
-        const editButton = document.getElementById('editButton');
-        const imageUploadSection = document.getElementById('imageUploadSection');
-        const saveChangesSection = document.getElementById('saveChangesSection');
-
-        inputs.forEach(input => {
-            if (input.tagName === 'SELECT') {
-                input.disabled = !input.disabled;
-            } else {
-                input.readOnly = !input.readOnly;
-            }
-        });
-
-        if (editButton.textContent === 'Chỉnh sửa') {
-            editButton.textContent = 'Hủy chỉnh sửa';
-            editButton.classList.remove('btn-light');
-            editButton.classList.add('btn-danger');
-            imageUploadSection.classList.remove('d-none');
-            saveChangesSection.classList.remove('d-none');
-        } else {
-            editButton.textContent = 'Chỉnh sửa';
-            editButton.classList.remove('btn-danger');
-            editButton.classList.add('btn-light');
-            imageUploadSection.classList.add('d-none');
-            saveChangesSection.classList.add('d-none');
-        }
-    }
-
-    function openImageModal(imageSrc, index) {
-        const modal = new bootstrap.Modal(document.getElementById('imageModal'));
-        const modalImage = document.getElementById('modalImage');
-        modalImage.src = imageSrc;
-        modal.show();
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const successAlert = document.getElementById("successAlert");
-        if (successAlert) {
-            setTimeout(() => {
-                successAlert.style.display = "none";
-            }, 10000);
-        }
-    });
-    function goBack() {
-        window.history.back();
-    }
-</script>
+<script src="~/js/SuppliesManager/ChiTietHang.js"></script>

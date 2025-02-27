@@ -10,17 +10,17 @@ namespace SuppliesManagement.Models
         public string TenHangHoa { get; set; } = null!;
         public int DonViTinhId { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = false)]
         public decimal DonGiaTruocThue { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = false)]
         public decimal DonGiaSauThue { get; set; }
         public int Vat { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = false)]
         public decimal TongGiaTruocThue { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = false)]
         public decimal TongGiaSauThue { get; set; }
         public int SoLuongDaXuat { get; set; }
         public int SoLuongConLai { get; set; }

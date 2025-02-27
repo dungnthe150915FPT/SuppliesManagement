@@ -76,7 +76,15 @@ app.MapGet(
         return Task.CompletedTask;
     }
 );
-
+// app.UseEndpoints(endpoints =>
+// {
+//     endpoints.MapRazorPages();
+    
+//     foreach (var endpoint in endpoints.DataSources.SelectMany(ds => ds.Endpoints))
+//     {
+//         Console.WriteLine(endpoint.DisplayName);
+//     }
+// });
 app.MapRazorPages();
 
 app.Run();

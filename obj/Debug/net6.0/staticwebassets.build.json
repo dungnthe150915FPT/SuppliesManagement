@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Gt/skhZIVLa+yNnt4UXTz/HMoiGaXSgvldWaG1Q0W0M=",
+  "Hash": "Mg+I0L9B4PYnhI8cz7Fj8poaXvRXS59IE7Ejbe6XJXw=",
   "Source": "SuppliesManagement",
   "BasePath": "_content/SuppliesManagement",
   "Mode": "Default",
@@ -185,6 +185,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "D:\\smtest\\SuppliesManagement\\wwwroot\\css\\SuppliesManager\\ChiTietHoaDonNhap.css",
+      "SourceId": "SuppliesManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\smtest\\SuppliesManagement\\wwwroot\\",
+      "BasePath": "_content/SuppliesManagement",
+      "RelativePath": "css/SuppliesManager/ChiTietHoaDonNhap.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\SuppliesManager\\ChiTietHoaDonNhap.css"
     },
     {
       "Identity": "D:\\smtest\\SuppliesManagement\\wwwroot\\css\\SuppliesManager\\DanhSachHang.css",
@@ -459,6 +476,40 @@
       "OriginalItemSpec": "wwwroot\\js\\site.js"
     },
     {
+      "Identity": "D:\\smtest\\SuppliesManagement\\wwwroot\\js\\SuppliesManager\\ChiTietHang.js",
+      "SourceId": "SuppliesManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\smtest\\SuppliesManagement\\wwwroot\\",
+      "BasePath": "_content/SuppliesManagement",
+      "RelativePath": "js/SuppliesManager/ChiTietHang.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\SuppliesManager\\ChiTietHang.js"
+    },
+    {
+      "Identity": "D:\\smtest\\SuppliesManagement\\wwwroot\\js\\SuppliesManager\\ChiTietHoaDonNhap.js",
+      "SourceId": "SuppliesManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\smtest\\SuppliesManagement\\wwwroot\\",
+      "BasePath": "_content/SuppliesManagement",
+      "RelativePath": "js/SuppliesManager/ChiTietHoaDonNhap.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\SuppliesManager\\ChiTietHoaDonNhap.js"
+    },
+    {
       "Identity": "D:\\smtest\\SuppliesManagement\\wwwroot\\js\\SuppliesManager\\DanhSachHang.js",
       "SourceId": "SuppliesManagement",
       "SourceType": "Discovered",
@@ -525,6 +576,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\SuppliesManager\\NhapMuaHangHoa.js"
+    },
+    {
+      "Identity": "D:\\smtest\\SuppliesManagement\\wwwroot\\js\\SuppliesManager\\VatTu.js",
+      "SourceId": "SuppliesManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\smtest\\SuppliesManagement\\wwwroot\\",
+      "BasePath": "_content/SuppliesManagement",
+      "RelativePath": "js/SuppliesManager/VatTu.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\SuppliesManager\\VatTu.js"
     },
     {
       "Identity": "D:\\smtest\\SuppliesManagement\\wwwroot\\js\\SuppliesManager\\XuatDungHangHoa.js",

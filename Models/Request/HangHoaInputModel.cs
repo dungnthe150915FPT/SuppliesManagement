@@ -7,6 +7,9 @@
         public int NhomHangID { get; set; }
         public int SoLuong { get; set; }
         public decimal DonGiaTruocThue { get; set; }
+        public decimal DonGiaSauThue { get; set; }
+        public decimal TongGiaTruocThue { get; set; }
+        public decimal TongGiaSauThue { get; set; }
         public int DonViTinhID { get; set; }
         public int VAT { get; set; }
 

@@ -1,0 +1,53 @@
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-print, .btn-export {
+    padding: 10px 20px;
+    font-size: 1rem;
+}
+
+@media print {
+    body {
+        visibility: hidden;
+    }
+    .modal-content {
+        visibility: visible;
+    }
+}
+
+#successAlert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+    animation: fadein 1s;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+#errorAlert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+    animation: fadein 1s;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

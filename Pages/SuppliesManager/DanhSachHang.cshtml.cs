@@ -52,8 +52,11 @@ namespace SuppliesManagement.Pages
             NhomHangs = dBContext.NhomHangs.ToList();
 
             IQueryable<HangHoa> query = dBContext.HangHoas
+                .Include(h => h.KhoHang)
                 .Include(h => h.NhomHang)
                 .Include(h => h.DonViTinh);
+                // .ThenInclude(nk => nk.HangHoaHoaDons)
+                // .ThenInclude(nk => nk.HoaDonNhaps);
 
             // Filtering
             if (NhomHangHoaId.HasValue)

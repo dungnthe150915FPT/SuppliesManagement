@@ -99,7 +99,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
             hangHoaToUpdate.DonGiaSauThue = hangHoa.DonGiaSauThue;
             hangHoaToUpdate.Vat = hangHoa.Vat;
             hangHoaToUpdate.SoLuongDaXuat = hangHoa.SoLuongDaXuat;
-            hangHoaToUpdate.SoLuongConLai = hangHoa.SoLuongConLai;
+            hangHoaToUpdate.SoLuong = hangHoa.SoLuong;
             hangHoaToUpdate.NgayNhap = hangHoa.NgayNhap;
             hangHoaToUpdate.KhoHangId = hangHoa.KhoHangId;
 

@@ -13,11 +13,11 @@
     <div class="mb-3">
         <label for="month">Tháng:</label>
         <input class="form-control" type="number" name="month" min="1" max="12" value="@Model.Month"
-            placeholder="Tháng" />
+            placeholder="Tháng" required/>
     </div>
     <div class="mb-3">
         <label for="NgayNhap">Năm:</label>
-        <input class="form-control" type="number" name="year" value="@Model.Year" placeholder="Năm" />
+        <input class="form-control" type="number" name="year" value="@Model.Year" placeholder="Năm" required/>
     </div>
     <div class="mb-3">
         <input type="submit" value="Search" class="btn btn-success" />
@@ -30,6 +30,7 @@
     {
         <input type="submit" asp-page-handler="Export"
             value="Xuất sổ Vật tư tháng @Request.Query["month"] năm @Request.Query["year"]" class="btn btn-primary" />
+        <input type="button" value="Xem sổ vật tư" class="btn btn-primary" onclick="showExcelPopup()" />
     }
 </form>
 <div class="table-responsive" style="margin-top: 5%">
@@ -78,8 +79,8 @@
                         <td>@hanghoa.SoLuongDaXuat</td>
                         <td>@hanghoa.SoLuongConLai</td>
                         <td>
-                        <a asp-page="./ChiTietHang" asp-route-id="@hanghoa.Id" class="btn btn-info">Xem chi tiết</a>
-                    </td>
+                            <a asp-page="./ChiTietHang" asp-route-id="@hanghoa.Id" class="btn btn-info">Xem chi tiết</a>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -119,3 +120,22 @@
         }
     </ul>
 </nav>
+<!-- Pop-up hiển thị file Excel -->
+<div id="excelPopup" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="excelPopupLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sổ Vật Tư Tháng <span id="popupMonth"></span> Năm <span id="popupYear"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <iframe id="excelFrame" style="width: 100%; height: 500px; border: none;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="printExcel()">In</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/SuppliesManager/VatTu.js"></script>

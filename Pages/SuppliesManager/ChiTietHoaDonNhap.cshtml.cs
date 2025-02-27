@@ -15,6 +15,7 @@ using UglyToad.PdfPig.Content;
 using UglyToad.PdfPig.Fonts.Standard14Fonts;
 using UglyToad.PdfPig.Writer;
 using System.Reflection.Metadata;
+using SuppliesManagement.Models.Request;
 
 namespace SuppliesManagement.Pages.SuppliesManager
 {
@@ -29,6 +30,8 @@ namespace SuppliesManagement.Pages.SuppliesManager
 
         public HoaDonNhapDetailViewModel HoaDonNhap { get; set; }
         public bool HasPDF { get; set; }
+        public List<NhomHang> NhomHangs { get; set; }
+        public List<DonViTinh> DonViTinhs { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
@@ -55,9 +58,11 @@ namespace SuppliesManagement.Pages.SuppliesManager
                     n =>
                         new HangHoaViewModel
                         {
+                            Id = n.HangHoaHoaDon.Id,
                             TenKhoHang = n.HangHoaHoaDon.KhoHang.Ten,
                             TenHangHoa = n.HangHoaHoaDon.TenHangHoa,
                             DonViTinh = n.HangHoaHoaDon.DonViTinh.Name,
+                            VAT = n.HangHoaHoaDon.Vat,
                             SoLuong = n.HangHoaHoaDon.SoLuong,
                             DonGiaTruocThue = n.HangHoaHoaDon.DonGiaTruocThue,
                             DonGiaSauThue = n.HangHoaHoaDon.DonGiaSauThue,
@@ -67,6 +72,9 @@ namespace SuppliesManagement.Pages.SuppliesManager
                         }
                 )
                 .ToListAsync();
+
+            DonViTinhs = await dBContext.DonViTinhs.ToListAsync();
+            NhomHangs = await dBContext.NhomHangs.ToListAsync();
 
             HoaDonNhap = new HoaDonNhapDetailViewModel
             {
@@ -821,12 +829,113 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 package.SaveAs(stream);
                 stream.Position = 0;
 
-                return File(
-                    stream,
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    $"HoaDonNhap_{id}.xlsx"
+                var fileContents = package.GetAsByteArray();
+                var base64FileContents = Convert.ToBase64String(fileContents);
+                return Content(base64FileContents);
+            }
+        }
+
+        public async Task<IActionResult> OnPostUpdateAsync(
+            Guid id,
+            string nhaCungCap,
+            string soHoaDon,
+            DateTime ngayNhap,
+            decimal thanhTien,
+            IFormFile pdfFile,
+            string serial,
+            [FromForm] List<HangHoaViewModel> hangHoaModels // Nhận danh sách hàng hóa từ form
+        )
+        {
+            Console.WriteLine($"Tổng số hàng hóa nhận được: {hangHoaModels?.Count ?? 0}");
+            if (hangHoaModels == null || hangHoaModels.Count == 0)
+            {
+                TempData["Error"] = "Không có dữ liệu hàng hóa được cập nhật!";
+                return RedirectToPage(new { id });
+            }
+
+            foreach (var hangHoa in hangHoaModels)
+            {
+                Console.WriteLine(
+                    $"Hàng hóa: {hangHoa.Id}, Tên: {hangHoa.TenHangHoa}, Số lượng: {hangHoa.SoLuong}"
                 );
             }
+
+            var hoaDon = await dBContext.HoaDonNhaps.FindAsync(id);
+            if (hoaDon == null)
+            {
+                return NotFound();
+            }
+
+            hoaDon.NhaCungCap = nhaCungCap;
+            hoaDon.SoHoaDon = soHoaDon;
+            hoaDon.NgayNhap = ngayNhap;
+            hoaDon.ThanhTien = thanhTien;
+            hoaDon.Serial = serial;
+
+            if (pdfFile != null && pdfFile.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await pdfFile.CopyToAsync(memoryStream);
+                    hoaDon.PDFFile = memoryStream.ToArray();
+                }
+            }
+
+            // Cập nhật thông tin hàng hóa
+            foreach (var hangHoaModel in hangHoaModels)
+            {
+                var hangHoa = await dBContext.HangHoaHoaDons.FindAsync(hangHoaModel.Id);
+                if (hangHoa != null)
+                {
+                    // hangHoa.Id = hangHoaModel.Id;
+                    hangHoa.TenHangHoa = hangHoaModel.TenHangHoa;
+                    hangHoa.DonViTinhId = hangHoaModel.DonViTinhId;
+                    hangHoa.NhomHangId = hangHoaModel.NhomHangId;
+                    hangHoa.SoLuong = hangHoaModel.SoLuong;
+                    hangHoa.Vat = hangHoaModel.VAT;
+                    hangHoa.DonGiaTruocThue = hangHoaModel.DonGiaTruocThue;
+                    hangHoa.DonGiaSauThue = hangHoaModel.DonGiaSauThue;
+                    hangHoa.TongGiaTruocThue = hangHoaModel.TongGiaTruocThue;
+                    hangHoa.TongGiaSauThue = hangHoa.TongGiaSauThue;
+
+                    dBContext.HangHoaHoaDons.Update(hangHoa);
+                }
+                else
+                {
+                    TempData["Error"] = $"Không tìm thấy hàng hóa có ID: {hangHoaModel.Id}";
+                }
+            }
+
+            await dBContext.SaveChangesAsync();
+            TempData["SuccessMessage"] =
+                $"Đã cập nhật hóa đơn nhập số {hoaDon.SoHoaDon} thành công.";
+            return RedirectToPage(new { id = hoaDon.Id });
+        }
+
+        public async Task<IActionResult> OnPostDeleteAsync(Guid id)
+        {
+            var hoaDon = await dBContext.HoaDonNhaps.FindAsync(id);
+            if (hoaDon == null)
+            {
+                return NotFound();
+            }
+
+            // Xóa các bản ghi liên quan trong bảng NhapKhos
+            var nhapKhos = await dBContext.NhapKhos
+                .Where(n => n.HoaDonNhapId == hoaDon.Id)
+                .ToListAsync();
+            dBContext.NhapKhos.RemoveRange(nhapKhos);
+
+            // Xóa các bản ghi liên quan trong bảng HangHoaHoaDons
+            var hangHoaHoaDons = await dBContext.HangHoaHoaDons
+                .Where(h => nhapKhos.Select(n => n.HangHoaHoaDonId).Contains(h.Id))
+                .ToListAsync();
+            dBContext.HangHoaHoaDons.RemoveRange(hangHoaHoaDons);
+
+            dBContext.HoaDonNhaps.Remove(hoaDon);
+            await dBContext.SaveChangesAsync();
+            TempData["SuccessMessage"] = $"Đã xóa hóa đơn nhập số {hoaDon.SoHoaDon} thành công.";
+            return RedirectToPage("/SuppliesManager/DanhSachHoaDonNhap");
         }
     }
 }

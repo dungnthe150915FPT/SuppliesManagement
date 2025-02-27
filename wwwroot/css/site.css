@@ -52,10 +52,10 @@ body {
   background-color: #f8f9fa;
   padding: 15px;
   border-right: 1px solid #dee2e6;
-  height: 88%;
+  height: 84%;
   position: absolute;
   z-index: 1;
-  font-size: 18px;
+  font-size: 17px;
 }
 
 .sidebar .nav-link {
