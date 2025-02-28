@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Mg+I0L9B4PYnhI8cz7Fj8poaXvRXS59IE7Ejbe6XJXw=",
+  "Hash": "uK02O1wq0RY3/xTbmhcigk+m2RRURmwEo9/0ZF86sb0=",
   "Source": "SuppliesManagement",
   "BasePath": "_content/SuppliesManagement",
   "Mode": "Default",
@@ -510,6 +510,23 @@
       "OriginalItemSpec": "wwwroot\\js\\SuppliesManager\\ChiTietHoaDonNhap.js"
     },
     {
+      "Identity": "D:\\smtest\\SuppliesManagement\\wwwroot\\js\\SuppliesManager\\CongCuDungCu.js",
+      "SourceId": "SuppliesManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\smtest\\SuppliesManagement\\wwwroot\\",
+      "BasePath": "_content/SuppliesManagement",
+      "RelativePath": "js/SuppliesManager/CongCuDungCu.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\SuppliesManager\\CongCuDungCu.js"
+    },
+    {
       "Identity": "D:\\smtest\\SuppliesManagement\\wwwroot\\js\\SuppliesManager\\DanhSachHang.js",
       "SourceId": "SuppliesManagement",
       "SourceType": "Discovered",
@@ -576,6 +593,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\SuppliesManager\\NhapMuaHangHoa.js"
+    },
+    {
+      "Identity": "D:\\smtest\\SuppliesManagement\\wwwroot\\js\\SuppliesManager\\PhuTungThayThe.js",
+      "SourceId": "SuppliesManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\smtest\\SuppliesManagement\\wwwroot\\",
+      "BasePath": "_content/SuppliesManagement",
+      "RelativePath": "js/SuppliesManager/PhuTungThayThe.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\SuppliesManager\\PhuTungThayThe.js"
+    },
+    {
+      "Identity": "D:\\smtest\\SuppliesManagement\\wwwroot\\js\\SuppliesManager\\TaiSanCoDinh.js",
+      "SourceId": "SuppliesManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\smtest\\SuppliesManagement\\wwwroot\\",
+      "BasePath": "_content/SuppliesManagement",
+      "RelativePath": "js/SuppliesManager/TaiSanCoDinh.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\SuppliesManager\\TaiSanCoDinh.js"
     },
     {
       "Identity": "D:\\smtest\\SuppliesManagement\\wwwroot\\js\\SuppliesManager\\VatTu.js",

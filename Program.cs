@@ -39,6 +39,7 @@ builder.Services
         }
     );
 builder.Services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
+
 // builder.Services.AddScoped<ISignInService, SignInService>();
 
 builder.Services.AddAuthorization(
@@ -76,10 +77,11 @@ app.MapGet(
         return Task.CompletedTask;
     }
 );
+
 // app.UseEndpoints(endpoints =>
 // {
 //     endpoints.MapRazorPages();
-    
+
 //     foreach (var endpoint in endpoints.DataSources.SelectMany(ds => ds.Endpoints))
 //     {
 //         Console.WriteLine(endpoint.DisplayName);
