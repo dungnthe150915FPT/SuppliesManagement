@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "uK02O1wq0RY3/xTbmhcigk+m2RRURmwEo9/0ZF86sb0=",
+  "Hash": "R5YSiFXmrOzqn044MRviKuRy6QQr2AhSw3LIicIiz6s=",
   "Source": "SuppliesManagement",
   "BasePath": "_content/SuppliesManagement",
   "Mode": "Default",
@@ -321,6 +321,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "D:\\smtest\\SuppliesManagement\\wwwroot\\favicons.ico",
+      "SourceId": "SuppliesManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\smtest\\SuppliesManagement\\wwwroot\\",
+      "BasePath": "_content/SuppliesManagement",
+      "RelativePath": "favicons.ico",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\favicons.ico"
     },
     {
       "Identity": "D:\\smtest\\SuppliesManagement\\wwwroot\\jquery-ajax-unobtrusive\\jquery.unobtrusive-ajax.min.js",

@@ -51,8 +51,6 @@
                     <button type="button" id="clearSearch" class="btn btn-secondary">
                         <i class="fas fa-eraser"></i> Xóa tìm kiếm
                     </button>
-                    @* <a class="btn btn-dark" asp-page="./NhapMuaHangHoa">Nhập mua hàng hóa</a>
-                    <a class="btn btn-dark" asp-page="./XuatDungHangHoa">Xuất dùng hàng hóa</a> *@
                 </div>
             </div>
         </form>
@@ -89,7 +87,7 @@
                                 @(Model.SortOrder == "SoLuongDesc" ? "▼" : "▽")
                             </a>
                         </th>
-                        <th>
+                        <th> 
                             Đơn giá (VNĐ)
                             <a asp-page="./DanhSachHang" asp-route-sortOrder="DonGiaAsc"
                                 asp-route-pageNumber="@Model.CurrentPage" asp-route-SearchTerm="@Model.SearchTerm"
@@ -127,24 +125,26 @@
                         </th>
                         <th>SL đã xuất</th>
                         <th>SL còn lại</th>
+                        <th>Số hóa đơn</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var hanghoa in Model.HangHoas)
+                    @foreach (var hanghoa in Model.NhapKhos)
                     {
                         <tr>
-                            <td>@hanghoa.TenHangHoa</td>
-                            <td>@hanghoa.NhomHang.Name</td>
-                            <td>@hanghoa.DonViTinh.Name</td>
-                            <td>@hanghoa.NgayNhap.ToString("dd/MM/yyyy")</td>
-                            <td>@hanghoa.SoLuong</td>
-                            <td>@hanghoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
-                            <td>@hanghoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
-                            <td>@hanghoa.SoLuongDaXuat</td>
-                            <td>@hanghoa.SoLuongConLai</td>
+                            <td>@hanghoa.HangHoa.TenHangHoa</td>
+                            <td>@hanghoa.HangHoa.NhomHang.Name</td>
+                            <td>@hanghoa.HangHoa.DonViTinh.Name</td>
+                            <td>@hanghoa.HangHoa.NgayNhap.ToString("dd/MM/yyyy")</td>
+                            <td>@hanghoa.HangHoa.SoLuong</td>
+                            <td>@hanghoa.HangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
+                            <td>@hanghoa.HangHoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
+                            <td>@hanghoa.HangHoa.SoLuongDaXuat</td>
+                            <td>@hanghoa.HangHoa.SoLuongConLai</td>
+                            <td>@hanghoa.HoaDonNhap.SoHoaDon</td>
                             <td>
-                                <a asp-page="./ChiTietHang" asp-route-id="@hanghoa.Id" class="btn btn-info btn-sm">
+                                <a asp-page="./ChiTietHang" asp-route-id="@hanghoa.HangHoa.Id" class="btn btn-info btn-sm">
                                     <i class="fas fa-info-circle"></i> Chi tiết
                                 </a>
                             </td>

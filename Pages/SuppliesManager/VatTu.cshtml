@@ -29,8 +29,8 @@
     @if (!string.IsNullOrEmpty(Request.Query["year"]) && !string.IsNullOrEmpty(Request.Query["month"]))
     {
         <input type="submit" asp-page-handler="Export"
-            value="Xuất sổ Vật tư tháng @Request.Query["month"] năm @Request.Query["year"]" class="btn btn-primary" />
-        <input type="button" value="Xem sổ vật tư" class="btn btn-primary" onclick="showExcelPopup()" />
+            value="Xuất sổ Vật Tư tháng @Request.Query["month"] năm @Request.Query["year"]" class="btn btn-primary" />
+        <input type="button" value="Sổ Vật Tư tháng @Request.Query["month"] năm @Request.Query["year"]" class="btn btn-primary" onclick="showExcelPopup()" />
     }
 </form>
 <div class="table-responsive" style="margin-top: 5%">

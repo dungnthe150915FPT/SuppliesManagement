@@ -110,13 +110,11 @@ namespace SuppliesManagement.Pages
                 dBContext.SaveChanges();
                 TempData["SuccessMessage"] =
                     $"Nhập mới hóa đơn hàng hóa có số hóa đơn: {SoHoaDon} và số Serial: {SoSerial} thành công!";
-                //return RedirectToPage("./NhapMuaHangHoa");
                 return Page();
             }
             catch (Exception ex)
             {
                 TempData["Error"] = $"Đã xảy ra lỗi khi xử lý: {ex.Message}";
-                //return RedirectToPage("./NhapMuaHangHoa");
                 return Page();
             }
         }
@@ -140,28 +138,32 @@ namespace SuppliesManagement.Pages
             }
 
             // Check if the exact same item exists in the same invoice
-            var existingItem = dBContext.HangHoas.FirstOrDefault(
-                h =>
-                    h.TenHangHoa == item.TenHangHoa
-                    && h.NhomHangId == item.NhomHangID
-                    && h.DonViTinhId == item.DonViTinhID
-                    && h.KhoHangId == khoHangID
-                    && h.NgayNhap == NgayNhap
-            );
+            // var existingItem = dBContext.HangHoas.FirstOrDefault(
+            //     h =>
+            //         h.TenHangHoa == item.TenHangHoa
+            //         && h.NhomHangId == item.NhomHangID
+            //         && h.DonViTinhId == item.DonViTinhID
+            //         && h.KhoHangId == khoHangID
+            //         && h.NgayNhap == NgayNhap
+            // );
 
-            if (existingItem != null)
-            {
-                // Update existing item
-                UpdateExistingHangHoa(existingItem, item, hoaDonNhap, khoHangID);
-            }
-            else
-            {
-                // Create new item
-                CreateNewHangHoa(item, hoaDonNhap, khoHangID, NgayNhap);
-            }
+            // if (existingItem != null)
+            // {
+            //     // Update existing item
+            //     UpdateExistingHangHoa(existingItem, item, hoaDonNhap, khoHangID);
+            // }
+            // else
+            // {
+            // Create new item
+            var hangHoaAdd = CreateNewHangHoa(item, hoaDonNhap, khoHangID, NgayNhap);
+
+            // Create HangHoaHoaDon and NhapKho records
+            var hangHoaHoaDon = CreateHangHoaHoaDon(item, khoHangID);
+            CreateNhapKhoRecord(hoaDonNhap.Id, hangHoaHoaDon.Id, hangHoaAdd.Id);
+            // }
         }
 
-        private void CreateNewHangHoa(
+        private HangHoa CreateNewHangHoa(
             HangHoaInputModel item,
             HoaDonNhap hoaDonNhap,
             Guid khoHangID,
@@ -191,31 +193,28 @@ namespace SuppliesManagement.Pages
             };
 
             dBContext.HangHoas.Add(hangHoa);
-
-            // Create HangHoaHoaDon and NhapKho records
-            var hangHoaHoaDon = CreateHangHoaHoaDon(item, khoHangID);
-            CreateNhapKhoRecord(hoaDonNhap.Id, hangHoaHoaDon.Id);
+            return hangHoa;
         }
 
-        private void UpdateExistingHangHoa(
-            HangHoa hangHoa,
-            HangHoaInputModel item,
-            HoaDonNhap hoaDonNhap,
-            Guid khoHangID
-        )
-        {
-            hangHoa.SoLuong += item.SoLuong;
-            hangHoa.SoLuongConLai += item.SoLuong;
-            hangHoa.TongGiaTruocThue += item.SoLuong * item.DonGiaTruocThue;
-            hangHoa.TongGiaSauThue +=
-                (item.DonGiaTruocThue + (item.DonGiaTruocThue * item.VAT / 100)) * item.SoLuong;
+        // private void UpdateExistingHangHoa(
+        //     HangHoa hangHoa,
+        //     HangHoaInputModel item,
+        //     HoaDonNhap hoaDonNhap,
+        //     Guid khoHangID
+        // )
+        // {
+        //     hangHoa.SoLuong += item.SoLuong;
+        //     hangHoa.SoLuongConLai += item.SoLuong;
+        //     hangHoa.TongGiaTruocThue += item.SoLuong * item.DonGiaTruocThue;
+        //     hangHoa.TongGiaSauThue +=
+        //         (item.DonGiaTruocThue + (item.DonGiaTruocThue * item.VAT / 100)) * item.SoLuong;
 
-            dBContext.HangHoas.Update(hangHoa);
+        //     dBContext.HangHoas.Update(hangHoa);
 
-            // Create HangHoaHoaDon and NhapKho records
-            var hangHoaHoaDon = CreateHangHoaHoaDon(item, khoHangID);
-            CreateNhapKhoRecord(hoaDonNhap.Id, hangHoaHoaDon.Id);
-        }
+        //     // Create HangHoaHoaDon and NhapKho records
+        //     var hangHoaHoaDon = CreateHangHoaHoaDon(item, khoHangID);
+        //     CreateNhapKhoRecord(hoaDonNhap.Id, hangHoaHoaDon.Id);
+        // }
 
         private HangHoaHoaDon CreateHangHoaHoaDon(HangHoaInputModel item, Guid khoHangID)
         {
@@ -256,13 +255,14 @@ namespace SuppliesManagement.Pages
             }
         }
 
-        private void CreateNhapKhoRecord(Guid hoaDonNhapId, Guid hangHoaHoaDonId)
+        private void CreateNhapKhoRecord(Guid hoaDonNhapId, Guid hangHoaHoaDonId, Guid hangHoaId)
         {
             var nhapKho = new NhapKho
             {
                 NhapKhoId = Guid.NewGuid(),
                 HoaDonNhapId = hoaDonNhapId,
-                HangHoaHoaDonId = hangHoaHoaDonId
+                HangHoaHoaDonId = hangHoaHoaDonId,
+                HangHoaId = hangHoaId
             };
             dBContext.NhapKhos.Add(nhapKho);
         }

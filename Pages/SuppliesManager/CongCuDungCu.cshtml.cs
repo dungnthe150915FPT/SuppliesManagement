@@ -288,17 +288,17 @@ namespace SuppliesManagement.Pages.SuppliesManager
             worksheet.Cells[rowIndex + 3, 8].Style.HorizontalAlignment =
                 ExcelHorizontalAlignment.Center;
 
-            worksheet.Cells[rowIndex + 8, 1].Value = "Dương Mạnh Tuấn";
-            worksheet.Cells[rowIndex + 8, 1, rowIndex + 8, 3].Merge = true;
-            worksheet.Cells[rowIndex + 8, 1].Style.HorizontalAlignment =
+            worksheet.Cells[rowIndex + 10, 1].Value = "Dương Mạnh Tuấn";
+            worksheet.Cells[rowIndex + 10, 1, rowIndex + 10, 3].Merge = true;
+            worksheet.Cells[rowIndex + 10, 1].Style.HorizontalAlignment =
                 ExcelHorizontalAlignment.Center;
-            worksheet.Cells[rowIndex + 8, 4].Value = "Nguyễn Thị Hảo";
-            worksheet.Cells[rowIndex + 8, 4, rowIndex + 8, 7].Merge = true;
-            worksheet.Cells[rowIndex + 8, 4].Style.HorizontalAlignment =
+            worksheet.Cells[rowIndex + 10, 4].Value = "Nguyễn Thị Hảo";
+            worksheet.Cells[rowIndex + 10, 4, rowIndex + 10, 7].Merge = true;
+            worksheet.Cells[rowIndex + 10, 4].Style.HorizontalAlignment =
                 ExcelHorizontalAlignment.Center;
-            worksheet.Cells[rowIndex + 8, 8].Value = "Đỗ Công Biên";
-            worksheet.Cells[rowIndex + 8, 8, rowIndex + 8, 11].Merge = true;
-            worksheet.Cells[rowIndex + 8, 8].Style.HorizontalAlignment =
+            worksheet.Cells[rowIndex + 10, 8].Value = "Đỗ Công Biên";
+            worksheet.Cells[rowIndex + 10, 8, rowIndex + 10, 11].Merge = true;
+            worksheet.Cells[rowIndex + 10, 8].Style.HorizontalAlignment =
                 ExcelHorizontalAlignment.Center;
 
             // Save and return file

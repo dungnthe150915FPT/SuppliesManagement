@@ -1,0 +1,11 @@
+@page
+@model SuppliesManagement.Pages.Reports.ViewExcelCongCuDungCuModel
+@{
+    Layout = null;
+    @* ViewData["Title"] = $"Báo cáo Công Cụ Dụng Cụ {Model.Year}"; *@
+}
+@* <h1>@ViewData["Title"]</h1> *@
+
+<div>
+    @Html.Raw(Model.ExcelHtml)
+</div>
