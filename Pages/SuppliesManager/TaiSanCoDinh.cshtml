@@ -4,77 +4,110 @@
     ViewData["Title"] = "Danh Sách Tài Sản Cố Định";
 }
 <h1>DANH SÁCH TÀI SẢN CỐ ĐỊNH</h1>
-<form method="get" class="form-group">
-    <div class="mb-3">
-        <label for="hanghoa">Tên hàng hóa:</label>
-        <input class="form-control" type="text" name="hanghoa" value="@Model.Hanghoa"
-            placeholder="Tên hàng hóa cần tìm kiếm" />
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-search"></i> Tìm kiếm Tài Sản Cố Định</h5>
     </div>
-    <div class="mb-3">
-        <label for="year">Năm:</label>
-        <input class="form-control" type="number" name="year" value="@Model.Year" placeholder="Năm cần tìm kiếm" />
+    <div class="card-body">
+        <form method="get" id="searchForm">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="hanghoa" class="form-label">Tên hàng hóa</label>
+                    <input id="hanghoa" class="form-control" type="text" name="hanghoa" value="@Model.Hanghoa"
+                        placeholder="Nhập tên hàng hóa" />
+                </div>
+                <div class="col-md-4">
+                    <label for="year" class="form-label">Năm</label>
+                    <input id="year" class="form-control" type="number" name="year" value="@Model.Year"
+                        placeholder="Nhập năm" />
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Tìm kiếm
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
-    <div class="mb-3">
-        <input type="submit" value="Search" class="btn btn-success" />
+</div>
+@if (Model.Year.HasValue)
+{
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0"><i class="fas fa-file-excel"></i> Xuất Excel</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" class="form-group">
+                <input type="hidden" name="year" value="@Model.Year" />
+                <button type="submit" asp-page-handler="Export" class="btn btn-success">
+                    <i class="fas fa-download"></i> Xuất sổ TSCĐ năm @Model.Year
+                </button>
+                <button type="button" class="btn btn-primary" onclick="showExcelPopup()">
+                    <i class="fas fa-eye"></i> Xem sổ TSCĐ năm @Model.Year
+                </button>
+            </form>
+        </div>
     </div>
-</form>
-<br>
-<form method="post" class="form-group">
-    <input type="hidden" name="year" value="@Model.Year" />
-    @if (Model.Year.HasValue)
-    {
-        <input type="submit" asp-page-handler="Export" value="Xuất sổ TSCĐ năm @Model.Year" class="btn btn-primary" />
-    }
-</form>
-<div class="table-responsive" style="margin-top: 5%">
-    <table class="table table-striped table-bordered">
-        <thead class="thead-dark">
-            <tr>
-                <th>Mặt hàng</th>
-                <th>Đơn vị tính</th>
-                <th>Ngày nhập</th>
-                <th>
-                    <a asp-page="./TaiSanCoDinh" asp-route-sortOrder="SoLuongAsc"
-                        asp-route-pageNumber="@Model.CurrentPage">S.lượng nhập ↑</a> |
-                    <a asp-page="./TaiSanCoDinh" asp-route-sortOrder="SoLuongDesc"
-                        asp-route-pageNumber="@Model.CurrentPage">↓</a>
-                </th>
-                <th>
-                    <a asp-page="./TaiSanCoDinh" asp-route-sortOrder="DonGiaAsc"
-                        asp-route-pageNumber="@Model.CurrentPage">Đơn giá (VNĐ) ↑</a> |
-                    <a asp-page="./TaiSanCoDinh" asp-route-sortOrder="DonGiaDesc"
-                        asp-route-pageNumber="@Model.CurrentPage">↓</a>
-                </th>
-                <th>
-                    <a asp-page="./TaiSanCoDinh" asp-route-sortOrder="ThanhTienAsc"
-                        asp-route-pageNumber="@Model.CurrentPage">Thành tiền (VNĐ) ↑</a> |
-                    <a asp-page="./TaiSanCoDinh" asp-route-sortOrder="ThanhTienDesc"
-                        asp-route-pageNumber="@Model.CurrentPage">↓</a>
-                </th>
-                <th>Số lượng đã xuất</th>
-                <th>Số lượng còn lại</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var hanghoa in Model.HangHoas)
-            {
-                <tr>
-                    <td>@hanghoa.TenHangHoa</td>
-                    <td>@hanghoa.DonViTinh.Name</td>
-                    <td>@hanghoa.NgayNhap.ToString("dd/MM/yyyy")</td>
-                    <td>@hanghoa.SoLuong</td>
-                    <td>@hanghoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
-                    <td>@hanghoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
-                    <td>@hanghoa.SoLuongDaXuat</td>
-                    <td>@hanghoa.SoLuongConLai</td>
-                    <td>
-                        <a asp-page="./ChiTietHang" asp-route-id="@hanghoa.Id" class="btn btn-info">Xem chi tiết</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+}
+
+<div class="card mt-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-list"></i> Danh sách Tài Sản Cố Định</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Mặt hàng</th>
+                        <th>Đơn vị tính</th>
+                        <th>Ngày Nhập</th>
+                        <th>
+                            <a asp-page="./TaiSanCoDinh" asp-route-sortOrder="SoLuongAsc"
+                                asp-route-pageNumber="@Model.CurrentPage">Số lượng nhập ↑</a> |
+                            <a asp-page="./TaiSanCoDinh" asp-route-sortOrder="SoLuongDesc"
+                                asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                        </th>
+                        <th>
+                            <a asp-page="./TaiSanCoDinh" asp-route-sortOrder="DonGiaAsc"
+                                asp-route-pageNumber="@Model.CurrentPage">Đơn giá (VNĐ) ↑</a> |
+                            <a asp-page="./TaiSanCoDinh" asp-route-sortOrder="DonGiaDesc"
+                                asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                        </th>
+                        <th>
+                            <a asp-page="./TaiSanCoDinh" asp-route-sortOrder="ThanhTienAsc"
+                                asp-route-pageNumber="@Model.CurrentPage">Thành tiền (VNĐ) ↑</a> |
+                            <a asp-page="./TaiSanCoDinh" asp-route-sortOrder="ThanhTienDesc"
+                                asp-route-pageNumber="@Model.CurrentPage">↓</a>
+                        </th>
+                        <th>Số lượng đã xuất</th>
+                        <th>Số lượng còn lại</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var hanghoa in Model.HangHoas)
+                    {
+                        <tr>
+                            <td>@hanghoa.TenHangHoa</td>
+                            <td>@hanghoa.DonViTinh.Name</td>
+                            <td>@hanghoa.NgayNhap.ToString("dd/MM/yyyy")</td>
+                            <td>@hanghoa.SoLuong</td>
+                            <td>@hanghoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
+                            <td>@hanghoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')</td>
+                            <td>@hanghoa.SoLuongDaXuat</td>
+                            <td>@hanghoa.SoLuongConLai</td>
+                            <td>
+                                <a asp-page="./ChiTietHang" asp-route-id="@hanghoa.Id" class="btn btn-info">Xem chi tiết</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 <nav>
     <ul class="pagination">
@@ -104,3 +137,22 @@
         }
     </ul>
 </nav>
+<div id="excelPopup" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="excelPopupLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sổ Tài Sản Cố Định Năm <span id="popupYear"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <iframe id="excelFrame" style="width: 100%; height: 500px; border: none;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="printExcel()">In</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/SuppliesManager/TaiSanCoDinh.js"></script>

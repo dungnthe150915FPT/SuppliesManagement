@@ -4863,11 +4863,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\smtest\\SuppliesManagement\\SuppliesManagement.csproj",
+      "projectUniqueName": "F:\\DISK\\smtest\\SuppliesManagement\\SuppliesManagement.csproj",
       "projectName": "SuppliesManagement",
-      "projectPath": "D:\\smtest\\SuppliesManagement\\SuppliesManagement.csproj",
+      "projectPath": "F:\\DISK\\smtest\\SuppliesManagement\\SuppliesManagement.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "D:\\smtest\\SuppliesManagement\\obj\\",
+      "outputPath": "F:\\DISK\\smtest\\SuppliesManagement\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -8,145 +8,153 @@ build_property.PlatformNeutralAssembly =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = SuppliesManagement
 build_property.RootNamespace = SuppliesManagement
-build_property.ProjectDir = D:\smtest\SuppliesManagement\
+build_property.ProjectDir = F:\DISK\smtest\SuppliesManagement\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = true
-build_property.MSBuildProjectDirectory = D:\smtest\SuppliesManagement
+build_property.MSBuildProjectDirectory = F:\DISK\smtest\SuppliesManagement
 build_property._RazorSourceGeneratorDebug = 
 
-[D:/smtest/SuppliesManagement/Pages/Admin/AddUser.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Admin/AddUser.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cQWRkVXNlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Admin/AdminDashboard.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Admin/AdminDashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cQWRtaW5EYXNoYm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Admin/DanhSachTaiKhoan.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Admin/DanhSachTaiKhoan.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cRGFuaFNhY2hUYWlLaG9hbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Admin/UserDetail.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Admin/UserDetail.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cVXNlckRldGFpbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Common/ChangePassword.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Common/ChangePassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29tbW9uXENoYW5nZVBhc3N3b3JkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Common/ForgotPassword.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Common/ForgotPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29tbW9uXEZvcmdvdFBhc3N3b3JkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Common/Profile.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Common/Profile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29tbW9uXFByb2ZpbGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Common/SignIn.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Common/SignIn.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29tbW9uXFNpZ25Jbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Common/SignOut.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Common/SignOut.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29tbW9uXFNpZ25PdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Error/AccessDenied.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Error/AccessDenied.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3JcQWNjZXNzRGVuaWVkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Error/PageNotFound.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Error/PageNotFound.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3JcUGFnZU5vdEZvdW5kLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Index.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Privacy.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Reports/ViewExcelCongCuDungCu.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Reports/ViewExcelCongCuDungCu.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xWaWV3RXhjZWxDb25nQ3VEdW5nQ3UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Reports/ViewExcelVatTu.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Reports/ViewExcelPhuTungThayThe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xWaWV3RXhjZWxQaHVUdW5nVGhheVRoZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/DISK/smtest/SuppliesManagement/Pages/Reports/ViewExcelTaiSanCoDinh.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xWaWV3RXhjZWxUYWlTYW5Db0RpbmguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/DISK/smtest/SuppliesManagement/Pages/Reports/ViewExcelVatTu.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xWaWV3RXhjZWxWYXRUdS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Shared/_ValidationScriptsPartial.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/SuppliesManager/ChiTietHang.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/SuppliesManager/ChiTietHang.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwcGxpZXNNYW5hZ2VyXENoaVRpZXRIYW5nLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/SuppliesManager/ChiTietHoaDonNhap.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/SuppliesManager/ChiTietHoaDonNhap.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwcGxpZXNNYW5hZ2VyXENoaVRpZXRIb2FEb25OaGFwLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/SuppliesManager/ChiTietHoaDonXuat.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/SuppliesManager/ChiTietHoaDonXuat.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwcGxpZXNNYW5hZ2VyXENoaVRpZXRIb2FEb25YdWF0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/SuppliesManager/CongCuDungCu.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/SuppliesManager/CongCuDungCu.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwcGxpZXNNYW5hZ2VyXENvbmdDdUR1bmdDdS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/SuppliesManager/DanhSachHang.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/SuppliesManager/DanhSachHang.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwcGxpZXNNYW5hZ2VyXERhbmhTYWNoSGFuZy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/SuppliesManager/DanhSachHoaDonNhap.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/SuppliesManager/DanhSachHoaDonNhap.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwcGxpZXNNYW5hZ2VyXERhbmhTYWNoSG9hRG9uTmhhcC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/SuppliesManager/DanhSachHoaDonXuat.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/SuppliesManager/DanhSachHoaDonXuat.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwcGxpZXNNYW5hZ2VyXERhbmhTYWNoSG9hRG9uWHVhdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/SuppliesManager/NhapMuaHangHoa.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/SuppliesManager/NhapMuaHangHoa.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwcGxpZXNNYW5hZ2VyXE5oYXBNdWFIYW5nSG9hLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/SuppliesManager/PhuTungThayThe.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/SuppliesManager/PhuTungThayThe.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwcGxpZXNNYW5hZ2VyXFBodVR1bmdUaGF5VGhlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/SuppliesManager/SuppliesDashboard.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/SuppliesManager/SuppliesDashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwcGxpZXNNYW5hZ2VyXFN1cHBsaWVzRGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/SuppliesManager/TaiSanCoDinh.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/SuppliesManager/TaiSanCoDinh.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwcGxpZXNNYW5hZ2VyXFRhaVNhbkNvRGluaC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/SuppliesManager/VatTu.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/SuppliesManager/VatTu.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwcGxpZXNNYW5hZ2VyXFZhdFR1LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/SuppliesManager/XuatDungHangHoa.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/SuppliesManager/XuatDungHangHoa.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwcGxpZXNNYW5hZ2VyXFh1YXREdW5nSGFuZ0hvYS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/SuppliesManager/XuatHangHoa.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/SuppliesManager/XuatHangHoa.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwcGxpZXNNYW5hZ2VyXFh1YXRIYW5nSG9hLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/User/DanhSachHangNhan.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/User/DanhSachHangNhan.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlclxEYW5oU2FjaEhhbmdOaGFuLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/_ViewImports.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/_ViewStart.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/smtest/SuppliesManagement/Pages/Shared/_Layout.cshtml]
+[F:/DISK/smtest/SuppliesManagement/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-27rva3h1gi
