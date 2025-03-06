@@ -228,9 +228,6 @@
         @TempData["Error"]
     </div>
 }
-@section Scripts {
-    @if (Model.HasPDF)
-    {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
         <script src="~/js/SuppliesManager/ChiTietHoaDonNhap.js"></script>
         <script>
@@ -278,29 +275,4 @@
                     alert("Xóa thành công!");
                 }
             }
-
-@*            function calculateTotals() {
-                let rows = document.querySelectorAll('tbody tr');
-                let totalAmount = 0;
-
-                rows.forEach(row => {
-                    let soLuong = parseFloat(row.querySelector('input[name*="SoLuong"]').value) || 0;
-                    let donGiaTruocThue = parseFloat(row.querySelector('input[name*="DonGiaTruocThue"]').value) || 0;
-                    let vat = parseFloat(row.querySelector('input[name*="VAT"]').value) || 0;
-
-                    let donGiaSauThue = donGiaTruocThue * (1 + vat / 100);
-                    let tongGiaTruocThue = donGiaTruocThue * soLuong;
-                    let tongGiaSauThue = donGiaSauThue * soLuong;
-
-                    row.querySelector('input[name*="DonGiaSauThue"]').value = donGiaSauThue.toFixed(0);
-                    row.querySelector('input[name*="TongGiaTruocThue"]').value = tongGiaTruocThue.toFixed(0);
-                    row.querySelector('input[name*="TongGiaSauThue"]').value = tongGiaSauThue.toFixed(0);
-
-                    totalAmount += tongGiaSauThue;
-                });
-
-                document.getElementById('thanhTien').value = totalAmount.toFixed(0);
-            }*@
         </script>
-    }
-}

@@ -7,15 +7,22 @@ using OfficeOpenXml.Style;
 using SuppliesManagement.Models;
 using SuppliesManagement.Models.ViewModels;
 
+// using SuppliesManagement.Services;
+
 namespace SuppliesManagement.Pages.SuppliesManager
 {
     public class ChiTietHoaDonXuatModel : PageModel
     {
+        // private readonly RecallService _recallService;
         private readonly SuppliesManagementProjectContext dBContext;
 
-        public ChiTietHoaDonXuatModel(SuppliesManagementProjectContext dbContext)
+        public ChiTietHoaDonXuatModel(
+            SuppliesManagementProjectContext dbContext
+        // RecallService recallService
+        )
         {
             dBContext = dbContext;
+            // _recallService = recallService;
         }
 
         public HoaDonXuatDetailViewModel HoaDonXuat { get; set; }
@@ -493,5 +500,56 @@ namespace SuppliesManagement.Pages.SuppliesManager
 
             return words.Trim();
         }
+
+        // public async Task<IActionResult> OnPostRecallAsync(Guid hoaDonXuatId)
+        // {
+        //     var hoaDonXuat = await dBContext.HoaDonXuats
+        //         .Include(h => h.XuatKhos)
+        //         .ThenInclude(x => x.HangHoa)
+        //         .Include(h => h.HangHoaHoaDons)
+        //         .FirstOrDefaultAsync(h => h.Id == hoaDonXuatId);
+
+        //     if (hoaDonXuat == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     using var transaction = await dBContext.Database.BeginTransactionAsync();
+
+        //     try
+        //     {
+        //         foreach (var xuatKho in hoaDonXuat.XuatKhos)
+        //         {
+        //             // Restore HangHoa quantities
+        //             xuatKho.HangHoa.SoLuongConLai += xuatKho.HangHoaHoaDon.SoLuong;
+        //             xuatKho.HangHoa.SoLuongDaXuat -= xuatKho.HangHoaHoaDon.SoLuong;
+        //         }
+
+        //         // Remove XuatKhos
+        //         dBContext.XuatKhos.RemoveRange(hoaDonXuat.XuatKhos);
+
+        //         // Remove HangHoaHoaDons
+        //         dBContext.HangHoaHoaDons.RemoveRange(hoaDonXuat.HangHoaHoaDons);
+
+        //         // Remove HoaDonXuat
+        //         dBContext.HoaDonXuats.Remove(hoaDonXuat);
+
+        //         await dBContext.SaveChangesAsync();
+        //         await transaction.CommitAsync();
+
+        //         return RedirectToPage(
+        //             "./DanhSachHoaDonXuat",
+        //             new { message = "Hóa đơn xuất đã được thu hồi thành công." }
+        //         );
+        //     }
+        //     catch (Exception)
+        //     {
+        //         await transaction.RollbackAsync();
+        //         return RedirectToPage(
+        //             "./ChiTietHoaDonXuat",
+        //             new { id = hoaDonXuatId, error = "Có lỗi xảy ra khi thu hồi hóa đơn xuất." }
+        //         );
+        //     }
+        // }
     }
 }

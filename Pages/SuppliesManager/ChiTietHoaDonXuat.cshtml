@@ -1,93 +1,116 @@
 ﻿@page "{id:guid}"
 @model SuppliesManagement.Pages.SuppliesManager.ChiTietHoaDonXuatModel
 @{
-    ViewData["Title"] = "HĐ xuất số " + @Model.HoaDonXuat.ID;
+    ViewData["Title"] = Model.HoaDonXuat != null ? $"Phiếu xuất kho số {Model.HoaDonXuat.ID}" : "Chi tiết hóa đơn xuất";
 }
-<h1>Chi Tiết Hóa Đơn Xuất</h1>
 
-<form method="post" asp-page-handler="Export" asp-route-id="@Model.HoaDonXuat.ID">
-    <button type="submit" class="btn btn-primary">Xuất Excel</button>
-</form>
-
-<div class="card mt-4">
-    <div class="card-header bg-primary text-white">
-        <h5 class="mb-0"><i class="fas fa-info-circle"></i> Thông Tin Hóa Đơn</h5>
+<h1>@ViewData["Title"]</h1>
+@if (!ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
     </div>
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">Người Nhận:</dt>
-            <dd class="col-sm-9">
-                <input type="text" class="form-control" value="@Model.HoaDonXuat.NguoiNhan" readonly />
-            </dd>
+}
 
-            <dt class="col-sm-3">Lý Do Xuất:</dt>
-            <dd class="col-sm-9">
-                <input type="text" class="form-control" value="@Model.HoaDonXuat.LyDoNhan" readonly />
-            </dd>
+@if (Model.HoaDonXuat != null)
+{
+    <form method="post" asp-page-handler="Export" asp-route-id="@Model.HoaDonXuat.ID">
+        <button type="submit" class="btn btn-primary">Xuất Excel</button>
+    </form>
 
-            <dt class="col-sm-3">Kho Xuất:</dt>
-            <dd class="col-sm-9">
-                <input type="text" class="form-control" value="@Model.HoaDonXuat.KhoHang" readonly />
-            </dd>
+    <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-info-circle"></i> Thông Tin Hóa Đơn</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Người Nhận:</dt>
+                <dd class="col-sm-9">
+                    <input type="text" class="form-control" value="@Model.HoaDonXuat.NguoiNhan" readonly />
+                </dd>
 
-            <dt class="col-sm-3">Ngày Xuất:</dt>
-            <dd class="col-sm-9">
-                <input type="text" class="form-control" value="@Model.HoaDonXuat.NgayNhan.ToString("dd/MM/yyyy")"
-                    readonly />
-            </dd>
+                <dt class="col-sm-3">Lý Do Xuất:</dt>
+                <dd class="col-sm-9">
+                    <input type="text" class="form-control" value="@Model.HoaDonXuat.LyDoNhan" readonly />
+                </dd>
 
-            <dt class="col-sm-3">Tổng Tiền chưa tính thuế (VNĐ):</dt>
-            <dd class="col-sm-9">
-                <input type="text" class="form-control"
-                    value="@Model.HoaDonXuat.ThanhTien.ToString("#,##0").Replace(',', '.')" readonly />
-            </dd>
-        </dl>
-    </div>
-</div>
+                <dt class="col-sm-3">Kho Xuất:</dt>
+                <dd class="col-sm-9">
+                    <input type="text" class="form-control" value="@Model.HoaDonXuat.KhoHang" readonly />
+                </dd>
 
-<h4>Danh Sách Hàng Hóa</h4>
-<div class="card mt-4">
-    <div class="card-header bg-info text-white">
-        <h5 class="mb-0"><i class="fas fa-list"></i> Danh sách hàng hóa</h5>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Hàng Hóa</th>
-                        <th>Nhóm Hàng</th>
-                        <th>Đơn Vị Tính</th>
-                        <th>Số Lượng</th>
-                        <th>Đơn Giá</th>
-                        <th>Thành Tiền</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.HoaDonXuat.HangHoas.Count == 0)
-                    {
-                        <tr>
-                            <td colspan="6" class="text-center">Không có hàng hóa nào trong hóa đơn này.</td>
-                        </tr>
-                    }
-                    else
-                    {
-                        foreach (var hangHoa in Model.HoaDonXuat.HangHoas)
-                        {
-                            <tr>
-                                <td><input type="text" class="form-control" readonly value="@hangHoa.TenHangHoa" /></td>
-                                <td><input type="text" class="form-control" readonly value="@hangHoa.NhomHangName" /></td>
-                                <td><input type="text" class="form-control" readonly value="@hangHoa.DonViTinh" /></td>
-                                <td><input type="text" class="form-control" readonly value="@hangHoa.SoLuong" /></td>
-                                <td><input type="text" class="form-control" readonly
-                                        value="@hangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')" /></td>
-                                <td><input type="text" class="form-control" readonly
-                                        value="@hangHoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')" /></td>
-                            </tr>
-                        }
-                    }
-                </tbody>
-            </table>
+                <dt class="col-sm-3">Ngày Xuất:</dt>
+                <dd class="col-sm-9">
+                    <input type="text" class="form-control" value="@Model.HoaDonXuat.NgayNhan.ToString("dd/MM/yyyy")"
+                        readonly />
+                </dd>
+
+                <dt class="col-sm-3">Tổng Tiền chưa tính thuế (VNĐ):</dt>
+                <dd class="col-sm-9">
+                    <input type="text" class="form-control"
+                        value="@Model.HoaDonXuat.ThanhTien.ToString("#,##0").Replace(',', '.')" readonly />
+                </dd>
+            </dl>
         </div>
     </div>
-</div>
+
+    <h4>Danh Sách Hàng Hóa</h4>
+    <div class="card mt-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0"><i class="fas fa-list"></i> Danh sách hàng hóa</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Hàng Hóa</th>
+                            <th>Nhóm Hàng</th>
+                            <th>Đơn Vị Tính</th>
+                            <th>Số Lượng</th>
+                            <th>Đơn Giá</th>
+                            <th>Thành Tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.HoaDonXuat.HangHoas.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">Không có hàng hóa nào trong hóa đơn này.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var hangHoa in Model.HoaDonXuat.HangHoas)
+                            {
+                                <tr>
+                                    <td><input type="text" class="form-control" readonly value="@hangHoa.TenHangHoa" /></td>
+                                    <td><input type="text" class="form-control" readonly value="@hangHoa.NhomHangName" /></td>
+                                    <td><input type="text" class="form-control" readonly value="@hangHoa.DonViTinh" /></td>
+                                    <td><input type="text" class="form-control" readonly value="@hangHoa.SoLuong" /></td>
+                                    <td><input type="text" class="form-control" readonly
+                                            value="@hangHoa.DonGiaTruocThue.ToString("#,##0").Replace(',', '.')" /></td>
+                                    <td><input type="text" class="form-control" readonly
+                                            value="@hangHoa.TongGiaTruocThue.ToString("#,##0").Replace(',', '.')" /></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <form method="post" asp-page-handler="Recall" asp-route-id="@Model.HoaDonXuat.ID">
+        <button type="submit" class="btn btn-danger"
+            onclick="return confirm('Are you sure you want to recall this invoice?');">Thu hồi</button>
+    </form>
+}
+else
+{
+    <p>Không tìm thấy hóa đơn xuất.</p>
+}

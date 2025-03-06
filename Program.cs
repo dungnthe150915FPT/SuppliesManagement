@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SuppliesManagement.Models;
 
+// using SuppliesManagement.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<SuppliesManagementProjectContext>(
@@ -41,15 +43,8 @@ builder.Services
 builder.Services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
 
 // builder.Services.AddScoped<ISignInService, SignInService>();
-
-builder.Services.AddAuthorization(
-/*    options =>
-{
-    options.AddPolicy("Admin", policy => policy.RequireRole("1"));
-    options.AddPolicy("SuppliesManager", policy => policy.RequireRole("2"));
-    options.AddPolicy("User", policy => policy.RequireRole("3"));
-}*/
-);
+// builder.Services.AddScoped<RecallService>();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 

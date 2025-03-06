@@ -136,31 +136,10 @@ namespace SuppliesManagement.Pages
                     item.ImageBytes[i] = memoryStream.ToArray();
                 }
             }
-
-            // Check if the exact same item exists in the same invoice
-            // var existingItem = dBContext.HangHoas.FirstOrDefault(
-            //     h =>
-            //         h.TenHangHoa == item.TenHangHoa
-            //         && h.NhomHangId == item.NhomHangID
-            //         && h.DonViTinhId == item.DonViTinhID
-            //         && h.KhoHangId == khoHangID
-            //         && h.NgayNhap == NgayNhap
-            // );
-
-            // if (existingItem != null)
-            // {
-            //     // Update existing item
-            //     UpdateExistingHangHoa(existingItem, item, hoaDonNhap, khoHangID);
-            // }
-            // else
-            // {
             // Create new item
-            var hangHoaAdd = CreateNewHangHoa(item, hoaDonNhap, khoHangID, NgayNhap);
-
-            // Create HangHoaHoaDon and NhapKho records
-            var hangHoaHoaDon = CreateHangHoaHoaDon(item, khoHangID);
-            CreateNhapKhoRecord(hoaDonNhap.Id, hangHoaHoaDon.Id, hangHoaAdd.Id);
-            // }
+            var hangHoa = CreateNewHangHoa(item, hoaDonNhap, khoHangID, NgayNhap);
+            // Create NhapKho record
+            CreateNhapKhoRecord(hoaDonNhap.Id, hangHoa.Id, hangHoa.Id);
         }
 
         private HangHoa CreateNewHangHoa(
@@ -170,9 +149,31 @@ namespace SuppliesManagement.Pages
             DateTime NgayNhap
         )
         {
+            // Generate a new Guid that will be used for both HangHoaHoaDon and HangHoa
+            Guid sharedId = Guid.NewGuid();
+
+            var hangHoaHoaDon = new HangHoaHoaDon
+            {
+                Id = sharedId,
+                TenHangHoa = item.TenHangHoa,
+                NhomHangId = item.NhomHangID,
+                DonViTinhId = item.DonViTinhID,
+                SoLuong = item.SoLuong,
+                Vat = item.VAT,
+                DonGiaTruocThue = item.DonGiaTruocThue,
+                DonGiaSauThue = item.DonGiaTruocThue + (item.DonGiaTruocThue * item.VAT / 100),
+                TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
+                TongGiaSauThue =
+                    (item.DonGiaTruocThue + (item.DonGiaTruocThue * item.VAT / 100)) * item.SoLuong,
+                KhoHangId = khoHangID,
+                Image1 = item.ImageBytes[0],
+                Image2 = item.ImageBytes[1],
+                Image3 = item.ImageBytes[2]
+            };
+
             var hangHoa = new HangHoa
             {
-                Id = Guid.NewGuid(),
+                Id = sharedId, // Use the same ID as HangHoaHoaDon
                 TenHangHoa = item.TenHangHoa,
                 NhomHangId = item.NhomHangID,
                 DonViTinhId = item.DonViTinhID,
@@ -192,9 +193,44 @@ namespace SuppliesManagement.Pages
                 Image3 = item.ImageBytes[2],
             };
 
+            dBContext.HangHoaHoaDons.Add(hangHoaHoaDon);
             dBContext.HangHoas.Add(hangHoa);
+
             return hangHoa;
         }
+
+        // private HangHoa CreateNewHangHoa(
+        //     HangHoaInputModel item,
+        //     HoaDonNhap hoaDonNhap,
+        //     Guid khoHangID,
+        //     DateTime NgayNhap
+        // )
+        // {
+        //     var hangHoa = new HangHoa
+        //     {
+        //         Id = Guid.NewGuid(),
+        //         TenHangHoa = item.TenHangHoa,
+        //         NhomHangId = item.NhomHangID,
+        //         DonViTinhId = item.DonViTinhID,
+        //         SoLuong = item.SoLuong,
+        //         Vat = item.VAT,
+        //         DonGiaTruocThue = item.DonGiaTruocThue,
+        //         DonGiaSauThue = item.DonGiaTruocThue + (item.DonGiaTruocThue * item.VAT / 100),
+        //         TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
+        //         TongGiaSauThue =
+        //             (item.DonGiaTruocThue + (item.DonGiaTruocThue * item.VAT / 100)) * item.SoLuong,
+        //         KhoHangId = khoHangID,
+        //         SoLuongDaXuat = 0,
+        //         SoLuongConLai = item.SoLuong,
+        //         NgayNhap = NgayNhap,
+        //         Image1 = item.ImageBytes[0],
+        //         Image2 = item.ImageBytes[1],
+        //         Image3 = item.ImageBytes[2],
+        //     };
+
+        //     dBContext.HangHoas.Add(hangHoa);
+        //     return hangHoa;
+        // }
 
         // private void UpdateExistingHangHoa(
         //     HangHoa hangHoa,
@@ -216,44 +252,43 @@ namespace SuppliesManagement.Pages
         //     CreateNhapKhoRecord(hoaDonNhap.Id, hangHoaHoaDon.Id);
         // }
 
-        private HangHoaHoaDon CreateHangHoaHoaDon(HangHoaInputModel item, Guid khoHangID)
-        {
-            // Create a new HangHoaHoaDon object
-            var hangHoaHoaDon = new HangHoaHoaDon
-            {
-                Id = Guid.NewGuid(),
-                TenHangHoa = item.TenHangHoa,
-                NhomHangId = item.NhomHangID,
-                DonViTinhId = item.DonViTinhID,
-                SoLuong = item.SoLuong,
-                Vat = item.VAT,
-                DonGiaTruocThue = item.DonGiaTruocThue,
-                DonGiaSauThue = item.DonGiaTruocThue + (item.DonGiaTruocThue * item.VAT / 100),
-                TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
-                TongGiaSauThue =
-                    (item.DonGiaTruocThue + (item.DonGiaTruocThue * item.VAT / 100)) * item.SoLuong,
-                KhoHangId = khoHangID,
-                Image1 = item.ImageBytes[0],
-                Image2 = item.ImageBytes[1],
-                Image3 = item.ImageBytes[2]
-            };
-            try
-            {
-                dBContext.HangHoaHoaDons.Add(hangHoaHoaDon);
-                Console.WriteLine(
-                    $"Added HangHoaHoaDon: {hangHoaHoaDon.Id}, {hangHoaHoaDon.TenHangHoa}"
-                );
-                TempData["SuccessMessage"] =
-                    $"Added HangHoaHoaDon: {hangHoaHoaDon.Id}, {hangHoaHoaDon.TenHangHoa}";
-                return hangHoaHoaDon;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error adding HangHoaHoaDon: {ex.Message}");
-                TempData["Error"] = $"Error adding HangHoaHoaDon: {ex.Message}";
-                throw;
-            }
-        }
+        // private HangHoaHoaDon CreateHangHoaHoaDon(HangHoaInputModel item, Guid khoHangID)
+        // {
+        //     var hangHoaHoaDon = new HangHoaHoaDon
+        //     {
+        //         Id = Guid.NewGuid(),
+        //         TenHangHoa = item.TenHangHoa,
+        //         NhomHangId = item.NhomHangID,
+        //         DonViTinhId = item.DonViTinhID,
+        //         SoLuong = item.SoLuong,
+        //         Vat = item.VAT,
+        //         DonGiaTruocThue = item.DonGiaTruocThue,
+        //         DonGiaSauThue = item.DonGiaTruocThue + (item.DonGiaTruocThue * item.VAT / 100),
+        //         TongGiaTruocThue = item.SoLuong * item.DonGiaTruocThue,
+        //         TongGiaSauThue =
+        //             (item.DonGiaTruocThue + (item.DonGiaTruocThue * item.VAT / 100)) * item.SoLuong,
+        //         KhoHangId = khoHangID,
+        //         Image1 = item.ImageBytes[0],
+        //         Image2 = item.ImageBytes[1],
+        //         Image3 = item.ImageBytes[2]
+        //     };
+        //     try
+        //     {
+        //         dBContext.HangHoaHoaDons.Add(hangHoaHoaDon);
+        //         Console.WriteLine(
+        //             $"Added HangHoaHoaDon: {hangHoaHoaDon.Id}, {hangHoaHoaDon.TenHangHoa}"
+        //         );
+        //         TempData["SuccessMessage"] =
+        //             $"Added HangHoaHoaDon: {hangHoaHoaDon.Id}, {hangHoaHoaDon.TenHangHoa}";
+        //         return hangHoaHoaDon;
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine($"Error adding HangHoaHoaDon: {ex.Message}");
+        //         TempData["Error"] = $"Error adding HangHoaHoaDon: {ex.Message}";
+        //         throw;
+        //     }
+        // }
 
         private void CreateNhapKhoRecord(Guid hoaDonNhapId, Guid hangHoaHoaDonId, Guid hangHoaId)
         {

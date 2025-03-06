@@ -111,3 +111,38 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 5000);
     }
 });
+
+function viewExcelFile(id) {
+    fetch(`/SuppliesManager/ChiTietHoaDonNhap?handler=ViewExcel&id=${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(html => {
+            document.getElementById('excelPreviewContent').innerHTML = html;
+            $('#excelPreviewModal').modal('show');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while loading the Excel preview.');
+        });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const errorAlert = document.getElementById("errorAlert");
+    if (errorAlert) {
+        setTimeout(() => {
+            errorAlert.style.display = "none";
+        }, 5000);
+    }
+});
+document.addEventListener("DOMContentLoaded", function () {
+    const successAlert = document.getElementById("successAlert");
+    if (successAlert) {
+        setTimeout(() => {
+            successAlert.style.display = "none";
+        }, 5000);
+    }
+});
