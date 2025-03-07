@@ -56,20 +56,20 @@ namespace SuppliesManagement.Pages.Common
 
             if (NewPassword == CurrentPassword)
             {
-                TempData["ErrorMessage"] =
+                TempData["ErrorChangePassword"] =
                     "Mật khẩu hiện tại và mật khẩu mới không được giống nhau.";
                 return Page();
             }
 
             if (user.Password != CurrentPassword)
             {
-                TempData["ErrorMessage"] = "Mật khẩu hiện tại không chính xác.";
+                TempData["ErrorChangePassword"] = "Mật khẩu hiện tại không chính xác.";
                 return Page();
             }
 
             if (NewPassword != ConfirmNewPassword)
             {
-                TempData["ErrorMessage"] = "Mật khẩu mới và xác nhận mật khẩu không khớp.";
+                TempData["ErrorChangePassword"] = "Mật khẩu mới và xác nhận mật khẩu không khớp.";
                 return Page();
             }
 
@@ -82,34 +82,34 @@ namespace SuppliesManagement.Pages.Common
 
             if (!hasLowerChar.IsMatch(NewPassword))
             {
-                TempData["ErrorMessage"] = "Mật khẩu mới phải chứa ít nhất một chữ cái viết thường";
+                TempData["ErrorChangePassword"] = "Mật khẩu mới phải chứa ít nhất một chữ cái viết thường";
                 return Page();
             }
             else if (!hasUpperChar.IsMatch(NewPassword))
             {
-                TempData["ErrorMessage"] = "Mật khẩu mới phải chứa ít nhất một chữ cái viết hoa";
+                TempData["ErrorChangePassword"] = "Mật khẩu mới phải chứa ít nhất một chữ cái viết hoa";
                 return Page();
             }
             else if (!hasMiniMaxChars.IsMatch(NewPassword))
             {
-                TempData["ErrorMessage"] = "Mật khẩu mới phải nằm trong khoảng 8-15 ký tự";
+                TempData["ErrorChangePassword"] = "Mật khẩu mới phải nằm trong khoảng 8-15 ký tự";
                 return Page();
             }
             else if (!hasNumber.IsMatch(NewPassword))
             {
-                TempData["ErrorMessage"] = "Mật khẩu mới phải chứa ít nhất một giá trị số";
+                TempData["ErrorChangePassword"] = "Mật khẩu mới phải chứa ít nhất một giá trị số";
                 return Page();
             }
             else if (!hasSymbols.IsMatch(NewPassword))
             {
-                TempData["ErrorMessage"] =
+                TempData["ErrorChangePassword"] =
                     "Mật khẩu mới phải chứa ít nhất một ký tự đặc biệt (!@#$%^&*...)";
                 return Page();
             }
             else
             {
                 user.Password = NewPassword;
-                TempData["SuccessMessage"] = "Mật khẩu đã được thay đổi thành công.";
+                TempData["SuccessChangePassword"] = "Mật khẩu đã được thay đổi thành công.";
                 _dbContext.SaveChanges();
             }
 

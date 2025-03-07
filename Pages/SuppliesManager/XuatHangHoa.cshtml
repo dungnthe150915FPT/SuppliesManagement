@@ -149,16 +149,16 @@
         </div>
     </div>
 </form>
-@if (TempData["SuccessMessage"] != null)
+@if (TempData["SuccessXuatHangHoa"] != null)
 {
     <div id="successAlert" class="alert alert-success" role="alert">
-        @TempData["SuccessMessage"]
+        @TempData["SuccessXuatHangHoa"]
     </div>
 }
-@if (TempData["Error"] != null)
+@if (TempData["ErrorXuatHangHoa"] != null)
 {
     <div id="errorAlert" class="alert alert-danger" role="alert">
-        @TempData["Error"]
+        @TempData["ErrorXuatHangHoa"]
     </div>
 }
 

@@ -10,16 +10,16 @@
 }
 <link href="~/css/SuppliesManager/NhapMuaHangHoa.css" rel="stylesheet" />
 <h1>Nhập Hàng Hóa</h1>
-@if (TempData["SuccessMessage"] != null)
+@if (TempData["SuccessNhapMuaHangHoa"] != null)
 {
     <div id="successAlert" class="alert alert-success" role="alert">
-        @TempData["SuccessMessage"]
+        @TempData["SuccessNhapMuaHangHoa"]
     </div>
 }
-@if (TempData["Error"] != null)
+@if (TempData["ErrorNhapMuaHangHoa"] != null)
 {
     <div id="errorAlert" class="alert alert-danger" role="alert">
-        @TempData["Error"]
+        @TempData["ErrorNhapMuaHangHoa"]
     </div>
 }
 <form asp-page-handler="ImportHoaDon" method="post" enctype="multipart/form-data">

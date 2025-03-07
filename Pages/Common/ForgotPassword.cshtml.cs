@@ -27,7 +27,7 @@ namespace SuppliesManagement.Pages.Common
             );
             if (user == null)
             {
-                TempData["ErrorMessage"] =
+                TempData["ErrorForgotPassword"] =
                     "Hãy nhập đúng tên đăng nhập và gmail liên kết với tài khoản";
                 return Page();
             }
@@ -93,12 +93,12 @@ namespace SuppliesManagement.Pages.Common
                 await smtp.SendMailAsync(mailMessage); // Gửi email
 
                 Console.WriteLine("Email sent successfully.");
-                TempData["SuccessMessage"] = "Email sent successfully.";
+                TempData["SuccessForgotPassword"] = "Email sent successfully.";
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Failed to send email: {ex.Message}");
-                TempData["SuccessMessage"] = $"Failed to send email: {ex.Message}";
+                TempData["ErrorForgotPassword"] = $"Failed to send email: {ex.Message}";
                 throw;
             }
         }

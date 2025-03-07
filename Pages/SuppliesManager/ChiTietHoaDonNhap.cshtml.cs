@@ -841,7 +841,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
             }
             catch (Exception ex)
             {
-                TempData["Error"] = $"Error in OnGetViewExcelAsync: {ex.Message}";
+                TempData["ErrorChiTietHoaDonNhap"] = $"Error in OnGetViewExcelAsync: {ex.Message}";
                 return Content(
                     "An error occurred while generating the Excel preview.",
                     "text/plain"
@@ -941,12 +941,13 @@ namespace SuppliesManagement.Pages.SuppliesManager
                 }
                 else
                 {
-                    TempData["Error"] = $"Không tìm thấy hàng hóa có ID: {hangHoaModel.Id}";
+                    TempData["ErrorChiTietHoaDonNhap"] =
+                        $"Không tìm thấy hàng hóa có ID: {hangHoaModel.Id}";
                 }
             }
 
             await dBContext.SaveChangesAsync();
-            TempData["SuccessMessage"] =
+            TempData["SuccessChiTietHoaDonNhap"] =
                 $"Đã cập nhật hóa đơn nhập số {hoaDon.SoHoaDon} thành công.";
             return RedirectToPage(new { id = hoaDon.Id });
         }
@@ -978,7 +979,8 @@ namespace SuppliesManagement.Pages.SuppliesManager
 
             dBContext.HoaDonNhaps.Remove(hoaDon);
             await dBContext.SaveChangesAsync();
-            TempData["SuccessMessage"] = $"Đã xóa hóa đơn nhập số {hoaDon.SoHoaDon} thành công.";
+            TempData["SuccessChiTietHoaDonNhap"] =
+                $"Đã xóa hóa đơn nhập số {hoaDon.SoHoaDon} thành công.";
             return RedirectToPage("/SuppliesManager/DanhSachHoaDonNhap");
         }
 

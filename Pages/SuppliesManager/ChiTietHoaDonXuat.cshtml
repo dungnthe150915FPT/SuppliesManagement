@@ -16,7 +16,18 @@
         </ul>
     </div>
 }
-
+@if (TempData["SuccessChiTietHoaDonXuat"] != null)
+{
+    <div id="successAlert" class="alert alert-success" role="alert">
+        @TempData["SuccessChiTietHoaDonXuat"]
+    </div>
+}
+@if (TempData["ErrorChiTietHoaDonXuat"] != null)
+{
+    <div id="errorAlert" class="alert alert-danger" role="alert">
+        @TempData["ErrorChiTietHoaDonXuat"]
+    </div>
+}
 @if (Model.HoaDonXuat != null)
 {
     <form method="post" asp-page-handler="Export" asp-route-id="@Model.HoaDonXuat.ID">
@@ -107,7 +118,7 @@
     </div>
     <form method="post" asp-page-handler="Recall" asp-route-id="@Model.HoaDonXuat.ID">
         <button type="submit" class="btn btn-danger"
-            onclick="return confirm('Are you sure you want to recall this invoice?');">Thu hồi</button>
+            onclick="return confirm('Bạn có muốn thu hồi hóa đơn, số lượng hàng hóa sẽ được cập nhật lại vào kho?');">Thu hồi</button>
     </form>
 }
 else

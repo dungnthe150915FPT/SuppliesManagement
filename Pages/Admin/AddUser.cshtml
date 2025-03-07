@@ -5,16 +5,16 @@
 }
 <h1>Thêm mới User</h1>
 
-@if (TempData["SuccessMessage"] != null)
+@if (TempData["SuccessAddUser"] != null)
 {
     <div class="alert alert-success">
-        @TempData["SuccessMessage"]
+        @TempData["SuccessAddUser"]
     </div>
 }
-@if (TempData["Error"] != null)
+@if (TempData["ErrorAddUser"] != null)
 {
     <div class="alert alert-danger">
-        @TempData["Error"]
+        @TempData["ErrorAddUser"]
     </div>
 }
 <form method="post">

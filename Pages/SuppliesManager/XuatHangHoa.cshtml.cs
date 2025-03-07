@@ -88,7 +88,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
             if (SoLuongs == null || SoLuongs.Count == 0 || !SoLuongs.Any(s => s.Value > 0))
             {
                 ModelState.AddModelError(string.Empty, "Không có hàng hóa nào được chọn để xuất.");
-                TempData["Error"] = "Không có hàng hóa nào được chọn để xuất.";
+                TempData["ErrorXuatHangHoa"] = "Không có hàng hóa nào được chọn để xuất.";
                 OnGet(null);
                 return Page();
             }
@@ -129,7 +129,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                             string.Empty,
                             $"Hàng hóa với ID {hangHoaId} không tồn tại."
                         );
-                        TempData["Error"] = $"Hàng hóa với ID {hangHoaId} không tồn tại.";
+                        TempData["ErrorXuatHangHoa"] = $"Hàng hóa với ID {hangHoaId} không tồn tại.";
                         return Page();
                     }
 
@@ -140,7 +140,7 @@ namespace SuppliesManagement.Pages.SuppliesManager
                             string.Empty,
                             $"Số lượng tồn kho của hàng hóa '{hangHoa.TenHangHoa}' không đủ."
                         );
-                        TempData["Error"] =
+                        TempData["ErrorXuatHangHoa"] =
                             $"Số lượng tồn kho của hàng hóa '{hangHoa.TenHangHoa}' không đủ.";
                         return Page();
                     }
@@ -164,7 +164,8 @@ namespace SuppliesManagement.Pages.SuppliesManager
                         DonGiaTruocThue = hangHoa.DonGiaTruocThue,
                         TongGiaTruocThue = tienHangTruocThue,
                         KhoHangId = KhoHangId,
-                        NhomHangId = hangHoa.NhomHangId
+                        NhomHangId = hangHoa.NhomHangId,
+                        Vat = hangHoa.Vat
                     };
                     _dbContext.HangHoaHoaDons.Add(hangHoaHoaDon);
 
@@ -183,13 +184,13 @@ namespace SuppliesManagement.Pages.SuppliesManager
 
                 // Lưu thay đổi vào cơ sở dữ liệu
                 _dbContext.SaveChanges();
-                TempData["SuccessMessage"] = "Xuất dùng hàng hóa thành công!";
+                TempData["SuccessXuatHangHoa"] = "Xuất dùng hàng hóa thành công!";
                 return RedirectToPage("./XuatHangHoa");
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, $"Đã xảy ra lỗi: {ex.Message}");
-                TempData["Error"] = $"Đã xảy ra lỗi: {ex.Message}";
+                TempData["ErrorXuatHangHoa"] = $"Đã xảy ra lỗi: {ex.Message}";
                 return Page();
             }
         }

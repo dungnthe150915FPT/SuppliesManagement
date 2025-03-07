@@ -216,16 +216,16 @@
         </div>
     </div>
 </div>
-@if (TempData["SuccessMessage"] != null)
+@if (TempData["SuccessChiTietHoaDonNhap"] != null)
 {
     <div id="successAlert" class="alert alert-success" role="alert">
-        @TempData["SuccessMessage"]
+        @TempData["SuccessChiTietHoaDonNhap"]
     </div>
 }
-@if (TempData["Error"] != null)
+@if (TempData["ErrorChiTietHoaDonNhap"] != null)
 {
     <div id="errorAlert" class="alert alert-danger" role="alert">
-        @TempData["Error"]
+        @TempData["ErrorChiTietHoaDonNhap"]
     </div>
 }
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>

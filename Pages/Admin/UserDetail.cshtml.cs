@@ -85,7 +85,7 @@ namespace SuppliesManagement.Pages.Admin
 
             context.SaveChanges();
 
-            TempData["SuccessMessage"] = "Thông tin người dùng đã được cập nhật thành công.";
+            TempData["SuccessUserDetail"] = "Thông tin người dùng đã được cập nhật thành công.";
             return RedirectToPage(new { id = Account.Id });
         }
     }

@@ -168,12 +168,12 @@ namespace SuppliesManagement.Pages.Admin
                 await smtp.SendMailAsync(mailMessage); // Gửi email
 
                 Console.WriteLine("Email sent successfully.");
-                TempData["SuccessMessage"] = "Email sent successfully.";
+                TempData["SuccessAddUser"] = "Email sent successfully.";
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Failed to send email: {ex.Message}");
-                TempData["SuccessMessage"] = $"Failed to send email: {ex.Message}";
+                TempData["ErrorAddUser"] = $"Failed to send email: {ex.Message}";
                 throw;
             }
         }

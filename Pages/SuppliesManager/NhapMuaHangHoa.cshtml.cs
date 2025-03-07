@@ -108,13 +108,13 @@ namespace SuppliesManagement.Pages
                 }
 
                 dBContext.SaveChanges();
-                TempData["SuccessMessage"] =
+                TempData["SuccessNhapMuaHangHoa"] =
                     $"Nhập mới hóa đơn hàng hóa có số hóa đơn: {SoHoaDon} và số Serial: {SoSerial} thành công!";
                 return Page();
             }
             catch (Exception ex)
             {
-                TempData["Error"] = $"Đã xảy ra lỗi khi xử lý: {ex.Message}";
+                TempData["ErrorNhapMuaHangHoa"] = $"Đã xảy ra lỗi khi xử lý: {ex.Message}";
                 return Page();
             }
         }

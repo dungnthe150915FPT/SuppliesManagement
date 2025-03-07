@@ -68,7 +68,7 @@ namespace SuppliesManagement.Pages.Common
             _dbContext.Accounts.Update(user);
             _dbContext.SaveChanges();
 
-            TempData["SuccessMessage"] = "Thông tin cá nhân đã được cập nhật thành công!";
+            TempData["SuccessProfile"] = "Thông tin cá nhân đã được cập nhật thành công!";
             return RedirectToPage();
         }
     }

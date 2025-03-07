@@ -501,55 +501,77 @@ namespace SuppliesManagement.Pages.SuppliesManager
             return words.Trim();
         }
 
-        // public async Task<IActionResult> OnPostRecallAsync(Guid hoaDonXuatId)
-        // {
-        //     var hoaDonXuat = await dBContext.HoaDonXuats
-        //         .Include(h => h.XuatKhos)
-        //         .ThenInclude(x => x.HangHoa)
-        //         .Include(h => h.HangHoaHoaDons)
-        //         .FirstOrDefaultAsync(h => h.Id == hoaDonXuatId);
+        public async Task<IActionResult> OnPostRecallAsync(Guid id)
+        {
+            var xuatKhos = await dBContext.XuatKhos
+                .Include(x => x.HangHoaHoaDon)
+                .Where(x => x.HoaDonXuatId == id)
+                .ToListAsync();
 
-        //     if (hoaDonXuat == null)
-        //     {
-        //         return NotFound();
-        //     }
+            if (!xuatKhos.Any())
+            {
+                return NotFound();
+            }
 
-        //     using var transaction = await dBContext.Database.BeginTransactionAsync();
+            // using var transaction = await dBContext.Database.BeginTransactionAsync();
 
-        //     try
-        //     {
-        //         foreach (var xuatKho in hoaDonXuat.XuatKhos)
-        //         {
-        //             // Restore HangHoa quantities
-        //             xuatKho.HangHoa.SoLuongConLai += xuatKho.HangHoaHoaDon.SoLuong;
-        //             xuatKho.HangHoa.SoLuongDaXuat -= xuatKho.HangHoaHoaDon.SoLuong;
-        //         }
+            try
+            {
+                foreach (var xuatKho in xuatKhos)
+                {
+                    var hangHoa = await dBContext.HangHoas.FirstOrDefaultAsync(
+                        h =>
+                            h.TenHangHoa == xuatKho.HangHoaHoaDon.TenHangHoa
+                            && h.DonViTinhId == xuatKho.HangHoaHoaDon.DonViTinhId
+                            && h.DonGiaTruocThue == xuatKho.HangHoaHoaDon.DonGiaTruocThue
+                            && h.Vat == xuatKho.HangHoaHoaDon.Vat
+                            && h.NhomHangId == xuatKho.HangHoaHoaDon.NhomHangId
+                    // && h.Image1 == xuatKho.HangHoaHoaDon.Image1
+                    // && h.Image2 == xuatKho.HangHoaHoaDon.Image2
+                    // && h.Image3 == xuatKho.HangHoaHoaDon.Image3
+                    );
 
-        //         // Remove XuatKhos
-        //         dBContext.XuatKhos.RemoveRange(hoaDonXuat.XuatKhos);
+                    if (hangHoa != null)
+                    {
+                        hangHoa.SoLuongConLai += xuatKho.HangHoaHoaDon.SoLuong;
+                        hangHoa.SoLuongDaXuat -= xuatKho.HangHoaHoaDon.SoLuong;
+                        dBContext.HangHoas.Update(hangHoa);
+                    }
+                    else
+                    {
+                        // Log a warning or handle the case where no matching HangHoa is found
+                        TempData["ErrorChiTietHoaDonXuat"] =
+                            $"Không tìm thấy hàng hóa phù hợp cho XuatKho với ID: {xuatKho.HangHoaHoaDon.Id}";
+                    }
+                }
 
-        //         // Remove HangHoaHoaDons
-        //         dBContext.HangHoaHoaDons.RemoveRange(hoaDonXuat.HangHoaHoaDons);
+                // Remove XuatKhos
+                dBContext.XuatKhos.RemoveRange(xuatKhos);
 
-        //         // Remove HoaDonXuat
-        //         dBContext.HoaDonXuats.Remove(hoaDonXuat);
+                // Remove HoaDonXuat
+                var hoaDonXuat = await dBContext.HoaDonXuats.FindAsync(id);
+                if (hoaDonXuat != null)
+                {
+                    dBContext.HoaDonXuats.Remove(hoaDonXuat);
+                }
 
-        //         await dBContext.SaveChangesAsync();
-        //         await transaction.CommitAsync();
+                // Remove HangHoaHoaDons
+                var hangHoaHoaDons = xuatKhos.Select(x => x.HangHoaHoaDon).ToList();
+                dBContext.HangHoaHoaDons.RemoveRange(hangHoaHoaDons);
 
-        //         return RedirectToPage(
-        //             "./DanhSachHoaDonXuat",
-        //             new { message = "Hóa đơn xuất đã được thu hồi thành công." }
-        //         );
-        //     }
-        //     catch (Exception)
-        //     {
-        //         await transaction.RollbackAsync();
-        //         return RedirectToPage(
-        //             "./ChiTietHoaDonXuat",
-        //             new { id = hoaDonXuatId, error = "Có lỗi xảy ra khi thu hồi hóa đơn xuất." }
-        //         );
-        //     }
-        // }
+                await dBContext.SaveChangesAsync();
+                // await transaction.CommitAsync();
+
+                TempData["SuccessChiTietHoaDonXuat"] = "Hóa đơn xuất đã được thu hồi thành công.";
+                return RedirectToPage("./DanhSachHoaDonXuat");
+            }
+            catch (Exception ex)
+            {
+                // await transaction.RollbackAsync();
+                TempData["ErrorChiTietHoaDonXuat"] =
+                    $"Có lỗi xảy ra khi thu hồi hóa đơn xuất: {ex.Message}";
+                return RedirectToPage("./ChiTietHoaDonXuat", new { id });
+            }
+        }
     }
 }

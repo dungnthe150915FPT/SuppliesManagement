@@ -104,10 +104,10 @@
     </div>
 </form>
 
-@if (TempData["SuccessMessage"] != null)
+@if (TempData["SuccessUserDetail"] != null)
 {
     <div id="successAlert" class="alert alert-success mt-3" role="alert">
-        @TempData["SuccessMessage"]
+        @TempData["SuccessUserDetail"]
     </div>
 }
 <script src="~/js/Admin/UserDetail.js"></script>
